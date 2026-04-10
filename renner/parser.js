@@ -107,7 +107,7 @@ async function parseProductRenner(page, urlOrId) {
                     product.skus.forEach(sku => {
                         if (sku.available && sku.size) tamanhos.push(sku.size.toUpperCase());
                     });
-                } else if (product.variants) {
+                } else if (product.variants && Array.isArray(product.variants)) {
                     product.variants.forEach(variant => {
                         const hasStock = variant.omniStock > 0 || variant.purchasable;
                         if (hasStock && variant.characteristics && variant.characteristics.Tamanho) {

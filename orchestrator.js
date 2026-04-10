@@ -53,14 +53,18 @@ async function runAllScrapers(quotas = null) {
                 // Parametrização Awin (Atualmente apenas Renner suportada no utility)
                 const originalUrl = data.url;
                 data.url = await generateAwinLink(originalUrl, store);
+
+                // Garantir que a imagem NUNCA venha da loja
+                data.imageUrl = null;
                 
-                // Sobrescrever imageUrl com o link do Drive se disponível
+                // Usar APENAS o link do Drive se disponível
                 if (item.driveFileId) {
                     data.imageUrl = `https://drive.google.com/uc?export=download&id=${item.driveFileId}`;
                 }
                 
                 rawResults.push({ ...data, store, driveId: item.id });
-                console.log(`✅ [${store.toUpperCase()}] Sucesso: ${item.id} | Imagem: ${data.imageUrl ? 'Drive ✅' : 'Null ❌'}`);
+                const imageStatus = data.imageUrl ? 'Drive ✅' : 'Falha no Drive ❌ (Sem ID)';
+                console.log(`✅ [${store.toUpperCase()}] Sucesso: ${item.id} | Imagem: ${imageStatus}`);
             }
         }
 
@@ -87,65 +91,49 @@ async function fetchDriveItems(page) {
         await new Promise(r => setTimeout(r, 5000));
         
         return await page.evaluate(() => {
-            const items = [];
+            const resultsMap = new Map();
             
-            // Estratégia 1: Procurar por elementos que tenham data-id (comum no Drive)
-            const rows = document.querySelectorAll('div[data-id]');
-            rows.forEach(row => {
-                const text = row.innerText || '';
-                const match = text.match(/\d{6,}/);
-                const fileId = row.getAttribute('data-id');
-                if (match && fileId && fileId.length > 20) {
-                     items.push({ 
-                         id: match[0], 
-                         driveFileId: fileId,
-                         fileName: text.split('\n')[0].substring(0, 100).toLowerCase() 
-                     });
+            const addItem = (id, driveFileId, fileName) => {
+                const existing = resultsMap.get(id);
+                resultsMap.set(id, {
+                    id,
+                    driveFileId: driveFileId || (existing ? existing.driveFileId : null),
+                    fileName: fileName || (existing ? existing.fileName : '')
+                });
+            };
+
+            // Estratégia 1: data-id (Containers de arquivos)
+            document.querySelectorAll('div[data-id]').forEach(el => {
+                const driveId = el.getAttribute('data-id');
+                const text = el.innerText || '';
+                const skuMatch = text.match(/\d{6,}/);
+                if (skuMatch && driveId && driveId.length > 20) {
+                    addItem(skuMatch[0], driveId, text.split('\n')[0].substring(0, 100).toLowerCase());
                 }
             });
 
-            // Estratégia 2: Se falhar a 1, procurar por links de arquivos
-            if (items.length === 0) {
-                const links = document.querySelectorAll('a[href*="/file/d/"]');
-                links.forEach(link => {
-                    const href = link.href;
-                    const idMatch = href.match(/\/file\/d\/([^/]+)/);
-                    const container = link.closest('div[role="row"], div[jslog]') || link;
-                    const text = container.innerText || link.innerText || '';
-                    const numMatch = text.match(/\d{6,}/);
-                    
-                    if (idMatch && numMatch) {
-                        items.push({
-                            id: numMatch[0],
-                            driveFileId: idMatch[1],
-                            fileName: text.split('\n')[0].trim().toLowerCase()
-                        });
-                    }
-                });
-            }
-
-            // Estratégia 3: Fallback original (apenas texto) se nada acima funcionar
-            if (items.length === 0) {
-                const elements = document.querySelectorAll('div, a, span');
-                elements.forEach(el => {
-                    const text = (el.innerText || el.textContent || '').trim();
-                    const match = text.match(/\d{6,}/);
-                    if (match && text.length < 200) {
-                        items.push({ id: match[0], fileName: text.split('\n')[0].substring(0, 100).toLowerCase() });
-                    }
-                });
-            }
-
-            // Remover duplicatas por SKU (id)
-            const unique = [];
-            const map = new Map();
-            for (const item of items) {
-                if (!map.has(item.id)) {
-                    map.set(item.id, true);
-                    unique.push(item);
+            // Estratégia 2: Links diretos (/file/d/)
+            document.querySelectorAll('a[href*="/file/d/"]').forEach(link => {
+                const idMatch = link.href.match(/\/file\/d\/([^/]+)/);
+                const container = link.closest('div[role="row"], div[jslog]') || link;
+                const text = container.innerText || link.innerText || '';
+                const skuMatch = text.match(/\d{6,}/);
+                if (idMatch && skuMatch) {
+                    addItem(skuMatch[0], idMatch[1], text.split('\n')[0].trim().toLowerCase());
                 }
-            }
-            return unique;
+            });
+
+            // Estratégia 3: Texto puro (Fallback para mapear SKUs mesmo sem ID de arquivo)
+            document.querySelectorAll('div, a, span').forEach(el => {
+                if (el.children.length > 0) return; // Apenas folhas para evitar duplicação de texto longo
+                const text = el.innerText || '';
+                const skuMatch = text.match(/\d{6,}/);
+                if (skuMatch && text.length < 150) {
+                    addItem(skuMatch[0], null, text.split('\n')[0].toLowerCase());
+                }
+            });
+
+            return Array.from(resultsMap.values());
         });
     } catch (e) {
         console.error('❌ Erro no Drive:', e.message);

@@ -24,8 +24,21 @@ async function parseProductRiachuelo(page, urlOrId) {
             console.log(`[Riachuelo] Produto encontrado, navegando para: ${url}`);
         }
 
-        await page.goto(url, { waitUntil: 'load', timeout: 60000 });
+        await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
         
+        // Anti-Redirect: Se cair na página de privacidade/cookies
+        if (page.url().includes('privacidade.')) {
+            console.log(`[Riachuelo] Redirecionamento de privacidade detectado. Tentando contornar...`);
+            // Espera o botão de fechar ou aceitar se houver
+            try {
+                const acceptBtn = await page.waitForSelector('a.cc-btn.cc-allow, button#onetrust-accept-btn-handler', { timeout: 5000 });
+                if (acceptBtn) await acceptBtn.click();
+            } catch (e) {
+                // Se não achar o botão, tenta apenas voltar pra URL original
+                await page.goto(url, { waitUntil: 'load', timeout: 30000 });
+            }
+        }
+
         // Espera de hidratação
         await new Promise(r => setTimeout(r, 5000));
 
