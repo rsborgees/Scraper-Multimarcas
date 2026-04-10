@@ -54,8 +54,13 @@ async function runAllScrapers(quotas = null) {
                 const originalUrl = data.url;
                 data.url = await generateAwinLink(originalUrl, store);
                 
+                // Sobrescrever imageUrl com o link do Drive se disponível
+                if (item.driveFileId) {
+                    data.imageUrl = `https://drive.google.com/uc?export=download&id=${item.driveFileId}`;
+                }
+                
                 rawResults.push({ ...data, store, driveId: item.id });
-                console.log(`✅ [${store.toUpperCase()}] Sucesso: ${item.id}`);
+                console.log(`✅ [${store.toUpperCase()}] Sucesso: ${item.id} | Imagem: ${data.imageUrl ? 'Drive ✅' : 'Null ❌'}`);
             }
         }
 
@@ -82,16 +87,65 @@ async function fetchDriveItems(page) {
         await new Promise(r => setTimeout(r, 5000));
         
         return await page.evaluate(() => {
-            const elements = document.querySelectorAll('div, a, span');
             const items = [];
-            elements.forEach(el => {
-                const text = (el.innerText || el.textContent || '').trim();
+            
+            // Estratégia 1: Procurar por elementos que tenham data-id (comum no Drive)
+            const rows = document.querySelectorAll('div[data-id]');
+            rows.forEach(row => {
+                const text = row.innerText || '';
                 const match = text.match(/\d{6,}/);
-                if (match) {
-                    items.push({ id: match[0], fileName: text.split('\n')[0].substring(0, 100).toLowerCase() });
+                const fileId = row.getAttribute('data-id');
+                if (match && fileId && fileId.length > 20) {
+                     items.push({ 
+                         id: match[0], 
+                         driveFileId: fileId,
+                         fileName: text.split('\n')[0].substring(0, 100).toLowerCase() 
+                     });
                 }
             });
-            return Array.from(new Map(items.map(i => [i.id, i])).values());
+
+            // Estratégia 2: Se falhar a 1, procurar por links de arquivos
+            if (items.length === 0) {
+                const links = document.querySelectorAll('a[href*="/file/d/"]');
+                links.forEach(link => {
+                    const href = link.href;
+                    const idMatch = href.match(/\/file\/d\/([^/]+)/);
+                    const container = link.closest('div[role="row"], div[jslog]') || link;
+                    const text = container.innerText || link.innerText || '';
+                    const numMatch = text.match(/\d{6,}/);
+                    
+                    if (idMatch && numMatch) {
+                        items.push({
+                            id: numMatch[0],
+                            driveFileId: idMatch[1],
+                            fileName: text.split('\n')[0].trim().toLowerCase()
+                        });
+                    }
+                });
+            }
+
+            // Estratégia 3: Fallback original (apenas texto) se nada acima funcionar
+            if (items.length === 0) {
+                const elements = document.querySelectorAll('div, a, span');
+                elements.forEach(el => {
+                    const text = (el.innerText || el.textContent || '').trim();
+                    const match = text.match(/\d{6,}/);
+                    if (match && text.length < 200) {
+                        items.push({ id: match[0], fileName: text.split('\n')[0].substring(0, 100).toLowerCase() });
+                    }
+                });
+            }
+
+            // Remover duplicatas por SKU (id)
+            const unique = [];
+            const map = new Map();
+            for (const item of items) {
+                if (!map.has(item.id)) {
+                    map.set(item.id, true);
+                    unique.push(item);
+                }
+            }
+            return unique;
         });
     } catch (e) {
         console.error('❌ Erro no Drive:', e.message);
