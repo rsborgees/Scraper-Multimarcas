@@ -1,0 +1,32 @@
+[
+  {
+    "id": "626440391",
+    "nome": "Calça Mom em Jeans com Cintura Alta e Costura Aparente Azul",
+    "precoAtual": 159.9,
+    "precoOriginal": 159.9,
+    "tamanhos": ["34", "36", "38", "40", "42", "44", "46"],
+    "categoria": "Feminino > Calças > Jeans",
+    "url": "https://www.lojasrenner.com.br/p/calca-mom-em-jeans-com-cintura-alta-e-costura-aparente/-/A-626440340-br.lr?sku=626440382",
+    "imageUrl": "https://drive.google.com/thumbnail?id=1Tk95H1i4ej-_ll37AuMsCYstXXp4JFDe&sz=w1000"
+  },
+  {
+    "id": "930118064",
+    "nome": "Blusa em Tricô com Gola Polo e Detalhe Contrastante",
+    "precoAtual": 89.9,
+    "precoOriginal": 89.9,
+    "tamanhos": ["PP", "P", "M", "G", "GG"],
+    "categoria": "Feminino > Blusas e Camisetas > Polo",
+    "url": "https://www.lojasrenner.com.br/p/blusa-em-trico-com-gola-polo-e-detalhe-contrastante/-/A-930118005-br.lr?sku=930118064",
+    "imageUrl": "https://drive.google.com/thumbnail?id=1Jaju66svWZSDhx1e9rbjZzoeYFr60YsJ&sz=w1000"
+  },
+  {
+    "id": "930413573",
+    "nome": "Vestido Longo com Decote V e Estampa Floral Bold",
+    "precoAtual": 199.9,
+    "precoOriginal": 199.9,
+    "tamanhos": ["PP", "P", "M", "G", "GG"],
+    "categoria": "Feminino > Vestidos > Vestido Longo",
+    "url": "https://www.lojasrenner.com.br/p/vestido-longo-com-decote-v-e-estampa-floral-bold/-/A-930413531-br.lr?sku=930413573",
+    "imageUrl": "https://drive.google.com/thumbnail?id=1LXc8UldR6pGqK98BeCbQYWXSC_cfNbgz&sz=w1000"
+  }
+]

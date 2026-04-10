@@ -1,0 +1,18 @@
+# Configurações
+.env
+node_modules/
+
+# Dados e Logs
+data/*.json
+*.log
+scrapers/data/*.json
+
+# Scripts de Teste
+test-*.js
+debug-*.js
+demo-*.js
+
+# Sistema
+.DS_Store
+Thumbs.db
+.gemini/
