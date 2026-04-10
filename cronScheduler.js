@@ -74,16 +74,11 @@ cron.schedule('0 7-21 * * *', async () => {
     } catch (error) {
         console.error('❌ [Scheduler] Falha no ciclo horário:', error.message);
     }
+}, {
+    timezone: "America/Sao_Paulo"
 });
 
-/**
- * JOB ESPECIAL: 05:00 AM (Sync)
- * Reservado para sincronização de novos IDs (Vazio no momento para estas lojas)
- */
-cron.schedule('0 5 * * *', () => {
-    console.log('🌅 [Scheduler] Iniciando Job de Sincronização Matinal...');
-    console.log('ℹ️ Nenhuma tarefa de sincronização pendente para Renner/C&A/Riachuelo.');
-});
+
 
 /**
  * Função de entrega Webhook
