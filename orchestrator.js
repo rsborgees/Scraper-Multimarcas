@@ -8,6 +8,7 @@ const { parseProductRenner } = require('./renner/parser');
 const { parseProductCEA } = require('./cea/parser');
 const { parseProductRiachuelo } = require('./riachuelo/parser');
 const { generateAwinLink } = require('./utils/affiliateManager');
+const { formatRennerMessage } = require('./utils/messageFormatter');
 
 /**
  * Função principal de orquestração
@@ -60,6 +61,11 @@ async function runAllScrapers(quotas = null) {
                 // Usar APENAS o link do Drive se disponível
                 if (item.driveFileId) {
                     data.imageUrl = `https://drive.google.com/uc?export=download&id=${item.driveFileId}`;
+                }
+
+                // Gerar mensagem formatada APENAS para Renner (solicitação do usuário)
+                if (store === 'renner') {
+                    data.message = formatRennerMessage(data);
                 }
                 
                 rawResults.push({ ...data, store, driveId: item.id });

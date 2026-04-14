@@ -79,43 +79,74 @@ async function parseProductRenner(page, urlOrId) {
             if (!precoOriginal) precoOriginal = precoAtual;
             if (precoOriginal < precoAtual) precoOriginal = precoAtual;
 
-            // Tamanhos
+            // --- EXTRAÇÃO DE TAMANHOS ---
             const tamanhos = [];
-            const sizeElements = Array.from(document.querySelectorAll('.size-selector__item:not(.size-selector__item--unavailable), [aria-label="Tamanho"] option'));
-            
-            sizeElements.forEach(el => {
-                let isUnavailable = el.className && (el.className.includes('--unavailable') || 
-                                     el.className.includes('disabled')) || 
-                                     el.getAttribute('aria-disabled') === 'true' ||
-                                     el.innerText.includes('Esgotado');
-                
-                if (el.tagName && el.tagName.toLowerCase() === 'option') {
-                     if (el.value === '-' || !el.value) isUnavailable = true;
-                }
-                
-                if (!isUnavailable) {
-                    let sizeText = getSafeText(el);
-                    if (sizeText && sizeText.length <= 4) {
-                        tamanhos.push(sizeText.toUpperCase());
-                    }
-                }
-            });
 
-            // Fallback via Next.js Data
-            if (tamanhos.length === 0 && product) {
-                if (product.skus) {
+            // ESTRATÉGIA PRINCIPAL: window.__NEXT_DATA__ (DADOS INTERNOS)
+            // É a mais confiável pois refere-se apenas ao SKU principal e seus irmãos de cor.
+            if (product) {
+                if (product.skus && product.skus.length > 0) {
                     product.skus.forEach(sku => {
-                        if (sku.available && sku.size) tamanhos.push(sku.size.toUpperCase());
+                        if (sku.available && sku.size) {
+                            tamanhos.push(sku.size.toUpperCase());
+                        }
                     });
                 } else if (product.variants && Array.isArray(product.variants)) {
                     product.variants.forEach(variant => {
                         const hasStock = variant.omniStock > 0 || variant.purchasable;
-                        if (hasStock && variant.characteristics && variant.characteristics.Tamanho) {
-                            tamanhos.push(variant.characteristics.Tamanho.toUpperCase());
-                        } else if (hasStock && variant.skuAttributes && variant.skuAttributes.Tamanho) {
-                            tamanhos.push(variant.skuAttributes.Tamanho.toUpperCase());
+                        if (hasStock) {
+                            let size = null;
+                            if (variant.characteristics && variant.characteristics.Tamanho) {
+                                size = variant.characteristics.Tamanho;
+                            } else if (variant.skuAttributes && variant.skuAttributes.Tamanho) {
+                                size = variant.skuAttributes.Tamanho;
+                            }
+                            if (size) tamanhos.push(size.toUpperCase());
                         }
                     });
+                }
+            }
+
+            // ESTRATÉGIA SECUNDÁRIA: DOM (Apenas se o Plano A falhar)
+            if (tamanhos.length === 0) {
+                // Estratégia Cirúrgica: Procurar o seletor de tamanhos MAIS PRÓXIMO do H1 (Título do Produto)
+                const h1 = document.querySelector('h1');
+                let mainProductContainer = h1 ? h1.parentElement : document;
+                
+                // Sobe até achar um container que tenha seletores de tamanho
+                let limit = 5;
+                while (mainProductContainer && limit > 0) {
+                    if (mainProductContainer.querySelector('.size-selector__item, [aria-label="Tamanho"]')) break;
+                    mainProductContainer = mainProductContainer.parentElement;
+                    limit--;
+                }
+
+                const scope = mainProductContainer || document;
+                const sizeElements = Array.from(scope.querySelectorAll('.size-selector__item:not(.size-selector__item--unavailable), [aria-label="Tamanho"] option'));
+                
+                sizeElements.forEach(el => {
+                    let isUnavailable = el.className && (el.className.includes('--unavailable') || el.className.includes('disabled')) || 
+                                         el.getAttribute('aria-disabled') === 'true' ||
+                                         el.innerText.includes('Esgotado');
+                    
+                    if (el.tagName && el.tagName.toLowerCase() === 'option') {
+                         if (el.value === '-' || !el.value) isUnavailable = true;
+                    }
+                    
+                    if (!isUnavailable) {
+                        let sizeText = getSafeText(el);
+                        if (sizeText && sizeText.length <= 4 && !sizeText.includes('Selecione')) {
+                            tamanhos.push(sizeText.toUpperCase());
+                        }
+                    }
+                });
+            }
+
+            // FALLBACK FINAL: Se ainda assim estiver vazio, tenta pegar o tamanho do SKU atual do NextData
+            if (tamanhos.length === 0 && product && product.skuAttributes) {
+                const sizeAttr = product.skuAttributes.find(a => a.attributeType === 'size' || a.attributeName === 'Tamanho');
+                if (sizeAttr && sizeAttr.name) {
+                    tamanhos.push(sizeAttr.name.toUpperCase());
                 }
             }
 

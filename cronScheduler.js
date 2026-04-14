@@ -12,8 +12,8 @@ const { loadHistory, markAsSent } = require('./utils/historyManager');
  */
 const IDEAL_TARGETS = {
     'renner': 35,    // Agora 35 itens/dia conforme solicitado
-    'cea': 50,
-    'riachuelo': 50
+    'cea': 0,        // Desativado temporariamente
+    'riachuelo': 0   // Desativado temporariamente
 };
 
 /**
@@ -135,4 +135,4 @@ async function sendBatchToWebhook(items) {
 
 console.log('🛡️  [Server] Scraper 2.0 Daemon Ativo');
 console.log('📅 Agendamento: 07h-21h (De hora em hora)');
-console.log('🎯 Metas: Renner (35) | C&A (50) | Riachuelo (50)');
+console.log('🎯 Metas: Renner (35) | C&A (OFF) | Riachuelo (OFF)');

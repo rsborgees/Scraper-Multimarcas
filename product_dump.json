@@ -1,0 +1,176 @@
+{
+  "mediaSets": [
+    {
+      "smallImageUrl": "//img.lojasrenner.com.br/item/930625461/small/3.jpg",
+      "zoomImageUrl": "//img.lojasrenner.com.br/item/930625461/zoom/3.jpg",
+      "mediumImageUrl": "//img.lojasrenner.com.br/item/930625461/medium/3.jpg",
+      "thumbImageUrl": "//img.lojasrenner.com.br/item/930625461/thumb/3.jpg",
+      "showcaseImageUrl": "//img.lojasrenner.com.br/item/930625461/vitrine/3.jpg",
+      "largeImageUrl": "//img.lojasrenner.com.br/item/930625461/large/3.jpg",
+      "id": "2797495"
+    },
+    {
+      "smallImageUrl": "//img.lojasrenner.com.br/item/930625461/small/4.jpg",
+      "zoomImageUrl": "//img.lojasrenner.com.br/item/930625461/zoom/4.jpg",
+      "mediumImageUrl": "//img.lojasrenner.com.br/item/930625461/medium/4.jpg",
+      "thumbImageUrl": "//img.lojasrenner.com.br/item/930625461/thumb/4.jpg",
+      "showcaseImageUrl": "//img.lojasrenner.com.br/item/930625461/vitrine/4.jpg",
+      "largeImageUrl": "//img.lojasrenner.com.br/item/930625461/large/4.jpg",
+      "id": "2797496"
+    },
+    {
+      "smallImageUrl": "//img.lojasrenner.com.br/item/930625461/small/5.jpg",
+      "zoomImageUrl": "//img.lojasrenner.com.br/item/930625461/zoom/5.jpg",
+      "mediumImageUrl": "//img.lojasrenner.com.br/item/930625461/medium/5.jpg",
+      "thumbImageUrl": "//img.lojasrenner.com.br/item/930625461/thumb/5.jpg",
+      "showcaseImageUrl": "//img.lojasrenner.com.br/item/930625461/vitrine/5.jpg",
+      "largeImageUrl": "//img.lojasrenner.com.br/item/930625461/large/5.jpg",
+      "id": "2797769"
+    },
+    {
+      "smallImageUrl": "//img.lojasrenner.com.br/item/930625461/small/7.jpg",
+      "zoomImageUrl": "//img.lojasrenner.com.br/item/930625461/zoom/7.jpg",
+      "mediumImageUrl": "//img.lojasrenner.com.br/item/930625461/medium/7.jpg",
+      "thumbImageUrl": "//img.lojasrenner.com.br/item/930625461/thumb/7.jpg",
+      "showcaseImageUrl": "//img.lojasrenner.com.br/item/930625461/vitrine/7.jpg",
+      "largeImageUrl": "//img.lojasrenner.com.br/item/930625461/large/7.jpg",
+      "id": "2797497"
+    },
+    {
+      "smallImageUrl": "//img.lojasrenner.com.br/item/930625461/small/9.jpg",
+      "zoomImageUrl": "//img.lojasrenner.com.br/item/930625461/zoom/9.jpg",
+      "mediumImageUrl": "//img.lojasrenner.com.br/item/930625461/medium/9.jpg",
+      "thumbImageUrl": "//img.lojasrenner.com.br/item/930625461/thumb/9.jpg",
+      "showcaseImageUrl": "//img.lojasrenner.com.br/item/930625461/vitrine/9.jpg",
+      "largeImageUrl": "//img.lojasrenner.com.br/item/930625461/large/9.jpg",
+      "id": "2797770"
+    },
+    {
+      "smallImageUrl": "//img.lojasrenner.com.br/item/930625461/small/13.jpg",
+      "zoomImageUrl": "//img.lojasrenner.com.br/item/930625461/zoom/13.jpg",
+      "mediumImageUrl": "//img.lojasrenner.com.br/item/930625461/medium/13.jpg",
+      "thumbImageUrl": "//img.lojasrenner.com.br/item/930625461/thumb/13.jpg",
+      "showcaseImageUrl": "//img.lojasrenner.com.br/item/930625461/vitrine/13.jpg",
+      "largeImageUrl": "//img.lojasrenner.com.br/item/930625461/large/13.jpg",
+      "id": "2782959"
+    },
+    {
+      "smallImageUrl": "//img.lojasrenner.com.br/item/930625461/small/14.jpg",
+      "zoomImageUrl": "//img.lojasrenner.com.br/item/930625461/zoom/14.jpg",
+      "mediumImageUrl": "//img.lojasrenner.com.br/item/930625461/medium/14.jpg",
+      "thumbImageUrl": "//img.lojasrenner.com.br/item/930625461/thumb/14.jpg",
+      "showcaseImageUrl": "//img.lojasrenner.com.br/item/930625461/vitrine/14.jpg",
+      "largeImageUrl": "//img.lojasrenner.com.br/item/930625461/large/14.jpg",
+      "id": "2782960"
+    }
+  ],
+  "purchasable": true,
+  "midiaFromSku": true,
+  "displayName": "Vestido Longo em Piquet com Cinto Corda e Fenda Frontal",
+  "salePriceFormatted": "R$ 0,00",
+  "variants": "Vinho|M",
+  "maxQuantityItem": 100,
+  "omniStock": false,
+  "backOrder": false,
+  "outOfStock": false,
+  "onSale": false,
+  "preOrder": false,
+  "installmentValueFormatted": "R$ 33,32",
+  "stamps": [],
+  "skuId": "930625470",
+  "percentDiscount": 0,
+  "characteristics": {},
+  "productAttributes": [
+    {
+      "code": null,
+      "displayName": "Gênero / Feminino",
+      "label": "Gênero - Feminino",
+      "creationDate": {
+        "time": 1505507745000
+      },
+      "priority": 2,
+      "enabled": true,
+      "mediaSet": null,
+      "internalName": null,
+      "hexCode": null,
+      "attributeType": "gender",
+      "name": "Feminino",
+      "attributeName": "Gênero"
+    },
+    {
+      "code": null,
+      "displayName": "Marca / Marfinno",
+      "label": "Marca - Marfinno",
+      "creationDate": {
+        "time": 1505513883000
+      },
+      "priority": 1,
+      "enabled": true,
+      "mediaSet": {
+        "smallImageUrl": "https://img.lojasrenner.com.br/banner/marca/Marfinno-marca-produto.png",
+        "zoomImageUrl": "https://img.lojasrenner.com.br/banner/marca/Marfinno-marca-produto.png",
+        "mediumImageUrl": "https://img.lojasrenner.com.br/banner/marca/Marfinno-marca-produto.png",
+        "thumbImageUrl": "https://img.lojasrenner.com.br/banner/marca/Marfinno-marca-produto.png",
+        "showcaseImageUrl": null,
+        "largeImageUrl": "https://img.lojasrenner.com.br/banner/marca/Marfinno-marca-produto.png",
+        "id": "86006"
+      },
+      "internalName": null,
+      "hexCode": null,
+      "attributeType": "brand",
+      "name": "Marfinno",
+      "attributeName": "Marca"
+    }
+  ],
+  "aggregationKey": "930625445-COR930625445-19-1629TCX",
+  "ccInstallment": 4,
+  "installmentWithoutInterestValueFormatted": "R$ 33,32",
+  "discountinued": false,
+  "skuAttributes": [
+    {
+      "code": null,
+      "displayName": "Tamanho / M",
+      "label": "Tamanho - M",
+      "creationDate": {
+        "time": 1506960925000
+      },
+      "priority": 4,
+      "enabled": true,
+      "mediaSet": null,
+      "internalName": null,
+      "hexCode": null,
+      "attributeType": "size",
+      "name": "M",
+      "attributeName": "Tamanho"
+    },
+    {
+      "code": "19-1629TCX",
+      "displayName": "Cor / Vinho",
+      "label": "Cor - Vinho",
+      "creationDate": {
+        "time": 1759378001000
+      },
+      "priority": null,
+      "enabled": true,
+      "mediaSet": null,
+      "internalName": "Ruby Wine",
+      "hexCode": "#5e2728",
+      "attributeType": "color",
+      "name": "Vinho",
+      "attributeName": "Cor"
+    }
+  ],
+  "listPriceFormatted": "R$ 199,90",
+  "installment": 6,
+  "ccInstallmentValueFormatted": "R$ 49,98",
+  "installmentWithoutInterest": 6,
+  "listPrice": 199.9,
+  "preLaunch": false,
+  "productId": "930625445",
+  "review": {
+    "average": 4.6,
+    "count": 5
+  },
+  "productModel": "product",
+  "parentCategories": "cat1050437|cat340070uy"
+}
