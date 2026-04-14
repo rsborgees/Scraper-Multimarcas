@@ -19,7 +19,7 @@ function formatRennerMessage(product) {
     
     // Formatação de Tamanhos
     const tamanhosStr = (product.tamanhos && product.tamanhos.length > 0) 
-        ? product.tamanhos.join(', ') 
+        ? product.tamanhos.join(' ') 
         : "Consultar no site";
 
     const priceLine = (product.precoOriginal && product.precoOriginal > product.precoAtual)
@@ -32,7 +32,7 @@ ${invisibleChar}
 (ativo clicando pelos meus links) 
 
 ${product.nome}
-Tamanhos disponíveis: ${tamanhosStr}
+${tamanhosStr}
 ${priceLine}
 
 🔗 ${product.url}

@@ -38,12 +38,16 @@ async function runAllScrapers(quotas = null) {
         const driveItems = await fetchDriveItems();
         const pool = getSelectionPool(driveItems);
 
-        // Se o scheduler passou quotas, respeitamos. Senão, usamos o pool completo até o limite.
-        const limit = quotas ? Object.values(quotas).reduce((a, b) => a + b, 0) : (parseInt(process.env.DAILY_QUOTA) || 10);
-        const itemsToProcess = pool.slice(0, limit);
+        // Usamos um pool de avaliação maior pois muitos podem ser pulados ou falhar
+        const itemsToProcess = pool.slice(0, 100);
 
         for (const item of itemsToProcess) {
             const store = detectStore(item.fileName);
+            // Pula imediatamente se a cota para a loja for estritamente zero
+            if (quotas && quotas[store] === 0) {
+                continue;
+            }
+
             const parser = getParser(store);
 
             if (!parser) continue;
@@ -72,6 +76,13 @@ async function runAllScrapers(quotas = null) {
                 rawResults.push({ ...data, store, driveId: item.id });
                 const imageStatus = data.imageUrl ? 'Drive ✅' : 'Falha no Drive ❌ (Sem ID)';
                 console.log(`✅ [${store.toUpperCase()}] Sucesso: ${item.id} | Imagem: ${imageStatus}`);
+
+                // Para imediatamente ao atingir o total requisitado pelas quotas
+                const targetTotal = quotas ? Object.values(quotas).filter(v => v > 0).reduce((a, b) => a + b, 0) : (parseInt(process.env.DAILY_QUOTA) || 10);
+                if (rawResults.length >= targetTotal) {
+                    console.log(`🎯 [Orchestrator] Meta atingida (${rawResults.length}/${targetTotal}). Encerrando coleta.`);
+                    break;
+                }
             }
         }
 
