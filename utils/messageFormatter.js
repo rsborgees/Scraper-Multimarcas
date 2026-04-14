@@ -22,6 +22,10 @@ function formatRennerMessage(product) {
         ? product.tamanhos.join(', ') 
         : "Consultar no site";
 
+    const priceLine = (product.precoOriginal && product.precoOriginal > product.precoAtual)
+        ? `De ~${precoOriginal}~ por *${precoAtual}*`
+        : `por *${precoAtual}*`;
+
     return `*${storeName}*
 ${invisibleChar}
 🏷️ Cupom ${cupom}
@@ -29,7 +33,7 @@ ${invisibleChar}
 
 ${product.nome}
 Tamanhos disponíveis: ${tamanhosStr}
-De ~${precoOriginal}~ por *${precoAtual}*
+${priceLine}
 
 🔗 ${product.url}
 
