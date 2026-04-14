@@ -2,6 +2,7 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
+const { google } = require('googleapis');
 
 const { getSelectionPool } = require('./utils/historyManager');
 const { parseProductRenner } = require('./renner/parser');
@@ -33,8 +34,8 @@ async function runAllScrapers(quotas = null) {
 
     try {
         // --- PHASE 1: GOOGLE DRIVE PRIORITY ---
-        console.log('📂 [PHASE 1] Iniciando prioridade do Google Drive...');
-        const driveItems = await fetchDriveItems(page);
+        console.log('📂 [PHASE 1] Iniciando prioridade da API do Google Drive...');
+        const driveItems = await fetchDriveItems();
         const pool = getSelectionPool(driveItems);
 
         // Se o scheduler passou quotas, respeitamos. Senão, usamos o pool completo até o limite.
@@ -90,59 +91,65 @@ async function runAllScrapers(quotas = null) {
  * Utilitários Internos
  */
 
-async function fetchDriveItems(page) {
+async function fetchDriveItems() {
     const folderId = process.env.GOOGLE_DRIVE_FOLDER_ID;
+    const clientId = process.env.GOOGLE_CLIENT_ID;
+    const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+    const refreshToken = process.env.GOOGLE_REFRESH_TOKEN;
+
+    if (!refreshToken) {
+        console.error('❌ ERRO FATAL: GOOGLE_REFRESH_TOKEN não encontrado na .env!');
+        console.error('👉 Por favor, execute o painel de configuração: node generate-token.js');
+        return [];
+    }
+
     try {
-        await page.goto(`https://drive.google.com/drive/folders/${folderId}`, { waitUntil: 'networkidle2', timeout: 60000 });
-        await new Promise(r => setTimeout(r, 5000));
+        const oauth2Client = new google.auth.OAuth2(clientId, clientSecret);
+        oauth2Client.setCredentials({ refresh_token: refreshToken });
+
+        const drive = google.drive({ version: 'v3', auth: oauth2Client });
         
-        return await page.evaluate(() => {
-            const resultsMap = new Map();
+        let allFiles = [];
+        let pageToken = null;
+
+        console.log(`📂 [Drive API] Buscando arquivos na pasta: ${folderId}`);
+
+        do {
+            const response = await drive.files.list({
+                q: `'${folderId}' in parents and trashed = false`,
+                fields: 'nextPageToken, files(id, name, mimeType)',
+                pageToken: pageToken,
+                pageSize: 1000
+            });
             
-            const addItem = (id, driveFileId, fileName) => {
-                const existing = resultsMap.get(id);
-                resultsMap.set(id, {
-                    id,
-                    driveFileId: driveFileId || (existing ? existing.driveFileId : null),
-                    fileName: fileName || (existing ? existing.fileName : '')
-                });
-            };
+            allFiles = allFiles.concat(response.data.files);
+            pageToken = response.data.nextPageToken;
+        } while (pageToken);
 
-            // Estratégia 1: data-id (Containers de arquivos)
-            document.querySelectorAll('div[data-id]').forEach(el => {
-                const driveId = el.getAttribute('data-id');
-                const text = el.innerText || '';
-                const skuMatch = text.match(/\d{6,}/);
-                if (skuMatch && driveId && driveId.length > 20) {
-                    addItem(skuMatch[0], driveId, text.split('\n')[0].substring(0, 100).toLowerCase());
+        const resultsMap = new Map();
+        
+        // Suporte a subpastas: se o usuário tiver subpastas, não vamos pegar recursivamente agora
+        // apenas os arquivos diretos nessa pasta.
+        allFiles.forEach(file => {
+            if (file.mimeType !== 'application/vnd.google-apps.folder') {
+                const skuMatch = file.name.match(/\d{6,}/);
+                if (skuMatch) {
+                    const sku = skuMatch[0];
+                    if (!resultsMap.has(sku)) {
+                        resultsMap.set(sku, {
+                            id: sku,
+                            driveFileId: file.id,
+                            fileName: file.name.toLowerCase()
+                        });
+                    }
                 }
-            });
-
-            // Estratégia 2: Links diretos (/file/d/)
-            document.querySelectorAll('a[href*="/file/d/"]').forEach(link => {
-                const idMatch = link.href.match(/\/file\/d\/([^/]+)/);
-                const container = link.closest('div[role="row"], div[jslog]') || link;
-                const text = container.innerText || link.innerText || '';
-                const skuMatch = text.match(/\d{6,}/);
-                if (idMatch && skuMatch) {
-                    addItem(skuMatch[0], idMatch[1], text.split('\n')[0].trim().toLowerCase());
-                }
-            });
-
-            // Estratégia 3: Texto puro (Fallback para mapear SKUs mesmo sem ID de arquivo)
-            document.querySelectorAll('div, a, span').forEach(el => {
-                if (el.children.length > 0) return; // Apenas folhas para evitar duplicação de texto longo
-                const text = el.innerText || '';
-                const skuMatch = text.match(/\d{6,}/);
-                if (skuMatch && text.length < 150) {
-                    addItem(skuMatch[0], null, text.split('\n')[0].toLowerCase());
-                }
-            });
-
-            return Array.from(resultsMap.values());
+            }
         });
+
+        console.log(`✅ [Drive API] Encontrados ${resultsMap.size} SKUs válidos!`);
+        return Array.from(resultsMap.values());
     } catch (e) {
-        console.error('❌ Erro no Drive:', e.message);
+        console.error('❌ Erro na API do Drive:', e.message);
         return [];
     }
 }
