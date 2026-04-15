@@ -14,7 +14,8 @@ const https = require('https');
 require('dotenv').config();
 
 const SUPABASE_URL = 'https://tzmwlmefpkskuogvhksw.supabase.co';
-const SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR6bXdsbWVmcGtza3VvZ3Zoa3N3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NzA0ODU0MiwiZXhwIjoyMDgyNjI0NTQyfQ.B7l0RKJcbV15ES6IxcO-KKFt1kL-pdCwlFMj7H6YAdU';
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 const WEBHOOK_URL = process.env.WEBHOOK_URL;
 
 const invisibleChar = 'ㅤ'; // U+3164

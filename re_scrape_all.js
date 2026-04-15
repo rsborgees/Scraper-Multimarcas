@@ -11,10 +11,11 @@ const puppeteer = require('puppeteer');
 const axios = require('axios');
 const https = require('https');
 const { parseProductRenner } = require('./renner/parser');
+const { fetchCupomRenner, applyCupomRenner } = require('./utils/cupomRenner');
 require('dotenv').config();
 
-const SUPABASE_URL = 'https://tzmwlmefpkskuogvhksw.supabase.co';
-const SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR6bXdsbWVmcGtza3VvZ3Zoa3N3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NzA0ODU0MiwiZXhwIjoyMDgyNjI0NTQyfQ.B7l0RKJcbV15ES6IxcO-KKFt1kL-pdCwlFMj7H6YAdU';
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 const WEBHOOK_URL = process.env.WEBHOOK_URL;
 
 // ─── Supabase helpers ──────────────────────────────────────────────────────────
@@ -113,6 +114,10 @@ async function main() {
     console.log(`✅ ${products.length} produtos encontrados no banco.`);
     console.log('');
 
+    // Busca regras de cupom da Renner antes do loop
+    console.log('🏷️  [CupomRenner] Buscando regras de desconto...');
+    const cupomRules = await fetchCupomRenner();
+
     const browser = await puppeteer.launch({
         headless: 'new',
         args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
@@ -143,6 +148,15 @@ async function main() {
 
             console.log(`  ✅ Preço Raspado: ${freshData.precoAtual} (Original: ${freshData.precoOriginal})`);
             console.log(`  ✅ Tamanhos: [${freshData.tamanhos.join(', ')}]`);
+
+            // Aplica cupom Renner se houver regra válida
+            const precoBase = freshData.precoAtual;
+            const preco = applyCupomRenner(precoBase, cupomRules);
+            freshData.precoOriginal = preco.precoOriginal;
+            freshData.precoAtual    = preco.precoAtual;
+            if (preco.descontoAplicado) {
+                console.log(`  🏷️  Cupom ${preco.descontoAplicado}% aplicado: R$${precoBase.toFixed(2)} → R$${freshData.precoAtual.toFixed(2)}`);
+            }
 
             // Build the updated message with FRESH sizes from the parser
             const updatedMessage = formatRennerMessage({
