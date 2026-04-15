@@ -80,54 +80,57 @@ async function parseProductRenner(page, urlOrId) {
             if (precoOriginal < precoAtual) precoOriginal = precoAtual;
 
             // --- EXTRAÇÃO DE TAMANHOS ---
-            const tamanhos = [];
+            const tamanhosRaw = [];
 
             // ESTRATÉGIA PRINCIPAL: window.__NEXT_DATA__ (DADOS INTERNOS)
-            // É a mais confiável pois refere-se apenas ao SKU principal e seus irmãos de cor.
             if (product) {
-                if (product.skus && product.skus.length > 0) {
-                    product.skus.forEach(sku => {
-                        if (sku.available && sku.size) {
-                            tamanhos.push(sku.size.toUpperCase());
+                const skus = product.skus || [];
+                if (skus.length > 0) {
+                    skus.forEach(sku => {
+                        const isAvailable = sku.available || (sku.inventory && sku.inventory > 0) || (sku.stock && sku.stock > 0);
+                        if (isAvailable && sku.size) {
+                            tamanhosRaw.push(sku.size.toUpperCase());
                         }
                     });
                 } else if (product.variants && Array.isArray(product.variants)) {
                     product.variants.forEach(variant => {
-                        const hasStock = variant.omniStock > 0 || variant.purchasable;
+                        const hasStock = variant.omniStock > 0 || variant.purchasable || variant.available;
                         if (hasStock) {
                             let size = null;
                             if (variant.characteristics && variant.characteristics.Tamanho) {
                                 size = variant.characteristics.Tamanho;
-                            } else if (variant.skuAttributes && variant.skuAttributes.Tamanho) {
-                                size = variant.skuAttributes.Tamanho;
+                            } else if (variant.skuAttributes) {
+                                const attr = Array.isArray(variant.skuAttributes) 
+                                    ? variant.skuAttributes.find(a => a.attributeType === 'size' || a.attributeName === 'Tamanho')
+                                    : (variant.skuAttributes.Tamanho || variant.skuAttributes.size);
+                                size = attr ? (typeof attr === 'object' ? attr.name || attr.value : attr) : null;
                             }
-                            if (size) tamanhos.push(size.toUpperCase());
+                            if (size) tamanhosRaw.push(size.toUpperCase());
                         }
                     });
                 }
             }
 
-            // ESTRATÉGIA SECUNDÁRIA: DOM (Apenas se o Plano A falhar)
-            if (tamanhos.length === 0) {
-                // Estratégia Cirúrgica: Procurar o seletor de tamanhos MAIS PRÓXIMO do H1 (Título do Produto)
+            // ESTRATÉGIA SECUNDÁRIA: DOM (Apenas se o Plano A falhar ou se quisermos validar)
+            if (tamanhosRaw.length === 0) {
                 const h1 = document.querySelector('h1');
-                let mainProductContainer = h1 ? h1.parentElement : document;
-                
-                // Sobe até achar um container que tenha seletores de tamanho
-                let limit = 5;
-                while (mainProductContainer && limit > 0) {
-                    if (mainProductContainer.querySelector('.size-selector__item, [aria-label="Tamanho"]')) break;
-                    mainProductContainer = mainProductContainer.parentElement;
-                    limit--;
-                }
+                // Tenta achar o container principal do produto para isolar os tamanhos
+                const mainScope = document.querySelector('[class*="product-info"], [class*="product-details"], .product-main') || 
+                                 h1?.closest('section') || 
+                                 h1?.parentElement?.parentElement || 
+                                 document;
 
-                const scope = mainProductContainer || document;
-                const sizeElements = Array.from(scope.querySelectorAll('.size-selector__item:not(.size-selector__item--unavailable), [aria-label="Tamanho"] option'));
+                // Seletores de itens de tamanho que NÃO estão em carrosséis de recomendações
+                const sizeElements = Array.from(mainScope.querySelectorAll('.size-selector__item, [aria-label="Tamanho"] option'))
+                    .filter(el => !el.closest('[class*="carousel"], [class*="recommendation"], [class*="related"]'));
                 
                 sizeElements.forEach(el => {
-                    let isUnavailable = el.className && (el.className.includes('--unavailable') || el.className.includes('disabled')) || 
+                    const className = el.className || '';
+                    let isUnavailable = className.includes('--unavailable') || 
+                                         className.includes('disabled') || 
                                          el.getAttribute('aria-disabled') === 'true' ||
-                                         el.innerText.includes('Esgotado');
+                                         el.hasAttribute('disabled') ||
+                                         (el.innerText || '').includes('Esgotado');
                     
                     if (el.tagName && el.tagName.toLowerCase() === 'option') {
                          if (el.value === '-' || !el.value) isUnavailable = true;
@@ -135,20 +138,44 @@ async function parseProductRenner(page, urlOrId) {
                     
                     if (!isUnavailable) {
                         let sizeText = getSafeText(el);
-                        if (sizeText && sizeText.length <= 4 && !sizeText.includes('Selecione')) {
-                            tamanhos.push(sizeText.toUpperCase());
+                        // Filtro de sanidade: tamanhos da Renner são curtos (P, M, G, 38, 40...)
+                        if (sizeText && sizeText.length <= 5 && !sizeText.toLowerCase().includes('selecione')) {
+                            tamanhosRaw.push(sizeText.toUpperCase());
                         }
                     }
                 });
             }
 
             // FALLBACK FINAL: Se ainda assim estiver vazio, tenta pegar o tamanho do SKU atual do NextData
-            if (tamanhos.length === 0 && product && product.skuAttributes) {
-                const sizeAttr = product.skuAttributes.find(a => a.attributeType === 'size' || a.attributeName === 'Tamanho');
+            if (tamanhosRaw.length === 0 && product && product.skuAttributes) {
+                const attrs = Array.isArray(product.skuAttributes) ? product.skuAttributes : [];
+                const sizeAttr = attrs.find(a => a.attributeType === 'size' || a.attributeName === 'Tamanho');
                 if (sizeAttr && sizeAttr.name) {
-                    tamanhos.push(sizeAttr.name.toUpperCase());
+                    tamanhosRaw.push(sizeAttr.name.toUpperCase());
                 }
             }
+
+            // FILTRO DE HOMOGENEIDADE: Evitar misturar roupas (P, M, G) com sapatos (34, 35...)
+            let finalTamanhos = [...new Set(tamanhosRaw)];
+            
+            const isAlpha = (s) => /^[P|M|G|U|X|S]+$/i.test(s) || s.includes('GG') || s.includes('PP');
+            const isNumeric = (s) => /^\d+$/.test(s);
+            
+            const alphas = finalTamanhos.filter(isAlpha);
+            const numerics = finalTamanhos.filter(isNumeric);
+
+            if (alphas.length > 0 && numerics.length > 0) {
+                const isShoeNumeric = numerics.some(n => ['35', '37', '39'].includes(n));
+                if (isShoeNumeric) {
+                    finalTamanhos = alphas; 
+                } else if (alphas.length > numerics.length) {
+                    finalTamanhos = alphas;
+                } else {
+                    finalTamanhos = numerics;
+                }
+            }
+            
+            const tamanhos = finalTamanhos;
 
             if (tamanhos.length === 0) return null;
 
