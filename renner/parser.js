@@ -32,10 +32,11 @@ async function parseProductRenner(page, urlOrId) {
             }
         }
 
-        await page.goto(url, { waitUntil: 'load', timeout: 60000 });
+        await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
         
-        // Espera de hidratação (Next.js)
-        await new Promise(r => setTimeout(r, 5000));
+        // Espera de hidratação e renderização (Next.js)
+        await new Promise(r => setTimeout(r, 6000));
+        await page.waitForSelector('h1, [class*="product-name"]', { timeout: 10000 }).catch(() => {});
 
         const data = await page.evaluate(async () => {
             const getSafeText = (el) => {
@@ -49,141 +50,140 @@ async function parseProductRenner(page, urlOrId) {
             let product = null;
             if (nextData && nextData.props && nextData.props.pageProps) {
                 const props = nextData.props.pageProps;
-                if (props.product) product = props.product;
-                else if (props.initialData && props.initialData.product) product = props.initialData.product;
+                
+                // Tenta caminhos diretos primeiro
+                if (props.product && props.product.name && props.product.skus) product = props.product;
+                else if (props.initialData && props.initialData.product && props.initialData.product.skus) product = props.initialData.product;
+                
+                // Busca profunda se falhar
+                if (!product || (!product.skus && !product.variants)) {
+                    const findProductDeep = (obj, depth = 0) => {
+                        if (!obj || depth > 15 || typeof obj !== 'object') return null;
+                        
+                        // Um produto real da Renner tem ID, Nome e SKUs ou Variants
+                        const hasName = !!(obj.name || obj.displayName);
+                        const hasItems = (Array.isArray(obj.skus) && obj.skus.length > 0) || 
+                                         (Array.isArray(obj.variants) && obj.variants.length > 0) ||
+                                         (typeof obj.variants === 'string' && obj.variants.length > 0);
+                        const hasId = !!(obj.id || obj.productId || obj.skuId);
+
+                        if (hasName && hasItems && hasId) {
+                            return obj;
+                        }
+                        
+                        for (let key in obj) {
+                            if (['root', 'parent', 'prev', 'next', 'children'].includes(key)) continue;
+                            const found = findProductDeep(obj[key], depth + 1);
+                            if (found) return found;
+                        }
+                        return null;
+                    };
+                    product = findProductDeep(props);
+                }
             }
 
-            // Nome
-            const h1 = document.querySelector('h1, [class*="product-name"], .product-name');
+            // Nome do Produto
+            const h1 = document.querySelector('h1, [class*="product-name"], [aria-level="1"]');
             let nome = getSafeText(h1);
-            if (!nome && product) nome = product.name;
+            if (!nome && product) nome = product.name || product.displayName;
+            
+            // Se ainda não tiver nome ou for um nome genérico detectado antes
+            if (!nome || nome.toLowerCase().includes('grupo de estoque')) {
+                 if (product && (product.name || product.displayName)) nome = product.name || product.displayName;
+            }
+            
             if (!nome) return null;
 
-            // Preços
+            // Preços via DOM (Estratégia 1)
             const getPriceValue = (sel) => {
                 const el = document.querySelector(sel);
                 if (!el) return null;
                 let txt = getSafeText(el).replace('R$', '').replace(/\./g, '').replace(',', '.').trim();
-                return parseFloat(txt);
+                const val = parseFloat(txt);
+                return isNaN(val) ? null : val;
             };
 
             let precoOriginal = getPriceValue('.price-old, [class*="price-old"]');
             let precoAtual = getPriceValue('.price-new, [class*="price-new"], .price-selling');
 
-            // Fallback via Next.js Data
+            // Fallback via Next.js Data (Estratégia 2)
             if ((!precoAtual || isNaN(precoAtual)) && product) {
-                precoAtual = product.price ? product.price.sellingPrice : (product.salePrice || product.listPrice);
-                precoOriginal = product.price ? (product.price.listPrice || precoAtual) : (product.listPrice || precoAtual);
-            }
+                // Preço atual
+                if (product.salePrice) precoAtual = product.salePrice;
+                else if (product.price && product.price.sellingPrice) precoAtual = product.price.sellingPrice;
+                else if (product.price && product.price.listPrice) precoAtual = product.price.listPrice;
+                else if (product.salePriceFormatted) {
+                    precoAtual = parseFloat(product.salePriceFormatted.replace('R$', '').replace(/\./g, '').replace(',', '.').trim());
+                }
 
-            if (!precoOriginal) precoOriginal = precoAtual;
-            if (precoOriginal < precoAtual) precoOriginal = precoAtual;
-
-            // --- EXTRAÇÃO DE TAMANHOS ---
-            const tamanhosRaw = [];
-
-            // ESTRATÉGIA PRINCIPAL: window.__NEXT_DATA__ (DADOS INTERNOS)
-            if (product) {
-                const skus = product.skus || [];
-                if (skus.length > 0) {
-                    skus.forEach(sku => {
-                        const isAvailable = sku.available || (sku.inventory && sku.inventory > 0) || (sku.stock && sku.stock > 0);
-                        if (isAvailable && sku.size) {
-                            tamanhosRaw.push(sku.size.toUpperCase());
-                        }
-                    });
-                } else if (product.variants && Array.isArray(product.variants)) {
-                    product.variants.forEach(variant => {
-                        const hasStock = variant.omniStock > 0 || variant.purchasable || variant.available;
-                        if (hasStock) {
-                            let size = null;
-                            if (variant.characteristics && variant.characteristics.Tamanho) {
-                                size = variant.characteristics.Tamanho;
-                            } else if (variant.skuAttributes) {
-                                const attr = Array.isArray(variant.skuAttributes) 
-                                    ? variant.skuAttributes.find(a => a.attributeType === 'size' || a.attributeName === 'Tamanho')
-                                    : (variant.skuAttributes.Tamanho || variant.skuAttributes.size);
-                                size = attr ? (typeof attr === 'object' ? attr.name || attr.value : attr) : null;
-                            }
-                            if (size) tamanhosRaw.push(size.toUpperCase());
-                        }
-                    });
+                // Preço original
+                if (product.listPrice) precoOriginal = product.listPrice;
+                else if (product.price && product.price.listPrice) precoOriginal = product.price.listPrice;
+                else if (product.listPriceFormatted) {
+                    precoOriginal = parseFloat(product.listPriceFormatted.replace('R$', '').replace(/\./g, '').replace(',', '.').trim());
                 }
             }
 
-            // ESTRATÉGIA SECUNDÁRIA: DOM (Apenas se o Plano A falhar ou se quisermos validar)
-            if (tamanhosRaw.length === 0) {
-                const h1 = document.querySelector('h1');
-                // Tenta achar o container principal do produto para isolar os tamanhos
-                const mainScope = document.querySelector('[class*="product-info"], [class*="product-details"], .product-main') || 
-                                 h1?.closest('section') || 
-                                 h1?.parentElement?.parentElement || 
-                                 document;
+            if (!precoOriginal || isNaN(precoOriginal)) precoOriginal = precoAtual;
 
-                // Seletores de itens de tamanho que NÃO estão em carrosséis de recomendações
-                const sizeElements = Array.from(mainScope.querySelectorAll('.size-selector__item, [aria-label="Tamanho"] option'))
-                    .filter(el => !el.closest('[class*="carousel"], [class*="recommendation"], [class*="related"]'));
-                
-                sizeElements.forEach(el => {
-                    const className = el.className || '';
-                    let isUnavailable = className.includes('--unavailable') || 
-                                         className.includes('disabled') || 
-                                         el.getAttribute('aria-disabled') === 'true' ||
-                                         el.hasAttribute('disabled') ||
-                                         (el.innerText || '').includes('Esgotado');
-                    
-                    if (el.tagName && el.tagName.toLowerCase() === 'option') {
-                         if (el.value === '-' || !el.value) isUnavailable = true;
-                    }
-                    
-                    if (!isUnavailable) {
-                        let sizeText = getSafeText(el);
-                        // Filtro de sanidade: tamanhos da Renner são curtos (P, M, G, 38, 40...)
-                        if (sizeText && sizeText.length <= 5 && !sizeText.toLowerCase().includes('selecione')) {
-                            tamanhosRaw.push(sizeText.toUpperCase());
-                        }
-                    }
+            // --- EXTRAÇÃO DE TAMANHOS ---
+            // NOTA: O NEXT_DATA da Renner só contém o SKU SELECIONADO no momento.
+            // Para capturar TODOS os tamanhos disponíveis, o DOM é a fonte correta.
+            const tamanhosRaw = [];
+
+            // ESTRATÉGIA PRINCIPAL: DOM com seletores exatos (descobertos via análise)
+            // Tamanho disponível: label.ProductAttributes_labelOption__* + ProductAttributes_attribute-size__*
+            // Tamanho indisponível (riscado): label.ProductAttributes_labelOption__* + ProductAttributes_unavailableStock__*
+            const labels = document.querySelectorAll('label[class*="ProductAttributes_labelOption"]');
+            labels.forEach(label => {
+                const cls = label.className || '';
+                const isUnavailable = cls.includes('unavailableStock');
+                if (!isUnavailable) {
+                    const txt = (label.innerText || label.textContent || '').trim().toUpperCase();
+                    const isSize = /^(PP|P|M|G|GG|G1|G2|G3|G4|XG|XGG|UNI|U|\d{2})$/.test(txt);
+                    if (txt && isSize) tamanhosRaw.push(txt);
+                }
+            });
+
+            // FALLBACK 1: Outros seletores de tamanho conhecidos
+            if (tamanhosRaw.length === 0) {
+                const fallbackSelectors = [
+                    '[class*="attribute-size"]:not([class*="unavailableStock"])',
+                    '.size-selector__item:not(.--unavailable)',
+                    '[aria-label="Tamanho"] option:not([disabled])'
+                ];
+                fallbackSelectors.forEach(sel => {
+                    document.querySelectorAll(sel).forEach(el => {
+                        const txt = (el.innerText || el.textContent || '').trim().toUpperCase();
+                        const isSize = /^(PP|P|M|G|GG|G1|G2|G3|G4|XG|XGG|UNI|U|\d{2})$/.test(txt);
+                        if (txt && isSize) tamanhosRaw.push(txt);
+                    });
                 });
             }
 
-            // FALLBACK FINAL: Se ainda assim estiver vazio, tenta pegar o tamanho do SKU atual do NextData
-            if (tamanhosRaw.length === 0 && product && product.skuAttributes) {
-                const attrs = Array.isArray(product.skuAttributes) ? product.skuAttributes : [];
-                const sizeAttr = attrs.find(a => a.attributeType === 'size' || a.attributeName === 'Tamanho');
-                if (sizeAttr && sizeAttr.name) {
-                    tamanhosRaw.push(sizeAttr.name.toUpperCase());
+            // FALLBACK 2: NEXT_DATA (só o SKU atual — usado como último recurso)
+            if (tamanhosRaw.length === 0 && product) {
+                // skuAttributes contem os atributos do SKU atual
+                if (Array.isArray(product.skuAttributes)) {
+                    const sizeAttr = product.skuAttributes.find(a => a.attributeType === 'size');
+                    if (sizeAttr && sizeAttr.name) {
+                        const s = sizeAttr.name.trim().toUpperCase();
+                        if (s) tamanhosRaw.push(s);
+                    }
                 }
             }
 
-            // FILTRO DE HOMOGENEIDADE: Evitar misturar roupas (P, M, G) com sapatos (34, 35...)
-            let finalTamanhos = [...new Set(tamanhosRaw)];
-            
-            const isAlpha = (s) => /^[P|M|G|U|X|S]+$/i.test(s) || s.includes('GG') || s.includes('PP');
-            const isNumeric = (s) => /^\d+$/.test(s);
-            
-            const alphas = finalTamanhos.filter(isAlpha);
-            const numerics = finalTamanhos.filter(isNumeric);
-
-            if (alphas.length > 0 && numerics.length > 0) {
-                const isShoeNumeric = numerics.some(n => ['35', '37', '39'].includes(n));
-                if (isShoeNumeric) {
-                    finalTamanhos = alphas; 
-                } else if (alphas.length > numerics.length) {
-                    finalTamanhos = alphas;
-                } else {
-                    finalTamanhos = numerics;
-                }
-            }
-            
-            const tamanhos = finalTamanhos;
+            // Limpeza final de tamanhos
+            const tamanhos = [...new Set(tamanhosRaw)].filter(s => s && s !== 'TAMANHO' && s !== 'GUIA DE MEDIDAS');
 
             if (tamanhos.length === 0) return null;
 
             // Categoria
             let categoria = 'outros';
-            const categories = product ? (product.categories || []) : [];
-            const breadcrumb = categories.map(c => c.name).join(' ').toLowerCase();
-            const fullText = (nome + ' ' + breadcrumb).toLowerCase();
+            const categories = product ? (product.categories || product.parentCategories || []) : [];
+            const breadcrumb = Array.isArray(categories) ? categories.map(c => c.name || c).join(' ').toLowerCase() : '';
+            const nomeProd = (product?.name || product?.displayName || nome || '').toLowerCase();
+            const fullText = (nomeProd + ' ' + breadcrumb).toLowerCase();
 
             if (fullText.includes('vestido')) categoria = 'vestido';
             else if (fullText.includes('macacão') || fullText.includes('macaquinho')) categoria = 'macacão';
@@ -194,9 +194,8 @@ async function parseProductRenner(page, urlOrId) {
             else if (fullText.includes('calça')) categoria = 'calça';
             else if (fullText.includes('casaco') || fullText.includes('jaqueta')) categoria = 'casaco';
 
-            // ID
-            let id = product ? product.id : null;
-            if (!id && product) id = product.sku;
+            // ID do Produto
+            let id = product ? (product.id || product.productId || product.skuId) : null;
             if (!id) {
                 const urlMatch = window.location.href.match(/-(\d{9,})/);
                 if (urlMatch) id = urlMatch[1];
@@ -204,11 +203,15 @@ async function parseProductRenner(page, urlOrId) {
 
             // Imagem
             let imageUrl = null;
-            if (product && product.images && product.images.length > 0) {
+            if (product && Array.isArray(product.images) && product.images.length > 0) {
                 imageUrl = product.images[0].url;
+            } else if (product && Array.isArray(product.mediaSets) && product.mediaSets.length > 0) {
+                 const firstSet = product.mediaSets[0];
+                 if (firstSet.images && firstSet.images.length > 0) imageUrl = firstSet.images[0].url;
             }
+
             if (!imageUrl) {
-                const imgEl = document.querySelector('.product-image img, [class*="product-image"] img');
+                const imgEl = document.querySelector('.product-image img, [class*="product-image"] img, [class*="MainImage"] img');
                 if (imgEl) imageUrl = imgEl.src;
             }
 
@@ -217,10 +220,11 @@ async function parseProductRenner(page, urlOrId) {
                 nome,
                 precoAtual,
                 precoOriginal,
-                tamanhos: [...new Set(tamanhos)],
+                tamanhos,
                 categoria,
                 url: window.location.href,
-                imageUrl
+                imageUrl,
+                store: 'renner'
             };
         });
 
