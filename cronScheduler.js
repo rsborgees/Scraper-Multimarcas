@@ -11,10 +11,13 @@ const { loadHistory, markAsSent } = require('./utils/historyManager');
  * Representam a quantidade total desejada por dia.
  */
 const IDEAL_TARGETS = {
-    'renner': 35,    // Agora 35 itens/dia conforme solicitado
+    'renner': 50,    // ~3 itens/hora (15h de janela = ~45-50/dia)
     'cea': 0,        // Desativado temporariamente
     'riachuelo': 0   // Desativado temporariamente
 };
+
+// Mínimo de itens por rodada horária (independente do cálculo de GAP)
+const MIN_BATCH_PER_STORE = 3;
 
 /**
  * Cálculo de GAP (Meta - Enviados Hoje)
@@ -56,8 +59,13 @@ function calculateHourlyBatchLimit(quotas) {
     let totalBatchSize = 0;
 
     Object.keys(quotas).forEach(store => {
-        // Divide o que falta pelas horas que faltam
-        const limit = Math.ceil(quotas[store] / hoursRemaining);
+        if (quotas[store] <= 0) {
+            hourlyLimits[store] = 0;
+            return;
+        }
+        // Divide o que falta pelas horas restantes, mas garante mínimo de MIN_BATCH_PER_STORE
+        const calculated = Math.ceil(quotas[store] / hoursRemaining);
+        const limit = Math.min(quotas[store], Math.max(MIN_BATCH_PER_STORE, calculated));
         hourlyLimits[store] = limit;
         totalBatchSize += limit;
     });
@@ -135,4 +143,4 @@ async function sendBatchToWebhook(items) {
 
 console.log('🛡️  [Server] Scraper 2.0 Daemon Ativo');
 console.log('📅 Agendamento: 07h-21h (De hora em hora)');
-console.log('🎯 Metas: Renner (35) | C&A (OFF) | Riachuelo (OFF)');
+console.log('🎯 Metas: Renner (50/dia, mín. 3/hora) | C&A (OFF) | Riachuelo (OFF)');
