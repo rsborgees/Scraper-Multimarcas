@@ -98,33 +98,41 @@ async function parseProductRenner(page, urlOrId) {
             const getPriceValue = (sel) => {
                 const el = document.querySelector(sel);
                 if (!el) return null;
-                let txt = getSafeText(el).replace('R$', '').replace(/\./g, '').replace(',', '.').trim();
+                // Pega apenas o primeiro padrão de preço encontrado (R$ XX,XX ou XX,XX)
+                const match = el.innerText.match(/(\d{1,3}(\.\d{3})*,\d{2})/);
+                if (!match) return null;
+                let txt = match[1].replace(/\./g, '').replace(',', '.').trim();
                 const val = parseFloat(txt);
                 return isNaN(val) ? null : val;
             };
 
-            let precoOriginal = getPriceValue('.price-old, [class*="price-old"]');
-            let precoAtual = getPriceValue('.price-new, [class*="price-new"], .price-selling');
+            // Seletores mais robustos para Renner Next.js
+            let precoOriginal = getPriceValue('.price-old, [class*="price-old"], [class*="PriceSelling_listPrice"]');
+            let precoAtual = getPriceValue('.price-new, [class*="price-new"], .price-selling, [class*="PriceSelling_sellingPrice"]');
 
             // Fallback via Next.js Data (Estratégia 2)
-            if ((!precoAtual || isNaN(precoAtual)) && product) {
+            if (((!precoAtual || isNaN(precoAtual)) || (!precoOriginal || isNaN(precoOriginal))) && product) {
                 // Preço atual
-                if (product.salePrice) precoAtual = product.salePrice;
+                if (product.salePrice && product.salePrice > 0) precoAtual = product.salePrice;
                 else if (product.price && product.price.sellingPrice) precoAtual = product.price.sellingPrice;
-                else if (product.price && product.price.listPrice) precoAtual = product.price.listPrice;
+                else if (product.price && product.price.listPrice && !precoAtual) precoAtual = product.price.listPrice;
                 else if (product.salePriceFormatted) {
-                    precoAtual = parseFloat(product.salePriceFormatted.replace('R$', '').replace(/\./g, '').replace(',', '.').trim());
+                    const m = product.salePriceFormatted.match(/(\d{1,3}(\.\d{3})*,\d{2})/);
+                    if (m) precoAtual = parseFloat(m[1].replace(/\./g, '').replace(',', '.'));
                 }
 
                 // Preço original
-                if (product.listPrice) precoOriginal = product.listPrice;
+                if (product.listPrice && product.listPrice > 0) precoOriginal = product.listPrice;
                 else if (product.price && product.price.listPrice) precoOriginal = product.price.listPrice;
                 else if (product.listPriceFormatted) {
-                    precoOriginal = parseFloat(product.listPriceFormatted.replace('R$', '').replace(/\./g, '').replace(',', '.').trim());
+                    const m = product.listPriceFormatted.match(/(\d{1,3}(\.\d{3})*,\d{2})/);
+                    if (m) precoOriginal = parseFloat(m[1].replace(/\./g, '').replace(',', '.'));
                 }
             }
 
-            if (!precoOriginal || isNaN(precoOriginal)) precoOriginal = precoAtual;
+            // Sanitização final: se só temos um preço, eles devem ser iguais (sem promo)
+            if ((!precoAtual || isNaN(precoAtual)) && precoOriginal) precoAtual = precoOriginal;
+            if ((!precoOriginal || isNaN(precoOriginal)) && precoAtual) precoOriginal = precoAtual;
 
             // --- EXTRAÇÃO DE TAMANHOS ---
             // NOTA: O NEXT_DATA da Renner só contém o SKU SELECIONADO no momento.
