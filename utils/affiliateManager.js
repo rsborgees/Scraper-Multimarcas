@@ -41,40 +41,65 @@ async function generateAwinLink(originalUrl, store) {
         return longTrackingUrl;
     }
 
-    try {
-        console.log(`🔗 [Awin] Encurtando link para Renner (ID: ${advertiserId})...`);
-        
-        const response = await fetch(`https://api.awin.com/publishers/${publisherId}/linkbuilder/generate`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${apiToken}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                advertiserId: parseInt(advertiserId),
-                destinationUrl: originalUrl,
-                shorten: true
-            })
-        });
+    const MAX_ATTEMPTS = 2;
+    let attempts = 0;
 
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.description || `Status ${response.status}`);
+    while (attempts < MAX_ATTEMPTS) {
+        attempts++;
+        try {
+            if (attempts > 1) {
+                console.log(`🔄 [Awin] Tentativa ${attempts}/${MAX_ATTEMPTS}...`);
+            } else {
+                console.log(`🔗 [Awin] Encurtando link para Renner (ID: ${advertiserId})...`);
+            }
+            
+            const response = await fetch(`https://api.awin.com/publishers/${publisherId}/linkbuilder/generate`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${apiToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    advertiserId: parseInt(advertiserId),
+                    destinationUrl: originalUrl,
+                    shorten: true
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                const errorMsg = errorData.description || `Status ${response.status}`;
+                
+                // Se for um erro do servidor ou o "Unknown error", tentamos novamente
+                if (response.status >= 500 || errorMsg.includes('Unknown error')) {
+                    if (attempts < MAX_ATTEMPTS) {
+                        await new Promise(r => setTimeout(r, 1000 * attempts)); // Espera exponencial simples
+                        continue;
+                    }
+                }
+                throw new Error(errorMsg);
+            }
+
+            const data = await response.json();
+            
+            if (data.shortUrl) {
+                console.log(`✅ [Awin] Link encurtado: ${data.shortUrl}`);
+                return data.shortUrl;
+            }
+
+            return data.url || longTrackingUrl;
+
+        } catch (error) {
+            if (attempts >= MAX_ATTEMPTS) {
+                console.error(`❌ [Awin] Falha após ${MAX_ATTEMPTS} tentativas: ${error.message}. Usando link longo.`);
+                return longTrackingUrl;
+            }
+            console.warn(`⚠️ [Awin] Falha na tentativa ${attempts}: ${error.message}`);
+            await new Promise(r => setTimeout(r, 1000 * attempts));
         }
-
-        const data = await response.json();
-        
-        if (data.shortUrl) {
-            console.log(`✅ [Awin] Link encurtado: ${data.shortUrl}`);
-            return data.shortUrl;
-        }
-
-        return data.url || longTrackingUrl;
-
-    } catch (error) {
-        console.error(`❌ [Awin] Erro na API: ${error.message}. Usando link longo.`);
-        return longTrackingUrl;
     }
+
+    return longTrackingUrl;
 }
 
 module.exports = {
