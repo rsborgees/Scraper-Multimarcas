@@ -11,7 +11,6 @@ const puppeteer = require('puppeteer');
 const axios = require('axios');
 const https = require('https');
 const { parseProductRenner } = require('./renner/parser');
-const { fetchCupomRenner, applyCupomRenner } = require('./utils/cupomRenner');
 const { formatRennerMessage } = require('./utils/messageFormatter');
 require('dotenv').config();
 
@@ -78,9 +77,6 @@ async function main() {
     console.log(`✅ ${products.length} produtos encontrados no banco.`);
     console.log('');
 
-    // Busca regras de cupom da Renner antes do loop
-    console.log('🏷️  [CupomRenner] Buscando regras de desconto...');
-    const cupomRules = await fetchCupomRenner();
 
     const browser = await puppeteer.launch({
         headless: 'new',
@@ -113,14 +109,6 @@ async function main() {
             console.log(`  ✅ Preço Raspado: ${freshData.precoAtual} (Original: ${freshData.precoOriginal})`);
             console.log(`  ✅ Tamanhos: [${freshData.tamanhos.join(', ')}]`);
 
-            // Aplica cupom Renner se houver regra válida
-            const precoBase = freshData.precoAtual;
-            const preco = applyCupomRenner(precoBase, cupomRules);
-            freshData.precoOriginal = preco.precoOriginal;
-            freshData.precoAtual    = preco.precoAtual;
-            if (preco.descontoAplicado) {
-                console.log(`  🏷️  Cupom ${preco.descontoAplicado}% aplicado: R$${precoBase.toFixed(2)} → R$${freshData.precoAtual.toFixed(2)}`);
-            }
 
             // Build the updated message with FRESH sizes from the parser
             const updatedMessage = formatRennerMessage({

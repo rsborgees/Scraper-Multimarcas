@@ -10,7 +10,6 @@ const { parseProductCEA } = require('./cea/parser');
 const { parseProductRiachuelo } = require('./riachuelo/parser');
 const { generateAwinLink } = require('./utils/affiliateManager');
 const { formatRennerMessage } = require('./utils/messageFormatter');
-const { fetchCupomRenner, applyCupomRenner } = require('./utils/cupomRenner');
 
 /**
  * Função principal de orquestração
@@ -34,10 +33,6 @@ async function runAllScrapers(quotas = null) {
     const rawResults = [];
 
     try {
-        // --- PRÉ-FASE: Busca regras de cupom da Renner (uma única vez antes do loop) ---
-        console.log('🏷️  [CupomRenner] Buscando regras de desconto...');
-        const cupomRules = await fetchCupomRenner();
-
         // --- PHASE 1: GOOGLE DRIVE PRIORITY ---
         console.log('📂 [PHASE 1] Iniciando prioridade da API do Google Drive...');
         const driveItems = await fetchDriveItems();
@@ -77,13 +72,6 @@ async function runAllScrapers(quotas = null) {
                     data.imageUrl = `https://drive.google.com/uc?export=download&id=${item.driveFileId}`;
                 }
 
-                // ── CUPOM RENNER (aplica desconto se houver regra válida) ──
-                if (store === 'renner' && data.precoAtual) {
-                    const preco = applyCupomRenner(data.precoAtual, cupomRules);
-                    data.precoOriginal = preco.precoOriginal;
-                    data.precoAtual    = preco.precoAtual;
-                    data.descontoAplicado = preco.descontoAplicado;
-                }
 
                 // Gerar mensagem formatada APENAS para Renner (solicitação do usuário)
                 if (store === 'renner') {
