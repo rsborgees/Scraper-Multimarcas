@@ -6,15 +6,17 @@ function formatRennerMessage(product) {
     const storeName = "RENNER";
     const invisibleChar = "ㅤ"; // U+3164 solicitado pelo usuário
     const cupom = "*FRANCALHEIRA*";
-    const communityLink = "https://chat.whatsapp.com/BvwDGxSyny67OV0loLpS9p";
     
     // Formatação de Preços
     const formatCurrency = (val) => {
         if (!val || isNaN(val) || val <= 0) return "R$ --";
-        return val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        // Formato: R$ 199,90
+        return val.toLocaleString('pt-BR', { 
+            style: 'currency', 
+            currency: 'BRL' 
+        });
     };
 
-    // Prepara os valores numéricos para comparação
     const valOriginal = product.precoOriginal;
     const valAtual = product.precoAtual;
     const temPromo = valOriginal && valAtual && valOriginal > valAtual;
@@ -29,31 +31,34 @@ function formatRennerMessage(product) {
 
     let priceLine = "";
     if (temPromo) {
+        // Uso de ~ para riscado e * para negrito conforme solicitado
+        // Ordem lógica: De ~Original~ por *Atual*
         priceLine = `De ~${precoOriginalStr}~ por *${precoAtualStr}*`;
-    } else if (valAtual && !isNaN(valAtual)) {
-        priceLine = `*${precoAtualStr}*`;
-    } else if (valOriginal && !isNaN(valOriginal)) {
-        priceLine = `*${precoOriginalStr}*`;
     } else {
-        priceLine = "*Preço consultar no site*";
+        // Adicionado "Por " conforme solicitado para preços sem promoção
+        priceLine = `Por *${precoAtualStr}*`;
     }
 
-    return `*${storeName}*
+    // Construção da Mensagem
+    let message = `*${storeName}*
 ${invisibleChar}
 🏷️ Cupom ${cupom}
-(ativo clicando pelos meus links) 
+(ativo clicando pelos meus links)
 ${invisibleChar}
 
-${product.nome}
-${tamanhosStr}
+${product.nome}`;
+
+    // Adiciona "Tamanho que usei" se existir (vindo do Drive)
+    if (product.tamanhoQueUsei) {
+        message += `\n\nTamanho que usei: ${product.tamanhoQueUsei}`;
+    }
+
+    message += `\n\n${tamanhosStr}
 ${priceLine}
 
-🔗 ${product.url}
+🔗 ${product.url}`;
 
-Vagas para nossa Comunidade: 
-(chama as amigas) 👇🏼
-
-${communityLink}`;
+    return message;
 }
 
 module.exports = { formatRennerMessage };

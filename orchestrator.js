@@ -61,6 +61,10 @@ async function runAllScrapers(quotas = null) {
             const data = await parser(page, item.id);
             
             if (data) {
+                // Adiciona o tamanho da modelo extraído do Drive se disponível
+                if (item.tamanhoQueUsei) {
+                    data.tamanhoQueUsei = item.tamanhoQueUsei;
+                }
                 // Parametrização Awin (Atualmente apenas Renner suportada no utility)
                 const originalUrl = data.url;
                 data.url = await generateAwinLink(originalUrl, store);
@@ -160,10 +164,16 @@ async function fetchDriveItems() {
                 if (skuMatch) {
                     const sku = skuMatch[0];
                     if (!resultsMap.has(sku)) {
+                        // Extração do tamanho da modelo (P, M, G, etc)
+                        // Busca por letras isoladas ou tamanhos comuns entre hífens ou espaços
+                        const sizeMatch = file.name.match(/\b(PP|P|M|G|GG|G1|G2|G3|G4|XG|XGG)\b/i);
+                        const tamanhoQueUsei = sizeMatch ? sizeMatch[1].toUpperCase() : null;
+
                         resultsMap.set(sku, {
                             id: sku,
                             driveFileId: file.id,
-                            fileName: file.name.toLowerCase()
+                            fileName: file.name.toLowerCase(),
+                            tamanhoQueUsei: tamanhoQueUsei
                         });
                     }
                 }

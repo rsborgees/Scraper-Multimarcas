@@ -11,6 +11,7 @@
 const puppeteer = require('puppeteer');
 const axios = require('axios');
 const https = require('https');
+const { formatRennerMessage } = require('./utils/messageFormatter');
 require('dotenv').config();
 
 const SUPABASE_URL = 'https://tzmwlmefpkskuogvhksw.supabase.co';
@@ -71,42 +72,6 @@ async function updateProductInSupabase(id, tamanhos, message) {
         `/produtos_2?id=eq.${id}`,
         { tamanhos, message }
     );
-}
-
-// ─── Message formatter (identical to messageFormatter.js) ─────────────────────
-
-function formatRennerMessage(product) {
-    const formatCurrency = (val) => {
-        if (!val || isNaN(val)) return 'R$ --';
-        return val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    };
-
-    const precoOriginal = formatCurrency(product.precoOriginal);
-    const precoAtual = formatCurrency(product.precoAtual);
-
-    const tamanhosStr = (product.tamanhos && product.tamanhos.length > 0)
-        ? product.tamanhos.join(' ')
-        : 'Consultar no site';
-
-    const priceLine = (product.precoOriginal && product.precoOriginal > product.precoAtual)
-        ? `De ~${precoOriginal}~ por *${precoAtual}*`
-        : `por *${precoAtual}*`;
-
-    return `*RENNER*
-${invisibleChar}
-🏷️ Cupom *FRANCALHEIRA*
-(ativo clicando pelos meus links) 
-
-${product.nome}
-${tamanhosStr}
-${priceLine}
-
-🔗 ${product.url}
-
-Vagas para nossa Comunidade: 
-(chama as amigas) 👇🏼
-
-https://chat.whatsapp.com/BvwDGxSyny67OV0loLpS9p`;
 }
 
 // ─── Renner size scraper ───────────────────────────────────────────────────────

@@ -5,41 +5,8 @@ require('dotenv').config();
 
 const { parseProductRenner } = require('./renner/parser');
 const { generateAwinLink } = require('./utils/affiliateManager');
+const { formatRennerMessage } = require('./utils/messageFormatter');
 
-function formatRennerMessage(product) {
-    const invisibleChar = 'ㅤ';
-    const formatCurrency = (val) => {
-        if (val === undefined || val === null || isNaN(val)) return 'R$ --';
-        return val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    };
-
-    const precoOriginal = formatCurrency(product.precoOriginal);
-    const precoAtual = formatCurrency(product.precoAtual);
-
-    const tamanhosStr = (product.tamanhos && product.tamanhos.length > 0)
-        ? product.tamanhos.join(' ')
-        : 'Consultar no site';
-
-    const priceLine = (product.precoOriginal && product.precoOriginal > product.precoAtual)
-        ? `De ~${precoOriginal}~ por *${precoAtual}*`
-        : `por *${precoAtual}*`;
-
-    return `*RENNER*
-${invisibleChar}
-🏷️ Cupom *FRANCALHEIRA*
-(ativo clicando pelos meus links) 
-
-${product.nome}
-${tamanhosStr}
-${priceLine}
-
-🔗 ${product.url}
-
-Vagas para nossa Comunidade: 
-(chama as amigas) 👇🏼
-
-https://chat.whatsapp.com/BvwDGxSyny67OV0loLpS9p`;
-}
 
 async function sendSpecificDriveItem() {
     const sku = '930932613';
