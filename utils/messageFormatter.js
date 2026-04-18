@@ -4,7 +4,7 @@
 
 function formatRennerMessage(product) {
     const storeName = "RENNER";
-    const invisibleChar = "ㅤ"; // U+3164 solicitado pelo usuário
+    const invisibleChar = "ㅤ";
     const cupom = "*FRANCALHEIRA*";
     
     // Formatação de Preços
@@ -31,11 +31,8 @@ function formatRennerMessage(product) {
 
     let priceLine = "";
     if (temPromo) {
-        // Uso de ~ para riscado e * para negrito conforme solicitado
-        // Ordem lógica: De ~Original~ por *Atual*
         priceLine = `De ~${precoOriginalStr}~ por *${precoAtualStr}*`;
     } else {
-        // Adicionado "Por " conforme solicitado para preços sem promoção
         priceLine = `Por *${precoAtualStr}*`;
     }
 

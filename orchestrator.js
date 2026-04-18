@@ -73,7 +73,7 @@ async function runAllScrapers(quotas = null) {
                 }
 
 
-                // Gerar mensagem formatada APENAS para Renner (solicitação do usuário)
+                // Gerar mensagem formatada APENAS para Renner
                 if (store === 'renner') {
                     data.message = formatRennerMessage(data);
                 }
@@ -144,7 +144,7 @@ async function fetchDriveItems() {
 
         const resultsMap = new Map();
         
-        // Suporte a subpastas: se o usuário tiver subpastas, não vamos pegar recursivamente agora
+        // Não processa subpastas recursivamente por enquanto
         // apenas os arquivos diretos nessa pasta.
         allFiles.forEach(file => {
             if (file.mimeType !== 'application/vnd.google-apps.folder') {

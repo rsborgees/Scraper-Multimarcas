@@ -1,5 +1,5 @@
 /**
- * Motor de Distribuição de Links (Filtro de Inteligência)
+ * Motor de Distribuição de Links
  * Responsável por selecionar os 11 melhores itens de um pool bruto.
  */
 
