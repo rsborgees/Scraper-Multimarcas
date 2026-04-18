@@ -7,10 +7,30 @@ data/*.json
 *.log
 scrapers/data/*.json
 
-# Scripts de Teste
+# Relatórios, Resumos e Evidências
+*.png
+*.txt
+product*.json
+produtos*.json
+
+# Scripts de Teste e Manutenção
 test-*.js
+test_*.js
 debug-*.js
 demo-*.js
+manual-*.js
+push-*.js
+fix-*.js
+fetch-*.js
+send-*.js
+dump-*.js
+re_scrape_*.js
+ultra-scan-*.js
+search-*.js
+full-drive-list.js
+
+# Pastas Temporárias
+scratch/
 
 # Sistema
 .DS_Store
