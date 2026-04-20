@@ -41,10 +41,14 @@ async function runAllScrapers(quotas = null) {
         // Usamos um pool de avaliação maior pois muitos podem ser pulados ou falhar
         const itemsToProcess = pool.slice(0, 100);
 
+        // Rastreador de metas atingidas por loja
+        const currentQuotas = quotas ? { ...quotas } : null;
+
         for (const item of itemsToProcess) {
             const store = detectStore(item.fileName);
-            // Pula imediatamente se a cota para a loja for estritamente zero
-            if (quotas && quotas[store] === 0) {
+            
+            // Pula se a loja não for reconhecida ou se a cota para ela já estiver zerada
+            if (!store || (currentQuotas && (currentQuotas[store] || 0) <= 0)) {
                 continue;
             }
 
@@ -95,12 +99,16 @@ async function runAllScrapers(quotas = null) {
                     finalData.message = formatRiachueloMessage(isConjunto ? scrapedItems : finalData);
                 }
 
+                if (currentQuotas) {
+                    currentQuotas[store]--;
+                }
+
                 rawResults.push(finalData);
                 const imageStatus = finalData.imageUrl ? 'Drive ✅' : 'Falha no Drive ❌ (Sem ID)';
                 console.log(`✅ [${store.toUpperCase()}] Sucesso: ${item.id} | Imagem: ${imageStatus} | Conjunto: ${isConjunto ? 'Sim' : 'Não'}`);
 
                 // Para imediatamente ao atingir o total requisitado pelas quotas
-                const targetTotal = quotas ? Object.values(quotas).filter(v => v > 0).reduce((a, b) => a + b, 0) : (parseInt(process.env.DAILY_QUOTA) || 10);
+                const targetTotal = quotas ? Object.values(quotas).reduce((a, b) => a + b, 0) : (parseInt(process.env.DAILY_QUOTA) || 10);
                 if (rawResults.length >= targetTotal) {
                     console.log(`🎯 [Orchestrator] Meta atingida (${rawResults.length}/${targetTotal}). Encerrando coleta.`);
                     break;
