@@ -53,34 +53,49 @@ async function runAllScrapers(quotas = null) {
             if (!parser) continue;
 
             console.log(`🕵️ [${store.toUpperCase()}] Processando: ${item.id}`);
-            const data = await parser(page, item.id);
             
-            if (data) {
-                // Adiciona o tamanho da modelo extraído do Drive se disponível
-                if (item.tamanhoQueUsei) {
-                    data.tamanhoQueUsei = item.tamanhoQueUsei;
-                }
-                // Parametrização Awin (Atualmente apenas Renner suportada no utility)
-                const originalUrl = data.url;
-                data.url = await generateAwinLink(originalUrl, store);
-
-                // Garantir que a imagem NUNCA venha da loja
-                data.imageUrl = null;
+            let scrapedItems = [];
+            for (let i = 0; i < item.skus.length; i++) {
+                const sku = item.skus[i];
+                const data = await parser(page, sku);
                 
-                // Usar APENAS o link do Drive se disponível
-                if (item.driveFileId) {
-                    data.imageUrl = `https://drive.google.com/uc?export=download&id=${item.driveFileId}`;
+                if (data) {
+                    const size = item.tamanhosQueUsei && item.tamanhosQueUsei[i] 
+                        ? item.tamanhosQueUsei[i] 
+                        : (item.tamanhosQueUsei && item.tamanhosQueUsei[0] ? item.tamanhosQueUsei[0] : null);
+                        
+                    if (size) {
+                        data.tamanhoQueUsei = size;
+                    }
+                    
+                    data.url = await generateAwinLink(data.url, store);
+                    scrapedItems.push(data);
+                }
+            }
+
+            if (scrapedItems.length > 0) {
+                const isConjunto = item.skus.length > 1;
+                
+                // Usamos a base do primeiro item e criamos um payload único
+                let finalData = { ...scrapedItems[0] };
+                
+                finalData.imageUrl = item.driveFileId ? `https://drive.google.com/uc?export=download&id=${item.driveFileId}` : null;
+                finalData.store = store;
+                finalData.driveId = item.id;
+                finalData.isConjunto = isConjunto;
+
+                if (isConjunto) {
+                    finalData.nome = "Conjunto";
+                    finalData.conjuntoItems = scrapedItems;
                 }
 
-
-                // Gerar mensagem formatada APENAS para Renner
                 if (store === 'renner') {
-                    data.message = formatRennerMessage(data);
+                    finalData.message = formatRennerMessage(isConjunto ? scrapedItems : finalData);
                 }
-                
-                rawResults.push({ ...data, store, driveId: item.id });
-                const imageStatus = data.imageUrl ? 'Drive ✅' : 'Falha no Drive ❌ (Sem ID)';
-                console.log(`✅ [${store.toUpperCase()}] Sucesso: ${item.id} | Imagem: ${imageStatus}`);
+
+                rawResults.push(finalData);
+                const imageStatus = finalData.imageUrl ? 'Drive ✅' : 'Falha no Drive ❌ (Sem ID)';
+                console.log(`✅ [${store.toUpperCase()}] Sucesso: ${item.id} | Imagem: ${imageStatus} | Conjunto: ${isConjunto ? 'Sim' : 'Não'}`);
 
                 // Para imediatamente ao atingir o total requisitado pelas quotas
                 const targetTotal = quotas ? Object.values(quotas).filter(v => v > 0).reduce((a, b) => a + b, 0) : (parseInt(process.env.DAILY_QUOTA) || 10);
@@ -148,20 +163,21 @@ async function fetchDriveItems() {
         // apenas os arquivos diretos nessa pasta.
         allFiles.forEach(file => {
             if (file.mimeType !== 'application/vnd.google-apps.folder') {
-                const skuMatch = file.name.match(/\d{6,}/);
-                if (skuMatch) {
-                    const sku = skuMatch[0];
-                    if (!resultsMap.has(sku)) {
+                const skuMatches = file.name.match(/\d{5,}/g);
+                if (skuMatches && skuMatches.length > 0) {
+                    const idKey = skuMatches.join('-'); // Junta os SKUs se for um conjunto
+                    if (!resultsMap.has(idKey)) {
                         // Extração do tamanho da modelo (P, M, G, etc)
-                        // Busca por letras isoladas ou tamanhos comuns entre hífens ou espaços
-                        const sizeMatch = file.name.match(/\b(PP|P|M|G|GG|G1|G2|G3|G4|XG|XGG)\b/i);
-                        const tamanhoQueUsei = sizeMatch ? sizeMatch[1].toUpperCase() : null;
+                        // Busca por letras isoladas ou múltiplos tamanhos
+                        const sizeMatches = file.name.match(/\b(PP|P|M|G|GG|G1|G2|G3|G4|XG|XGG)\b/ig);
+                        const tamanhosQueUsei = sizeMatches ? sizeMatches.map(s => s.toUpperCase()) : [];
 
-                        resultsMap.set(sku, {
-                            id: sku,
+                        resultsMap.set(idKey, {
+                            id: idKey,
+                            skus: skuMatches,
                             driveFileId: file.id,
                             fileName: file.name.toLowerCase(),
-                            tamanhoQueUsei: tamanhoQueUsei
+                            tamanhosQueUsei: tamanhosQueUsei
                         });
                     }
                 }

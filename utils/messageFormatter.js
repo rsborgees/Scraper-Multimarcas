@@ -2,7 +2,7 @@
  * Utilitário para formatação de mensagens de produtos (WhatsApp/Telegram)
  */
 
-function formatRennerMessage(product) {
+function formatRennerMessage(productOrProducts) {
     const storeName = "RENNER";
     const invisibleChar = "ㅤ";
     const cupom = "*FRANCALHEIRA*";
@@ -17,24 +17,36 @@ function formatRennerMessage(product) {
         });
     };
 
-    const valOriginal = product.precoOriginal;
-    const valAtual = product.precoAtual;
-    const temPromo = valOriginal && valAtual && valOriginal > valAtual;
+    const buildProductBlock = (product) => {
+        const valOriginal = product.precoOriginal;
+        const valAtual = product.precoAtual;
+        const temPromo = valOriginal && valAtual && valOriginal > valAtual;
 
-    const precoOriginalStr = formatCurrency(valOriginal);
-    const precoAtualStr = formatCurrency(valAtual);
-    
-    // Formatação de Tamanhos
-    const tamanhosStr = (product.tamanhos && product.tamanhos.length > 0) 
-        ? product.tamanhos.join(' ') 
-        : "Consultar no site";
+        const precoOriginalStr = formatCurrency(valOriginal);
+        const precoAtualStr = formatCurrency(valAtual);
+        
+        // Formatação de Tamanhos
+        const tamanhosStr = (product.tamanhos && product.tamanhos.length > 0) 
+            ? product.tamanhos.join(' ') 
+            : "Consultar no site";
 
-    let priceLine = "";
-    if (temPromo) {
-        priceLine = `De ~${precoOriginalStr}~ por *${precoAtualStr}*`;
-    } else {
-        priceLine = `Por *${precoAtualStr}*`;
-    }
+        let priceLine = "";
+        if (temPromo) {
+            priceLine = `De ~${precoOriginalStr}~ por *${precoAtualStr}*`;
+        } else {
+            priceLine = `Por *${precoAtualStr}*`;
+        }
+
+        let block = `${product.nome}`;
+        
+        if (product.tamanhoQueUsei) {
+            block += `\n\nTamanho que usei: ${product.tamanhoQueUsei}`;
+        }
+        
+        block += `\n\n${tamanhosStr}\n${priceLine}\n\n🔗 ${product.url}`;
+        
+        return block;
+    };
 
     // Construção da Mensagem
     let message = `*${storeName}*
@@ -42,18 +54,15 @@ ${invisibleChar}
 🏷️ Cupom ${cupom}
 (ativo clicando pelos meus links)
 ${invisibleChar}
+`;
 
-${product.nome}`;
-
-    // Adiciona "Tamanho que usei" se existir (vindo do Drive)
-    if (product.tamanhoQueUsei) {
-        message += `\n\nTamanho que usei: ${product.tamanhoQueUsei}`;
+    if (Array.isArray(productOrProducts)) {
+        const blocks = productOrProducts.map(p => buildProductBlock(p));
+        // Separa cada peça por quebras de linha generosas
+        message += "\n" + blocks.join('\n\n\n');
+    } else {
+        message += "\n" + buildProductBlock(productOrProducts);
     }
-
-    message += `\n\n${tamanhosStr}
-${priceLine}
-
-🔗 ${product.url}`;
 
     return message;
 }
