@@ -11,13 +11,17 @@ const { loadHistory, markAsSent } = require('./utils/historyManager');
  * Representam a quantidade total desejada por dia.
  */
 const IDEAL_TARGETS = {
-    'renner': 50,    // ~3 itens/hora (15h de janela = ~45-50/dia)
+    'renner': 45,    // ~3 itens/hora (15h de janela = 45/dia)
     'cea': 0,        // Desativado temporariamente
-    'riachuelo': 0   // Desativado temporariamente
+    'riachuelo': 15  // ~1 item/hora (15h de janela = 15/dia)
 };
 
-// Mínimo de itens por rodada horária (independente do cálculo de GAP)
-const MIN_BATCH_PER_STORE = 3;
+// Limites por rodada horária (garante estabilidade no envio)
+const BATCH_CONFIG = {
+    'renner': { min: 2, max: 3 },
+    'riachuelo': { min: 1, max: 1 },
+    'cea': { min: 1, max: 3 }
+};
 
 /**
  * Cálculo de GAP (Meta - Enviados Hoje)
@@ -63,9 +67,19 @@ function calculateHourlyBatchLimit(quotas) {
             hourlyLimits[store] = 0;
             return;
         }
-        // Divide o que falta pelas horas restantes, mas garante mínimo de MIN_BATCH_PER_STORE
+        // Configurações de min/max para a loja
+        const config = BATCH_CONFIG[store] || { min: 1, max: 3 };
+        
+        // Divide o que falta pelas horas restantes
         const calculated = Math.ceil(quotas[store] / hoursRemaining);
-        const limit = Math.min(quotas[store], Math.max(MIN_BATCH_PER_STORE, calculated));
+        
+        // Aplica os limitadores (nunca menos que 'min', nunca mais que 'max')
+        let limit = Math.max(config.min, calculated);
+        limit = Math.min(limit, config.max);
+        
+        // Mas nunca maior que a própria quota pendente
+        limit = Math.min(quotas[store], limit);
+        
         hourlyLimits[store] = limit;
         totalBatchSize += limit;
     });
@@ -143,4 +157,4 @@ async function sendBatchToWebhook(items) {
 
 console.log('🛡️  [Server] Scraper 2.0 Daemon Ativo');
 console.log('📅 Agendamento: 07h-21h (De hora em hora)');
-console.log('🎯 Metas: Renner (50/dia, mín. 3/hora) | C&A (OFF) | Riachuelo (OFF)');
+console.log('🎯 Metas: Renner (~3/hora) | Riachuelo (1/hora) | C&A (OFF)');

@@ -4,7 +4,12 @@
  */
 
 const MERCHANT_IDS = {
-    'renner': '17801'
+    'renner': '17801',
+    'riachuelo': '86587'
+};
+
+const PUBLISHER_IDS = {
+    'riachuelo': process.env.AWIN_PUBLISHER_ID_RIACHUELO
 };
 
 /**
@@ -18,13 +23,13 @@ const MERCHANT_IDS = {
 async function generateAwinLink(originalUrl, store) {
     const storeLower = store.toLowerCase();
     
-    // RESTRICÃO: Só processa a Renner por enquanto
-    if (storeLower !== 'renner') {
-        console.log(`ℹ️ [Awin] Ignorando parametrização para ${store} (Apenas Renner ativa).`);
+    // Agora processamos tanto Renner quanto Riachuelo
+    if (!MERCHANT_IDS[storeLower]) {
+        console.log(`ℹ️ [Awin] Ignorando parametrização para ${store} (Loja não configurada na Awin).`);
         return originalUrl;
     }
 
-    const publisherId = process.env.AWIN_PUBLISHER_ID;
+    const publisherId = PUBLISHER_IDS[storeLower] || process.env.AWIN_PUBLISHER_ID;
     const apiToken = process.env.AWIN_API_TOKEN;
     const advertiserId = MERCHANT_IDS[storeLower];
 
@@ -33,8 +38,11 @@ async function generateAwinLink(originalUrl, store) {
         return originalUrl;
     }
 
+    // Limpa a URL de parâmetros que podem quebrar o redirecionamento
+    const cleanUrl = originalUrl.split('?')[0];
+
     // Fallback: Gerar link longo se não houver token de API
-    const longTrackingUrl = `https://www.awin1.com/cread.php?awinmid=${advertiserId}&awinaffid=${publisherId}&p=${encodeURIComponent(originalUrl)}`;
+    const longTrackingUrl = `https://www.awin1.com/cread.php?awinmid=${advertiserId}&awinaffid=${publisherId}&p=${encodeURIComponent(cleanUrl)}`;
 
     if (!apiToken) {
         console.warn('⚠️ [Awin] AWIN_API_TOKEN não configurado. Retornando link longo.');
@@ -50,7 +58,7 @@ async function generateAwinLink(originalUrl, store) {
             if (attempts > 1) {
                 console.log(`🔄 [Awin] Tentativa ${attempts}/${MAX_ATTEMPTS}...`);
             } else {
-                console.log(`🔗 [Awin] Encurtando link para Renner (ID: ${advertiserId})...`);
+                console.log(`🔗 [Awin] Encurtando link para ${store.toUpperCase()} (ID: ${advertiserId})...`);
             }
             
             const response = await fetch(`https://api.awin.com/publishers/${publisherId}/linkbuilder/generate`, {

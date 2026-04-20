@@ -9,7 +9,7 @@ const { parseProductRenner } = require('./renner/parser');
 const { parseProductCEA } = require('./cea/parser');
 const { parseProductRiachuelo } = require('./riachuelo/parser');
 const { generateAwinLink } = require('./utils/affiliateManager');
-const { formatRennerMessage } = require('./utils/messageFormatter');
+const { formatRennerMessage, formatRiachueloMessage } = require('./utils/messageFormatter');
 
 /**
  * Função principal de orquestração
@@ -91,6 +91,8 @@ async function runAllScrapers(quotas = null) {
 
                 if (store === 'renner') {
                     finalData.message = formatRennerMessage(isConjunto ? scrapedItems : finalData);
+                } else if (store === 'riachuelo') {
+                    finalData.message = formatRiachueloMessage(isConjunto ? scrapedItems : finalData);
                 }
 
                 rawResults.push(finalData);
