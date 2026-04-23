@@ -16,11 +16,11 @@ const IDEAL_TARGETS = {
     'riachuelo': 15  // ~1 item/hora (15h de janela = 15/dia)
 };
 
-// Limites por rodada horária (garante estabilidade no envio)
+// Limites EXATOS por rodada horária (min = max = obrigatório)
 const BATCH_CONFIG = {
-    'renner': { min: 2, max: 3 },
+    'renner': { min: 3, max: 3 },
     'riachuelo': { min: 1, max: 1 },
-    'cea': { min: 1, max: 3 }
+    'cea': { min: 0, max: 0 }
 };
 
 /**
@@ -111,21 +111,36 @@ cron.schedule('0 7-21 * * *', async () => {
         // mas o Distributor filtrará apenas o limite desta hora.
         const rawPool = await runAllScrapers(quotas);
         
-        // 2. Filtragem e Seleção inteligente (usando o limite calculado para esta hora)
-        // O distributeLinks selecionará os N melhores do pool total
-        const finalSelection = distributeLinks(rawPool, totalBatchSize);
-        
+        // 2. Filtragem e Seleção com proporção exata por loja
+        const finalSelection = distributeLinks(rawPool, hourlyLimits);
+
+        // 3. Validação de exatidão — só envia se tiver EXATAMENTE o número certo de cada loja
+        const countByStore = {};
+        finalSelection.forEach(item => {
+            countByStore[item.store] = (countByStore[item.store] || 0) + 1;
+        });
+
+        const exactMatch = Object.entries(hourlyLimits).every(([store, required]) => {
+            if (required === 0) return true; // lojas desativadas são ignoradas
+            return (countByStore[store] || 0) === required;
+        });
+
+        if (!exactMatch) {
+            console.warn(`⚠️ [Scheduler] Proporção não atingida. Necessário: ${JSON.stringify(hourlyLimits)} | Obtido: ${JSON.stringify(countByStore)}. Rodada pulada.`);
+            return;
+        }
+
         if (finalSelection.length > 0) {
-            // 3. Envio para o Webhook (Lote único)
+            // 4. Envio para o Webhook (Lote único)
             await sendBatchToWebhook(finalSelection);
             
-            // 4. Marcar como enviado no histórico
+            // 5. Marcar como enviado no histórico
             finalSelection.forEach(item => {
                 markAsSent(item.driveId || item.id, item.store);
             });
-            console.log(`✅ [Scheduler] Rodada finalizada: ${finalSelection.length} itens enviados.`);
+            console.log(`✅ [Scheduler] Rodada finalizada: ${finalSelection.length} itens enviados. Distribuição: ${JSON.stringify(countByStore)}`);
         } else {
-            console.log('📭 [Scheduler] Nenhum item disponível ou selecionado para envio nesta rodada.');
+            console.log('📭 [Scheduler] Nenhum item disponível para envio nesta rodada.');
         }
 
     } catch (error) {

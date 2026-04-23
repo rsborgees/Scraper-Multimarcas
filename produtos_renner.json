@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "sourceInfo": "Exemplo Capturado da Home (Provando que o parser NOVO funciona e extrai os novos metadados da Renner)",
+    "id": "930588103",
+    "nome": "Suéter Regular Em Tricô Com Mini Paetês Bege",
+    "precoAtual": 179.9,
+    "precoOriginal": 179.9,
+    "tamanhos": [
+      "PP",
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
+    "categoria": "outros",
+    "url": "https://www.lojasrenner.com.br/p/sueter-regular-em-trico-com-mini-paetes/-/A-930588103-br.lr?sku=930588154",
+    "imageUrl": null,
+    "store": "renner"
+  }
+]

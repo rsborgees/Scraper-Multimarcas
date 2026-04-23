@@ -1,0 +1,177 @@
+{
+  "mediaSets": [
+    {
+      "smallImageUrl": "//img.lojasrenner.com.br/item/928556760/small/3.jpg",
+      "zoomImageUrl": "//img.lojasrenner.com.br/item/928556760/zoom/3.jpg",
+      "mediumImageUrl": "//img.lojasrenner.com.br/item/928556760/medium/3.jpg",
+      "thumbImageUrl": "//img.lojasrenner.com.br/item/928556760/thumb/3.jpg",
+      "showcaseImageUrl": "//img.lojasrenner.com.br/item/928556760/vitrine/3.jpg",
+      "largeImageUrl": "//img.lojasrenner.com.br/item/928556760/large/3.jpg",
+      "id": "2598496"
+    },
+    {
+      "smallImageUrl": "//img.lojasrenner.com.br/item/928556760/small/4.jpg",
+      "zoomImageUrl": "//img.lojasrenner.com.br/item/928556760/zoom/4.jpg",
+      "mediumImageUrl": "//img.lojasrenner.com.br/item/928556760/medium/4.jpg",
+      "thumbImageUrl": "//img.lojasrenner.com.br/item/928556760/thumb/4.jpg",
+      "showcaseImageUrl": "//img.lojasrenner.com.br/item/928556760/vitrine/4.jpg",
+      "largeImageUrl": "//img.lojasrenner.com.br/item/928556760/large/4.jpg",
+      "id": "2598497"
+    },
+    {
+      "smallImageUrl": "//img.lojasrenner.com.br/item/928556760/small/5.jpg",
+      "zoomImageUrl": "//img.lojasrenner.com.br/item/928556760/zoom/5.jpg",
+      "mediumImageUrl": "//img.lojasrenner.com.br/item/928556760/medium/5.jpg",
+      "thumbImageUrl": "//img.lojasrenner.com.br/item/928556760/thumb/5.jpg",
+      "showcaseImageUrl": "//img.lojasrenner.com.br/item/928556760/vitrine/5.jpg",
+      "largeImageUrl": "//img.lojasrenner.com.br/item/928556760/large/5.jpg",
+      "id": "2598718"
+    },
+    {
+      "smallImageUrl": "//img.lojasrenner.com.br/item/928556760/small/7.jpg",
+      "zoomImageUrl": "//img.lojasrenner.com.br/item/928556760/zoom/7.jpg",
+      "mediumImageUrl": "//img.lojasrenner.com.br/item/928556760/medium/7.jpg",
+      "thumbImageUrl": "//img.lojasrenner.com.br/item/928556760/thumb/7.jpg",
+      "showcaseImageUrl": "//img.lojasrenner.com.br/item/928556760/vitrine/7.jpg",
+      "largeImageUrl": "//img.lojasrenner.com.br/item/928556760/large/7.jpg",
+      "id": "2598719"
+    },
+    {
+      "smallImageUrl": "//img.lojasrenner.com.br/item/928556760/small/8.jpg",
+      "zoomImageUrl": "//img.lojasrenner.com.br/item/928556760/zoom/8.jpg",
+      "mediumImageUrl": "//img.lojasrenner.com.br/item/928556760/medium/8.jpg",
+      "thumbImageUrl": "//img.lojasrenner.com.br/item/928556760/thumb/8.jpg",
+      "showcaseImageUrl": "//img.lojasrenner.com.br/item/928556760/vitrine/8.jpg",
+      "largeImageUrl": "//img.lojasrenner.com.br/item/928556760/large/8.jpg",
+      "id": "2598498"
+    },
+    {
+      "smallImageUrl": "//img.lojasrenner.com.br/item/928556778/small/13.jpg",
+      "zoomImageUrl": "//img.lojasrenner.com.br/item/928556778/zoom/13.jpg",
+      "mediumImageUrl": "//img.lojasrenner.com.br/item/928556778/medium/13.jpg",
+      "thumbImageUrl": "//img.lojasrenner.com.br/item/928556778/thumb/13.jpg",
+      "showcaseImageUrl": "//img.lojasrenner.com.br/item/928556778/vitrine/13.jpg",
+      "largeImageUrl": "//img.lojasrenner.com.br/item/928556778/large/13.jpg",
+      "id": "2597149"
+    },
+    {
+      "smallImageUrl": "//img.lojasrenner.com.br/item/928556778/small/14.jpg",
+      "zoomImageUrl": "//img.lojasrenner.com.br/item/928556778/zoom/14.jpg",
+      "mediumImageUrl": "//img.lojasrenner.com.br/item/928556778/medium/14.jpg",
+      "thumbImageUrl": "//img.lojasrenner.com.br/item/928556778/thumb/14.jpg",
+      "showcaseImageUrl": "//img.lojasrenner.com.br/item/928556778/vitrine/14.jpg",
+      "largeImageUrl": "//img.lojasrenner.com.br/item/928556778/large/14.jpg",
+      "id": "2597150"
+    }
+  ],
+  "purchasable": true,
+  "midiaFromSku": true,
+  "displayName": "Blusa em PU com Abertura de Gota",
+  "salePriceFormatted": "R$ 95,90",
+  "variants": "Preto|GG",
+  "maxQuantityItem": 100,
+  "omniStock": false,
+  "backOrder": false,
+  "outOfStock": false,
+  "onSale": true,
+  "preOrder": false,
+  "installmentValueFormatted": "R$ 31,97",
+  "stamps": [],
+  "skuId": "928556823",
+  "percentDiscount": 40,
+  "characteristics": {},
+  "salePrice": 95.9,
+  "productAttributes": [
+    {
+      "code": null,
+      "displayName": "Gênero / Feminino",
+      "label": "Gênero - Feminino",
+      "creationDate": {
+        "time": 1505507745000
+      },
+      "priority": 2,
+      "enabled": true,
+      "mediaSet": null,
+      "internalName": null,
+      "hexCode": null,
+      "attributeType": "gender",
+      "name": "Feminino",
+      "attributeName": "Gênero"
+    },
+    {
+      "code": null,
+      "displayName": "Marca / Cortelle",
+      "label": "Marca - Cortelle",
+      "creationDate": {
+        "time": 1505513884000
+      },
+      "priority": 1,
+      "enabled": true,
+      "mediaSet": {
+        "smallImageUrl": "https://img.lojasrenner.com.br/banner/marca/Cortelle-marca-produto.png",
+        "zoomImageUrl": "https://img.lojasrenner.com.br/banner/marca/Cortelle-marca-produto.png",
+        "mediumImageUrl": "https://img.lojasrenner.com.br/banner/marca/Cortelle-marca-produto.png",
+        "thumbImageUrl": "https://img.lojasrenner.com.br/banner/marca/Cortelle-marca-produto.png",
+        "showcaseImageUrl": null,
+        "largeImageUrl": "https://img.lojasrenner.com.br/banner/marca/Cortelle-marca-produto.png",
+        "id": "86001"
+      },
+      "internalName": null,
+      "hexCode": null,
+      "attributeType": "brand",
+      "name": "Cortelle",
+      "attributeName": "Marca"
+    }
+  ],
+  "aggregationKey": "928556663-COR928556663-19-4007TCX",
+  "ccInstallment": 2,
+  "installmentWithoutInterestValueFormatted": "R$ 31,97",
+  "discountinued": false,
+  "skuAttributes": [
+    {
+      "code": null,
+      "displayName": "Tamanho / GG",
+      "label": "Tamanho - GG",
+      "creationDate": {
+        "time": 1506960925000
+      },
+      "priority": 6,
+      "enabled": true,
+      "mediaSet": null,
+      "internalName": null,
+      "hexCode": null,
+      "attributeType": "size",
+      "name": "GG",
+      "attributeName": "Tamanho"
+    },
+    {
+      "code": "19-4007TCX",
+      "displayName": "Cor / Preto",
+      "label": "Cor - Preto",
+      "creationDate": {
+        "time": 1726197184000
+      },
+      "priority": null,
+      "enabled": true,
+      "mediaSet": null,
+      "internalName": "Anthracite",
+      "hexCode": "#1C1C1F",
+      "attributeType": "color",
+      "name": "Preto",
+      "attributeName": "Cor"
+    }
+  ],
+  "listPriceFormatted": "R$ 159,90",
+  "installment": 3,
+  "ccInstallmentValueFormatted": "R$ 47,95",
+  "installmentWithoutInterest": 3,
+  "listPrice": 159.9,
+  "preLaunch": false,
+  "productId": "928556663",
+  "review": {
+    "average": 4.7,
+    "count": 47
+  },
+  "productModel": "product",
+  "parentCategories": "cat290046uy|cat30026"
+}
