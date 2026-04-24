@@ -109,42 +109,28 @@ cron.schedule('0 7-21 * * *', async () => {
         // 1. Coleta bruta via Orquestrador
         // Passamos o total de GAPs para o orquestrador buscar o suficiente, 
         // mas o Distributor filtrará apenas o limite desta hora.
-        const rawPool = await runAllScrapers(quotas);
+        const rawPool = await runAllScrapers(hourlyLimits);
         
         // 2. Filtragem e Seleção com proporção exata por loja
         const finalSelection = distributeLinks(rawPool, hourlyLimits);
 
-        // 3. Validação de exatidão — só envia se tiver EXATAMENTE o número certo de cada loja
-        const countByStore = {};
-        finalSelection.forEach(item => {
-            countByStore[item.store] = (countByStore[item.store] || 0) + 1;
-        });
-
-        const exactMatch = Object.entries(hourlyLimits).every(([store, required]) => {
-            if (required === 0) return true; // lojas desativadas são ignoradas
-            const obtained = countByStore[store] || 0;
-            if (obtained < required) {
-                console.warn(`⚠️ [Scheduler] Loja ${store.toUpperCase()} não atingiu a meta: ${obtained}/${required}`);
-            }
-            return obtained === required;
-        });
-
-        if (!exactMatch) {
-            console.warn(`⚠️ [Scheduler] Proporção total não atingida. Esperado: ${JSON.stringify(hourlyLimits)} | Obtido: ${JSON.stringify(countByStore)}. Rodada pulada.`);
-            return;
-        }
-
         if (finalSelection.length > 0) {
-            // 4. Envio para o Webhook (Lote único)
+            // 3. Envio para o Webhook (Lote único)
             await sendBatchToWebhook(finalSelection);
             
-            // 5. Marcar como enviado no histórico
+            // 4. Marcar como enviado no histórico
             finalSelection.forEach(item => {
                 markAsSent(item.driveId || item.id, item.store);
             });
+            
+            const countByStore = {};
+            finalSelection.forEach(item => {
+                countByStore[item.store] = (countByStore[item.store] || 0) + 1;
+            });
+
             console.log(`✅ [Scheduler] Rodada finalizada: ${finalSelection.length} itens enviados. Distribuição: ${JSON.stringify(countByStore)}`);
         } else {
-            console.log('📭 [Scheduler] Nenhum item disponível para envio nesta rodada.');
+            console.log('📭 [Scheduler] Nenhum item válido encontrado nesta rodada.');
         }
 
     } catch (error) {

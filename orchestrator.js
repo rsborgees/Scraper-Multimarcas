@@ -1,224 +1,259 @@
-const puppeteer = require('puppeteer');
-const fs = require('fs');
-const path = require('path');
-require('dotenv').config();
-const { google } = require('googleapis');
+/**
+ * Orquestrador Principal do Scraper 2.0
+ *
+ * Responsável por:
+ * 1. Receber limites por loja (ex: { renner: 3, riachuelo: 1 })
+ * 2. Buscar todos os arquivos da pasta única do Google Drive
+ * 3. Separar arquivos por loja com base no nome do arquivo
+ * 4. Parsear produtos respeitando os limites por loja
+ * 5. Retornar pool bruto de produtos (nunca bloqueia por quota incompleta)
+ */
 
-const { getSelectionPool } = require('./utils/historyManager');
+'use strict';
+
+const puppeteer = require('puppeteer');
+const { google } = require('googleapis');
+require('dotenv').config();
+
 const { parseProductRenner } = require('./renner/parser');
-const { parseProductCEA } = require('./cea/parser');
 const { parseProductRiachuelo } = require('./riachuelo/parser');
 const { generateAwinLink } = require('./utils/affiliateManager');
-const { formatRennerMessage, formatRiachueloMessage } = require('./utils/messageFormatter');
+const { getSelectionPool } = require('./utils/historyManager');
+
+// ─── Google Drive ─────────────────────────────────────────────────────────────
+
+function buildDriveClient() {
+    const auth = new google.auth.OAuth2(
+        process.env.GOOGLE_CLIENT_ID,
+        process.env.GOOGLE_CLIENT_SECRET,
+        'urn:ietf:wg:oauth:2.0:oob'
+    );
+    auth.setCredentials({ refresh_token: process.env.GOOGLE_REFRESH_TOKEN });
+    return google.drive({ version: 'v3', auth });
+}
 
 /**
- * Função principal de orquestração
- * @param {Object} quotas - Metas calculadas pelo Scheduler (opcional por enquanto)
+ * Lista TODOS os arquivos da pasta do Drive e classifica por loja.
+ * Retorna: { renner: [...], riachuelo: [...], cea: [...] }
+ * Cada item: { id: driveFileId, fileName: 'nome.jpg', productId: '12345', store: 'renner' }
  */
-async function runAllScrapers(quotas = null) {
-    console.log('🚀 [Orchestrator] Iniciando execução por fases...');
-    
-    const browser = await puppeteer.launch({ 
-        headless: 'new',
-        args: [
-            '--no-sandbox', 
-            '--disable-setuid-sandbox',
-            '--disable-dev-shm-usage',
-            '--disable-blink-features=AutomationControlled',
-            '--disable-http2'
-        ] 
-    });
-    const page = await browser.newPage();
-    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+async function listDriveFilesByStore() {
+    const folderId = process.env.GOOGLE_DRIVE_FOLDER_ID;
+    if (!folderId) {
+        console.error('❌ [Drive] GOOGLE_DRIVE_FOLDER_ID não configurado.');
+        return {};
+    }
 
-    const rawResults = [];
+    let files = [];
+    try {
+        const drive = buildDriveClient();
+        let pageToken = null;
+        do {
+            const res = await drive.files.list({
+                q: `'${folderId}' in parents and trashed = false`,
+                fields: 'nextPageToken, files(id, name)',
+                pageSize: 1000,
+                pageToken: pageToken || undefined
+            });
+            files = files.concat(res.data.files || []);
+            pageToken = res.data.nextPageToken;
+        } while (pageToken);
+
+        console.log(`📂 [Drive] ${files.length} arquivos encontrados na pasta.`);
+    } catch (err) {
+        console.error(`❌ [Drive] Erro ao listar arquivos: ${err.message}`);
+        return {};
+    }
+
+    // Classifica por loja com base no nome do arquivo
+    const byStore = { renner: [], riachuelo: [], cea: [] };
+
+    files.forEach(f => {
+        const nameLower = (f.name || '').toLowerCase();
+        
+        // Remove extensão
+        let cleanName = f.name.replace(/\.[^.]+$/, '');
+        let store = 'renner'; // Default
+
+        // Identifica a loja e remove o nome da loja do ID
+        if (nameLower.includes('riachuelo') || nameLower.includes('ria')) {
+            store = 'riachuelo';
+            cleanName = cleanName.replace(/riachuelo/i, '').replace(/ria/i, '');
+        } else if (nameLower.includes('cea') || nameLower.includes('c&a')) {
+            store = 'cea';
+            cleanName = cleanName.replace(/cea/i, '').replace(/c&a/i, '');
+        } else if (nameLower.includes('renner')) {
+            store = 'renner';
+            cleanName = cleanName.replace(/renner/i, '');
+        }
+
+        // O que sobrou (removendo espaços extras) é o ID completo
+        const productId = cleanName.trim();
+
+        // Só processa se sobrar algo que pareça um ID (pelo menos 4 caracteres)
+        if (productId.length < 4) return;
+
+        const item = { 
+            id: f.id, 
+            fileName: f.name, 
+            productId, 
+            store 
+        };
+
+        byStore[store].push(item);
+    });
+
+    Object.entries(byStore).forEach(([store, items]) => {
+        console.log(`   📁 ${store}: ${items.length} arquivos`);
+    });
+
+    return byStore;
+}
+
+// ─── Parsers por loja ─────────────────────────────────────────────────────────
+
+const PARSERS = {
+    renner: parseProductRenner,
+    riachuelo: parseProductRiachuelo
+};
+
+// ─── Função Principal ─────────────────────────────────────────────────────────
+
+/**
+ * Executa os scrapers para todas as lojas com limite por loja.
+ *
+ * IMPORTANTE: Nunca bloqueia — se uma loja não tiver produtos suficientes,
+ * retorna o que conseguiu. A quota é um alvo, não um bloqueio.
+ *
+ * @param {Object} storeLimits - Ex: { renner: 3, riachuelo: 1, cea: 0 }
+ * @returns {Promise<Array>} - Pool bruto de produtos parseados
+ */
+async function runAllScrapers(storeLimits = {}) {
+    const allProducts = [];
+
+    // Filtra lojas ativas (limit > 0) com parser disponível
+    const activeStores = Object.entries(storeLimits)
+        .filter(([store, limit]) => limit > 0 && PARSERS[store]);
+
+    if (activeStores.length === 0) {
+        console.log('ℹ️ [Orchestrator] Nenhuma loja ativa para esta rodada.');
+        return [];
+    }
+
+    console.log(`\n🚀 [Orchestrator] Iniciando coleta. Alvos: ${JSON.stringify(storeLimits)}`);
+
+    // 1. Busca todos os arquivos do Drive e classifica por loja
+    const driveByStore = await listDriveFilesByStore();
+
+    // 2. Lança o browser uma única vez para todas as lojas
+    let browser;
+    try {
+        browser = await puppeteer.launch({
+            headless: 'new',
+            args: [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-blink-features=AutomationControlled',
+                '--disable-http2'
+            ]
+        });
+    } catch (err) {
+        console.error(`❌ [Orchestrator] Falha ao lançar Puppeteer: ${err.message}`);
+        return [];
+    }
 
     try {
-        // --- PHASE 1: GOOGLE DRIVE PRIORITY ---
-        console.log('📂 [PHASE 1] Iniciando prioridade da API do Google Drive...');
-        const driveItems = await fetchDriveItems();
-        const pool = getSelectionPool(driveItems);
+        // 3. Processa cada loja sequencialmente
+        for (const [store, limit] of activeStores) {
+            const parser = PARSERS[store];
+            const driveFiles = driveByStore[store] || [];
 
-        // Usamos um pool de avaliação maior pois muitos podem ser pulados ou falhar
-        const itemsToProcess = pool.slice(0, 100);
+            console.log(`\n🏪 [Orchestrator] Processando: ${store.toUpperCase()} (alvo: ${limit} itens, ${driveFiles.length} no Drive)`);
 
-        // Rastreador de metas atingidas por loja
-        const currentQuotas = quotas ? { ...quotas } : null;
-
-        for (const item of itemsToProcess) {
-            const store = detectStore(item.fileName);
-            
-            // Pula se a loja não for reconhecida ou se a cota para ela já estiver zerada
-            if (!store || (currentQuotas && (currentQuotas[store] || 0) <= 0)) {
+            if (driveFiles.length === 0) {
+                console.log(`📭 [Orchestrator/${store}] Nenhum arquivo no Drive para esta loja.`);
                 continue;
             }
 
-            const parser = getParser(store);
+            // 4. Aplica filtro de histórico (Tier1: nunca enviado, Tier2: mais antigo)
+            const selectionPool = getSelectionPool(driveFiles);
+            console.log(`🗂️ [Orchestrator/${store}] Pool disponível: ${selectionPool.length} itens (excluídos enviados hoje)`);
 
-            if (!parser) continue;
-
-            console.log(`🕵️ [${store.toUpperCase()}] Processando: ${item.id}`);
-            
-            let scrapedItems = [];
-            for (let i = 0; i < item.skus.length; i++) {
-                const sku = item.skus[i];
-                const data = await parser(page, sku);
-                
-                if (data) {
-                    const size = item.tamanhosQueUsei && item.tamanhosQueUsei[i] 
-                        ? item.tamanhosQueUsei[i] 
-                        : (item.tamanhosQueUsei && item.tamanhosQueUsei[0] ? item.tamanhosQueUsei[0] : null);
-                        
-                    if (size) {
-                        data.tamanhoQueUsei = size;
-                    }
-                    
-                    data.url = await generateAwinLink(data.url, store);
-                    scrapedItems.push(data);
-                }
+            if (selectionPool.length === 0) {
+                console.log(`⚠️ [Orchestrator/${store}] Todos os itens foram enviados hoje. Pulando.`);
+                continue;
             }
 
-            if (scrapedItems.length > 0) {
-                const isConjunto = item.skus.length > 1;
-                
-                // Usamos a base do primeiro item e criamos um payload único
-                let finalData = { ...scrapedItems[0] };
-                
-                finalData.imageUrl = item.driveFileId ? `https://drive.google.com/uc?export=download&id=${item.driveFileId}` : null;
-                finalData.store = store;
-                finalData.driveId = item.id;
-                finalData.isConjunto = isConjunto;
+            // 5. Abre uma página e tenta parsear até atingir o limite
+            let successCount = 0;
+            let attemptIndex = 0;
+            // Tenta no máximo 4x o alvo para ter margem de falhas
+            const maxAttempts = Math.min(selectionPool.length, limit * 4);
 
-                if (isConjunto) {
-                    finalData.nome = "Conjunto";
-                    finalData.conjuntoItems = scrapedItems;
+            const page = await browser.newPage();
+            try {
+                await page.setUserAgent(
+                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+                );
+                await page.setExtraHTTPHeaders({ 'Accept-Language': 'pt-BR,pt;q=0.9' });
+
+                while (successCount < limit && attemptIndex < maxAttempts) {
+                    const item = selectionPool[attemptIndex];
+                    attemptIndex++;
+
+                    // O ID que passamos para o parser é o productId extraído do nome
+                    const productId = item.productId || item.fileName;
+                    console.log(`   🔍 [${store}] Tentativa ${attemptIndex}/${maxAttempts}: ${productId}`);
+
+                    try {
+                        const productData = await parser(page, productId);
+
+                        if (!productData || !productData.nome || !productData.precoAtual) {
+                            console.log(`   ⚠️ [${store}] Dados incompletos para ${productId}, pulando.`);
+                            continue;
+                        }
+
+                        // Gera link de afiliado
+                        const affiliateUrl = await generateAwinLink(productData.url, store);
+                        productData.url = affiliateUrl;
+
+                        // Metadados para rastreamento no histórico
+                        productData.store = store;
+                        productData.driveId = item.id;
+
+                        allProducts.push(productData);
+                        successCount++;
+
+                        console.log(`   ✅ [${store}] Coletado: "${productData.nome}" (${successCount}/${limit})`);
+
+                    } catch (parseErr) {
+                        console.error(`   ❌ [${store}] Erro ao parsear ${productId}: ${parseErr.message}`);
+                    }
                 }
 
-                if (store === 'renner') {
-                    finalData.message = formatRennerMessage(isConjunto ? scrapedItems : finalData);
-                } else if (store === 'riachuelo') {
-                    finalData.message = formatRiachueloMessage(isConjunto ? scrapedItems : finalData);
-                }
+            } finally {
+                await page.close().catch(() => {});
+            }
 
-                if (currentQuotas) {
-                    currentQuotas[store]--;
-                }
-
-                rawResults.push(finalData);
-                const imageStatus = finalData.imageUrl ? 'Drive ✅' : 'Falha no Drive ❌ (Sem ID)';
-                console.log(`✅ [${store.toUpperCase()}] Sucesso: ${item.id} | Imagem: ${imageStatus} | Conjunto: ${isConjunto ? 'Sim' : 'Não'}`);
-
-                // Para quando TODAS as quotas forem atingidas (ou pool esgotar)
-                const allQuotasMet = currentQuotas 
-                    ? Object.values(currentQuotas).every(q => q <= 0) 
-                    : rawResults.length >= (parseInt(process.env.DAILY_QUOTA) || 10);
-
-                if (allQuotasMet) {
-                    console.log(`🎯 [Orchestrator] Todas as metas atingidas. Encerrando coleta.`);
-                    break;
-                }
+            if (successCount < limit) {
+                console.warn(`⚠️ [Orchestrator/${store}] Coletados ${successCount}/${limit} — abaixo do alvo, mas continuando.`);
+            } else {
+                console.log(`✅ [Orchestrator/${store}] Meta atingida: ${successCount}/${limit}`);
             }
         }
 
-        // --- PHASE 2: REGULAR SCRAPPING (Placeholder para expansão futura) ---
-        // Aqui entrariam raspagens de "Novidades" se as quotas não fossem atingidas no Drive.
-
-    } catch (error) {
-        console.error('💥 [Orchestrator] Erro fatal:', error.message);
     } finally {
-        await browser.close();
+        await browser.close().catch(() => {});
     }
 
-    return rawResults;
-}
+    // Resumo final
+    const byStore = {};
+    allProducts.forEach(p => { byStore[p.store] = (byStore[p.store] || 0) + 1; });
+    console.log(`\n✅ [Orchestrator] Coleta finalizada. Total: ${allProducts.length} produtos.`);
+    console.log(`📊 [Orchestrator] Por loja: ${JSON.stringify(byStore)}`);
 
-/**
- * Utilitários Internos
- */
-
-async function fetchDriveItems() {
-    const folderId = process.env.GOOGLE_DRIVE_FOLDER_ID;
-    const clientId = process.env.GOOGLE_CLIENT_ID;
-    const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
-    const refreshToken = process.env.GOOGLE_REFRESH_TOKEN;
-
-    if (!refreshToken) {
-        console.error('❌ ERRO FATAL: GOOGLE_REFRESH_TOKEN não encontrado na .env!');
-        console.error('👉 Por favor, execute o painel de configuração: node generate-token.js');
-        return [];
-    }
-
-    try {
-        const oauth2Client = new google.auth.OAuth2(clientId, clientSecret);
-        oauth2Client.setCredentials({ refresh_token: refreshToken });
-
-        const drive = google.drive({ version: 'v3', auth: oauth2Client });
-        
-        let allFiles = [];
-        let pageToken = null;
-
-        console.log(`📂 [Drive API] Buscando arquivos na pasta: ${folderId}`);
-
-        do {
-            const response = await drive.files.list({
-                q: `'${folderId}' in parents and trashed = false`,
-                fields: 'nextPageToken, files(id, name, mimeType)',
-                pageToken: pageToken,
-                pageSize: 1000
-            });
-            
-            allFiles = allFiles.concat(response.data.files);
-            pageToken = response.data.nextPageToken;
-        } while (pageToken);
-
-        const resultsMap = new Map();
-        
-        // Não processa subpastas recursivamente por enquanto
-        // apenas os arquivos diretos nessa pasta.
-        allFiles.forEach(file => {
-            if (file.mimeType !== 'application/vnd.google-apps.folder') {
-                const skuMatches = file.name.match(/\d{5,}/g);
-                if (skuMatches && skuMatches.length > 0) {
-                    const idKey = skuMatches.join('-'); // Junta os SKUs se for um conjunto
-                    if (!resultsMap.has(idKey)) {
-                        // Extração do tamanho da modelo (P, M, G, etc)
-                        // Busca por letras isoladas ou múltiplos tamanhos
-                        const sizeMatches = file.name.match(/\b(PP|P|M|G|GG|G1|G2|G3|G4|XG|XGG)\b/ig);
-                        const tamanhosQueUsei = sizeMatches ? sizeMatches.map(s => s.toUpperCase()) : [];
-
-                        resultsMap.set(idKey, {
-                            id: idKey,
-                            skus: skuMatches,
-                            driveFileId: file.id,
-                            fileName: file.name.toLowerCase(),
-                            tamanhosQueUsei: tamanhosQueUsei
-                        });
-                    }
-                }
-            }
-        });
-
-        console.log(`✅ [Drive API] Encontrados ${resultsMap.size} SKUs válidos!`);
-        return Array.from(resultsMap.values());
-    } catch (e) {
-        console.error('❌ Erro na API do Drive:', e.message);
-        return [];
-    }
-}
-
-function detectStore(fileName) {
-    const name = fileName.toLowerCase();
-    if (name.includes('renner')) return 'renner';
-    if (name.includes('riachuelo')) return 'riachuelo';
-    if (name.includes('cea') || name.includes('c&a')) return 'cea';
-    return null;
-}
-
-function getParser(store) {
-    if (store === 'renner') return parseProductRenner;
-    if (store === 'cea') return parseProductCEA;
-    if (store === 'riachuelo') return parseProductRiachuelo;
-    return null;
+    return allProducts;
 }
 
 module.exports = { runAllScrapers };
