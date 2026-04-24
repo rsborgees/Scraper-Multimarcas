@@ -9,7 +9,7 @@ async function parseProductRenner(page, urlOrId) {
             const searchUrl = `https://www.lojasrenner.com.br/b?Ntt=${url}`;
             console.log(`[Renner] Buscando ID ${url} via pesquisa: ${searchUrl}`);
             await page.goto(searchUrl, { waitUntil: 'load', timeout: 60000 });
-            await new Promise(r => setTimeout(r, 5000));
+            await new Promise(r => setTimeout(r, 2000)); // Reduzido de 5s para 2s
 
             // Caso A: Redirecionou direto para a página do produto
             if (page.url().includes('/p/')) {
@@ -69,7 +69,7 @@ async function parseProductRenner(page, urlOrId) {
         await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
         
         // Espera de hidratação e renderização (Next.js)
-        await new Promise(r => setTimeout(r, 6000));
+        await new Promise(r => setTimeout(r, 2500)); // Reduzido de 6s para 2.5s
         await page.waitForSelector('h1, [class*="product-name"]', { timeout: 10000 }).catch(() => {});
 
         const data = await page.evaluate(async () => {

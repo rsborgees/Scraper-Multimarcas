@@ -17,7 +17,7 @@ async function parseProductRiachuelo(page, urlOrId) {
                 }
                 return null;
             }
-            await new Promise(r => setTimeout(r, 5000));
+            await new Promise(r => setTimeout(r, 2000)); // Reduzido de 5s
             
             // Anti-Redirect na busca
             if (page.url().includes('privacidade.') || page.url().includes('politicas-de-privacidade')) {
@@ -27,7 +27,7 @@ async function parseProductRiachuelo(page, urlOrId) {
                     if (acceptBtn) await acceptBtn.click();
                 } catch (e) {}
                 await page.goto(searchUrl, { waitUntil: 'load', timeout: 60000 });
-                await new Promise(r => setTimeout(r, 5000));
+                await new Promise(r => setTimeout(r, 2000)); // Reduzido de 5s
             }
 
             const productLink = await page.evaluate((targetId) => {
@@ -61,7 +61,7 @@ async function parseProductRiachuelo(page, urlOrId) {
 
             console.log(`[Riachuelo] Produto encontrado nos resultados, navegando para: ${productLink}`);
             await page.goto(productLink, { waitUntil: 'load', timeout: 60000 });
-            await new Promise(r => setTimeout(r, 5000));
+            await new Promise(r => setTimeout(r, 2000)); // Reduzido de 5s
 
             // Anti-Redirect no PDP
             if (page.url().includes('privacidade.') || page.url().includes('politicas-de-privacidade')) {
@@ -71,11 +71,11 @@ async function parseProductRiachuelo(page, urlOrId) {
                     if (acceptBtn) await acceptBtn.click();
                 } catch (e) {}
                 await page.goto(productLink, { waitUntil: 'load', timeout: 60000 });
-                await new Promise(r => setTimeout(r, 5000));
+                await new Promise(r => setTimeout(r, 2000)); // Reduzido de 5s
             }
         } else {
              await page.goto(url, { waitUntil: 'load', timeout: 60000 });
-             await new Promise(r => setTimeout(r, 5000));
+             await new Promise(r => setTimeout(r, 2000)); // Reduzido de 5s
         }
 
         // Anti-Redirect / Cookies genérico
@@ -129,7 +129,7 @@ async function parseProductRiachuelo(page, urlOrId) {
                     };
                     
                     const deepSizes = findSizesDeep(d);
-                    console.log('Deep sizes found:', JSON.stringify(deepSizes));
+                    console.log(`[Riachuelo] Deep sizes found: ${deepSizes.join(', ')}`);
 
                     // Tenta encontrar a lista de SKUs
                     let skus = [];
@@ -221,14 +221,19 @@ async function parseProductRiachuelo(page, urlOrId) {
                 '.sku-selector__item:not(.sku-selector__item--unavailable)',
                 '[class*="size-selector"] li:not([class*="unavailable"])',
                 '[class*="product-attributes"] [class*="size"]:not([class*="unavailable"])',
-                '.product-sizes__item:not(.--unavailable)'
+                '.product-sizes__item:not(.--unavailable)',
+                '[class*="controlLabel"]:not([class*="disabled"])',
+                'label[class*="MuiFormControlLabel"]:not([class*="Mui-disabled"])',
+                '[class*="SizeButton"]:not([class*="disabled"])'
             ];
 
             sizeSelectors.forEach(sel => {
                 document.querySelectorAll(sel).forEach(el => {
-                    const txt = getSafeText(el).toUpperCase();
-                    if (txt && /^(PP|P|M|G|GG|G1|G2|G3|G4|XG|XGG|UNI|U|\d{2})$/.test(txt)) {
-                        tamanhosRaw.push(txt);
+                    let txt = getSafeText(el).split('\n')[0].trim().toUpperCase();
+                    // Regex para capturar tamanhos puros ou com variações comuns (ex: "G - 42")
+                    const sizeMatch = txt.match(/^(PP|P|M|G|GG|G1|G2|G3|G4|XG|XGG|UNI|U|\d{2})$/);
+                    if (sizeMatch) {
+                        tamanhosRaw.push(sizeMatch[1]);
                     }
                 });
             });
@@ -237,10 +242,14 @@ async function parseProductRiachuelo(page, urlOrId) {
             if (tamanhosRaw.length === 0 && vtexProduct && vtexProduct.items) {
                 vtexProduct.items.forEach(item => {
                     const seller = item.sellers ? item.sellers[0] : null;
-                    const isAvailable = seller && seller.commertialOffer && seller.commertialOffer.AvailableQuantity > 0;
+                    const offer = seller ? seller.commertialOffer : null;
+                    const isAvailable = offer && offer.AvailableQuantity > 0;
+                    
                     if (isAvailable && item.name) {
-                        const s = item.name.split('/').pop().trim().toUpperCase();
-                        if (/^(PP|P|M|G|GG|G1|G2|G3|G4|XG|XGG|UNI|U|\d{2})$/.test(s)) {
+                        // Tenta extrair o tamanho do nome (geralmente é a última parte após um hífen ou espaço)
+                        const parts = item.name.split(/[\s-/]+/).map(p => p.trim().toUpperCase());
+                        const s = parts.find(p => /^(PP|P|M|G|GG|G1|G2|G3|G4|XG|XGG|UNI|U|\d{2})$/.test(p));
+                        if (s) {
                             tamanhosRaw.push(s);
                         }
                     }

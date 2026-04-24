@@ -19,6 +19,7 @@ const { parseProductRenner } = require('./renner/parser');
 const { parseProductRiachuelo } = require('./riachuelo/parser');
 const { generateAwinLink } = require('./utils/affiliateManager');
 const { getSelectionPool } = require('./utils/historyManager');
+const { formatRennerMessage, formatRiachueloMessage } = require('./utils/messageFormatter');
 
 // ─── Google Drive ─────────────────────────────────────────────────────────────
 
@@ -188,8 +189,8 @@ async function runAllScrapers(storeLimits = {}) {
             // 5. Abre uma página e tenta parsear até atingir o limite
             let successCount = 0;
             let attemptIndex = 0;
-            // Tenta no máximo 4x o alvo para ter margem de falhas
-            const maxAttempts = Math.min(selectionPool.length, limit * 4);
+            // Tenta no máximo 3x o alvo para ter margem de falhas sem ser lento demais
+            const maxAttempts = Math.min(selectionPool.length, limit * 3);
 
             const page = await browser.newPage();
             try {
@@ -202,7 +203,6 @@ async function runAllScrapers(storeLimits = {}) {
                     const item = selectionPool[attemptIndex];
                     attemptIndex++;
 
-                    // O ID que passamos para o parser é o productId extraído do nome
                     const productId = item.productId || item.fileName;
                     console.log(`   🔍 [${store}] Tentativa ${attemptIndex}/${maxAttempts}: ${productId}`);
 
@@ -218,9 +218,22 @@ async function runAllScrapers(storeLimits = {}) {
                         const affiliateUrl = await generateAwinLink(productData.url, store);
                         productData.url = affiliateUrl;
 
-                        // Metadados para rastreamento no histórico
-                        productData.store = store;
+                        // --- PAYLOAD PADRÃO (Enriquecimento) ---
                         productData.driveId = item.id;
+                        productData.fileName = item.fileName;
+                        productData.store = store;
+                        
+                        // Força a imagem do DRIVE no campo imageUrl e image
+                        const driveImageUrl = `https://drive.google.com/uc?export=download&id=${item.id}`;
+                        productData.imageUrl = driveImageUrl;
+                        productData.image = driveImageUrl;
+
+                        // Formata a mensagem padrão conforme a loja
+                        if (store === 'renner') {
+                            productData.message = formatRennerMessage(productData);
+                        } else if (store === 'riachuelo') {
+                            productData.message = formatRiachueloMessage(productData);
+                        }
 
                         allProducts.push(productData);
                         successCount++;
