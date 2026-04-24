@@ -8,7 +8,15 @@ async function parseProductRiachuelo(page, urlOrId) {
         if (!url.startsWith('http')) {
             const searchUrl = `https://www.riachuelo.com.br/busca?q=${url}&gad_source=1`;
             console.log(`[Riachuelo] Buscando ID ${url} via pesquisa: ${searchUrl}`);
-            await page.goto(searchUrl, { waitUntil: 'load', timeout: 60000 });
+            try {
+                await page.goto(searchUrl, { waitUntil: 'load', timeout: 60000 });
+            } catch (err) {
+                console.error(`❌ [Riachuelo] Erro de navegação na busca: ${err.message}`);
+                if (err.message.includes('ERR_HTTP2_PROTOCOL_ERROR')) {
+                    console.log('💡 Sugestão: Desative o HTTP2 no Puppeteer.');
+                }
+                return null;
+            }
             await new Promise(r => setTimeout(r, 5000));
             
             // Anti-Redirect na busca

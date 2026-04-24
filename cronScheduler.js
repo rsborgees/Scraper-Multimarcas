@@ -122,11 +122,15 @@ cron.schedule('0 7-21 * * *', async () => {
 
         const exactMatch = Object.entries(hourlyLimits).every(([store, required]) => {
             if (required === 0) return true; // lojas desativadas são ignoradas
-            return (countByStore[store] || 0) === required;
+            const obtained = countByStore[store] || 0;
+            if (obtained < required) {
+                console.warn(`⚠️ [Scheduler] Loja ${store.toUpperCase()} não atingiu a meta: ${obtained}/${required}`);
+            }
+            return obtained === required;
         });
 
         if (!exactMatch) {
-            console.warn(`⚠️ [Scheduler] Proporção não atingida. Necessário: ${JSON.stringify(hourlyLimits)} | Obtido: ${JSON.stringify(countByStore)}. Rodada pulada.`);
+            console.warn(`⚠️ [Scheduler] Proporção total não atingida. Esperado: ${JSON.stringify(hourlyLimits)} | Obtido: ${JSON.stringify(countByStore)}. Rodada pulada.`);
             return;
         }
 

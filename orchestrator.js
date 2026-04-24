@@ -24,7 +24,8 @@ async function runAllScrapers(quotas = null) {
             '--no-sandbox', 
             '--disable-setuid-sandbox',
             '--disable-dev-shm-usage',
-            '--disable-blink-features=AutomationControlled'
+            '--disable-blink-features=AutomationControlled',
+            '--disable-http2'
         ] 
     });
     const page = await browser.newPage();
@@ -107,10 +108,13 @@ async function runAllScrapers(quotas = null) {
                 const imageStatus = finalData.imageUrl ? 'Drive ✅' : 'Falha no Drive ❌ (Sem ID)';
                 console.log(`✅ [${store.toUpperCase()}] Sucesso: ${item.id} | Imagem: ${imageStatus} | Conjunto: ${isConjunto ? 'Sim' : 'Não'}`);
 
-                // Para imediatamente ao atingir o total requisitado pelas quotas
-                const targetTotal = quotas ? Object.values(quotas).reduce((a, b) => a + b, 0) : (parseInt(process.env.DAILY_QUOTA) || 10);
-                if (rawResults.length >= targetTotal) {
-                    console.log(`🎯 [Orchestrator] Meta atingida (${rawResults.length}/${targetTotal}). Encerrando coleta.`);
+                // Para quando TODAS as quotas forem atingidas (ou pool esgotar)
+                const allQuotasMet = currentQuotas 
+                    ? Object.values(currentQuotas).every(q => q <= 0) 
+                    : rawResults.length >= (parseInt(process.env.DAILY_QUOTA) || 10);
+
+                if (allQuotasMet) {
+                    console.log(`🎯 [Orchestrator] Todas as metas atingidas. Encerrando coleta.`);
                     break;
                 }
             }

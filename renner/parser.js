@@ -17,9 +17,43 @@ async function parseProductRenner(page, urlOrId) {
                 url = page.url();
             } else {
                 // Caso B: Caiu na página de resultados de busca
+                console.log(`[Renner] Página de busca detectada. Aguardando resultados...`);
+                
+                // Tenta aceitar termos de privacidade que podem bloquear a renderização
+                try {
+                    await page.evaluate(() => {
+                        // 1. Procura pelo checkbox específico dos termos
+                        const labels = Array.from(document.querySelectorAll('label'));
+                        const targetLabel = labels.find(l => l.innerText.includes('Li, aceito os Termos de Uso'));
+                        if (targetLabel) {
+                            const checkbox = targetLabel.querySelector('input') || document.getElementById(targetLabel.getAttribute('for'));
+                            if (checkbox && !checkbox.checked) checkbox.click();
+                            else if (!checkbox) targetLabel.click();
+                        }
+
+                        // 2. Procura por botões de aceitar genéricos
+                        const buttons = Array.from(document.querySelectorAll('button'));
+                        const acceptBtn = buttons.find(b => {
+                            const txt = b.innerText.toLowerCase();
+                            return txt.includes('aceitar') || txt.includes('concordo') || txt.includes('entendido');
+                        });
+                        if (acceptBtn) acceptBtn.click();
+                    });
+                    
+                    // OneTrust fallback
+                    const otBtn = await page.$('#onetrust-accept-btn-handler');
+                    if (otBtn) await otBtn.click();
+                    
+                    console.log(`[Renner] Tentativa de aceitar termos realizada.`);
+                    await new Promise(r => setTimeout(r, 2000));
+                } catch (e) {}
+
+                // Aguarda o link do produto OU um sinal de que a busca terminou (mesmo se vazia)
+                await page.waitForSelector('a[href*="/p/"], [class*="no-results"], [class*="SearchError"]', { timeout: 20000 }).catch(() => {});
+                
                 const productLink = await page.evaluate(() => {
-                    // Seletores mais abrangentes para a página de busca da Renner
-                    const link = document.querySelector('div[class*="product-card"] a[href*="/p/"], a[href*="/p/"]');
+                    // Seletores atualizados para a página de busca da Renner
+                    const link = document.querySelector('a[class*="ProductBox_productBox"], [class*="product-card"] a[href*="/p/"], a[href*="/p/"]');
                     return link ? link.href : null;
                 });
                 
