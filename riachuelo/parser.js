@@ -179,12 +179,20 @@ async function parseProductRiachuelo(page, urlOrId) {
                     const deepSizes = findSizesDeep(d);
                     console.log(`[Riachuelo] Deep sizes found: ${deepSizes.join(', ')}`);
 
-                    // Tenta encontrar a lista de SKUs
+                    // Tenta encontrar a lista de SKUs do produto principal
                     let skus = [];
-                    if (d.skuGroup && Array.isArray(d.skuGroup.skus)) skus = d.skuGroup.skus;
-                    else if (d.skuSubGroup && Array.isArray(d.skuSubGroup.skus)) skus = d.skuSubGroup.skus;
-                    else if (Array.isArray(d.skus)) skus = d.skus;
-                    else if (Array.isArray(d.items)) skus = d.items;
+                    const mainId = d.sku || d.skuGroup?.id || d.skuSubGroup?.id || d.id;
+                    
+                    if (d.skuGroup && Array.isArray(d.skuGroup.skus)) {
+                        skus = d.skuGroup.skus;
+                    } else if (d.skuSubGroup && Array.isArray(d.skuSubGroup.skus)) {
+                        skus = d.skuSubGroup.skus;
+                    } else if (Array.isArray(d.skus)) {
+                        // Se for uma lista genérica, tenta filtrar pelo ID principal se disponível
+                        skus = d.skus.filter(s => !mainId || s.productId === mainId || String(s.id).startsWith(String(mainId).substring(0, 8)));
+                    } else if (Array.isArray(d.items)) {
+                        skus = d.items.filter(s => !mainId || s.productId === mainId || String(s.itemId).startsWith(String(mainId).substring(0, 8)));
+                    }
                     
                     vtexProduct = {
                         productName: d.name,
@@ -261,9 +269,6 @@ async function parseProductRiachuelo(page, urlOrId) {
             if (precoOriginal < precoAtual) precoOriginal = precoAtual;
 
             // --- TAMANHOS ---
-            // Já inicializado e preenchido via NEXT_DATA se disponível
-            
-            // DOM
             const sizeSelectors = [
                 '.sku-selector__item:not(.sku-selector__item--unavailable)',
                 '[class*="size-selector"] li:not([class*="unavailable"])',
@@ -273,9 +278,17 @@ async function parseProductRiachuelo(page, urlOrId) {
                 'label[class*="MuiFormControlLabel"]:not([class*="Mui-disabled"])',
                 '[class*="SizeButton"]:not([class*="disabled"])'
             ];
-
+            
+            // DOM - Restrito à área do produto para evitar "contaminação" de produtos recomendados/recentes
+            const mainContent = document.querySelector('main, [class*="ProductDetails"], [class*="ProductInfo"], .product-info') || document;
+            
             sizeSelectors.forEach(sel => {
-                document.querySelectorAll(sel).forEach(el => {
+                mainContent.querySelectorAll(sel).forEach(el => {
+                    // Ignora elementos que estão dentro de seções de recomendações ou vistos recentemente
+                    if (el.closest('[class*="RecentlyViewed"], [class*="Recommendations"], [class*="RelatedProducts"], [class*="Carousel"]')) {
+                        return;
+                    }
+
                     // Verifica se o elemento está explicitamente marcado como indisponível/desativado
                     const isUnavailable = el.matches('[class*="unavailable"], [class*="disabled"], [aria-disabled="true"], .Mui-disabled') ||
                                          el.closest('[class*="unavailable"], [class*="disabled"], [aria-disabled="true"], .Mui-disabled');
