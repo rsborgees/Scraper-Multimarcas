@@ -214,9 +214,8 @@ async function parseProductRiachuelo(page, urlOrId) {
                         }]
                     };
                     
-                    if (deepSizes.length > 0) {
-                        deepSizes.forEach(s => tamanhosRaw.push(s));
-                    }
+                    // Removido o preenchimento automático de tamanhosRaw via deepSizes para evitar pegar tamanhos indisponíveis
+                    // console.log(`[Riachuelo] Deep sizes found: ${deepSizes.join(', ')}`);
                 }
             } else if (state && state.product) {
                 // VTEX Padrão
@@ -277,6 +276,12 @@ async function parseProductRiachuelo(page, urlOrId) {
 
             sizeSelectors.forEach(sel => {
                 document.querySelectorAll(sel).forEach(el => {
+                    // Verifica se o elemento está explicitamente marcado como indisponível/desativado
+                    const isUnavailable = el.matches('[class*="unavailable"], [class*="disabled"], [aria-disabled="true"], .Mui-disabled') ||
+                                         el.closest('[class*="unavailable"], [class*="disabled"], [aria-disabled="true"], .Mui-disabled');
+                    
+                    if (isUnavailable) return;
+
                     let txt = getSafeText(el).split('\n')[0].trim().toUpperCase();
                     // Regex para capturar tamanhos puros ou com variações comuns (ex: "G - 42")
                     const sizeMatch = txt.match(/^(PP|P|M|G|GG|G1|G2|G3|G4|XG|XGG|UNI|U|\d{2})$/);
@@ -286,17 +291,28 @@ async function parseProductRiachuelo(page, urlOrId) {
                 });
             });
 
-            // VTEX/NEXT State
-            if (tamanhosRaw.length === 0 && vtexProduct && vtexProduct.items) {
+            // VTEX/NEXT State - Agora é a fonte principal ou fallback confiável
+            if (vtexProduct && vtexProduct.items) {
                 vtexProduct.items.forEach(item => {
                     const seller = item.sellers ? item.sellers[0] : null;
                     const offer = seller ? seller.commertialOffer : null;
                     const isAvailable = offer && offer.AvailableQuantity > 0;
                     
                     if (isAvailable && item.name) {
-                        // Tenta extrair o tamanho do nome (geralmente é a última parte após um hífen ou espaço)
-                        const parts = item.name.split(/[\s-/]+/).map(p => p.trim().toUpperCase());
-                        const s = parts.find(p => /^(PP|P|M|G|GG|G1|G2|G3|G4|XG|XGG|UNI|U|\d{2})$/.test(p));
+                        // Tenta extrair o tamanho do nome ou atributos
+                        let s = null;
+                        if (item.name) {
+                            const parts = item.name.split(/[\s-/]+/).map(p => p.trim().toUpperCase());
+                            s = parts.find(p => /^(PP|P|M|G|GG|G1|G2|G3|G4|XG|XGG|UNI|U|\d{2})$/.test(p));
+                        }
+                        
+                        if (!s && item.attributes) {
+                            const attrVal = item.attributes.tamanho || item.attributes.Tamanho;
+                            if (attrVal && /^(PP|P|M|G|GG|G1|G2|G3|G4|XG|XGG|UNI|U|\d{2})$/i.test(attrVal)) {
+                                s = attrVal.toUpperCase();
+                            }
+                        }
+
                         if (s) {
                             tamanhosRaw.push(s);
                         }
