@@ -191,8 +191,8 @@ async function runAllScrapers(storeLimits = {}) {
             // 5. Abre uma página e tenta parsear até atingir o limite
             let successCount = 0;
             let attemptIndex = 0;
-            // Tenta no máximo 3x o alvo para ter margem de falhas sem ser lento demais
-            const maxAttempts = Math.min(selectionPool.length, limit * 3);
+            // Tenta no máximo 10x o alvo para ter margem de falhas maior (pedido pelo usuário)
+            const maxAttempts = Math.min(selectionPool.length, limit * 10);
 
             const page = await browser.newPage();
             try {
@@ -205,47 +205,95 @@ async function runAllScrapers(storeLimits = {}) {
                     const item = selectionPool[attemptIndex];
                     attemptIndex++;
 
-                    const productId = item.productId || item.fileName;
-                    console.log(`   🔍 [${store}] Tentativa ${attemptIndex}/${maxAttempts}: ${productId}`);
+                    const rawProductId = item.productId || item.fileName;
+                    
+                    // --- Lógica de Conjuntos (Parsing de IDs e Tamanhos) ---
+                    // Ex: "930773780 38 931151771" -> IDs: [930773780 (tam 38), 931151771 (sem tam)]
+                    const tokens = rawProductId.split(/\s+/);
+                    const targets = [];
+                    for (let i = 0; i < tokens.length; i++) {
+                        const token = tokens[i];
+                        // IDs geralmente têm 7+ dígitos. C&A pode ter 5+.
+                        if (token.length >= 7 || (store === 'cea' && token.length >= 5)) {
+                            const nextToken = tokens[i+1];
+                            let sizeUsed = null;
+                            // Se o próximo token parece um tamanho (ex: 38, PP, G)
+                            if (nextToken && /^(PP|P|M|G|GG|G1|G2|G3|G4|XG|XGG|UNI|U|\d{2})$/i.test(nextToken)) {
+                                sizeUsed = nextToken.toUpperCase();
+                                i++; // Consome o token de tamanho
+                            }
+                            targets.push({ id: token, sizeUsed });
+                        }
+                    }
+
+                    if (targets.length === 0) {
+                        console.log(`   ⚠️ [${store}] Nenhum ID válido encontrado em "${rawProductId}", pulando.`);
+                        continue;
+                    }
+
+                    const targetsDesc = targets.map(t => `${t.id}${t.sizeUsed ? ` (${t.sizeUsed})` : ''}`).join(', ');
+                    console.log(`   🔍 [${store}] Tentativa ${attemptIndex}/${maxAttempts}: ${targetsDesc}`);
 
                     try {
-                        const productData = await parser(page, productId);
+                        const scrapedProducts = [];
+                        for (const target of targets) {
+                            const p = await parser(page, target.id);
+                            if (p && p.nome && p.precoAtual) {
+                                p.tamanhoQueUsei = target.sizeUsed;
+                                scrapedProducts.push(p);
+                            }
+                        }
 
-                        if (!productData || !productData.nome || !productData.precoAtual) {
-                            console.log(`   ⚠️ [${store}] Dados incompletos para ${productId}, pulando.`);
+                        if (scrapedProducts.length === 0) {
+                            console.log(`   ⚠️ [${store}] Falha ao coletar dados para ${rawProductId}, pulando.`);
                             continue;
                         }
 
-                        // Gera link de afiliado
-                        const affiliateUrl = await generateAwinLink(productData.url, store);
-                        productData.url = affiliateUrl;
-
-                        // --- PAYLOAD PADRÃO (Enriquecimento) ---
-                        productData.driveId = item.id;
-                        productData.fileName = item.fileName;
-                        productData.store = store;
-                        
-                        // Força a imagem do DRIVE no campo imageUrl e image
-                        const driveImageUrl = `https://drive.google.com/uc?export=download&id=${item.id}`;
-                        productData.imageUrl = driveImageUrl;
-                        productData.image = driveImageUrl;
-
-                        // Formata a mensagem padrão conforme a loja
-                        if (store === 'renner') {
-                            productData.message = formatRennerMessage(productData);
-                        } else if (store === 'riachuelo') {
-                            productData.message = formatRiachueloMessage(productData);
-                        } else if (store === 'cea') {
-                            productData.message = formatCeaMessage(productData);
+                        // Enriquecimento de cada produto do conjunto
+                        for (const p of scrapedProducts) {
+                            const affiliateUrl = await generateAwinLink(p.url, store);
+                            p.url = affiliateUrl;
+                            p.store = store;
+                            
+                            // Imagem do DRIVE (comum a todos do arquivo)
+                            const driveImageUrl = `https://drive.google.com/uc?export=download&id=${item.id}`;
+                            p.imageUrl = driveImageUrl;
+                            p.image = driveImageUrl;
                         }
 
-                        allProducts.push(productData);
+                        // Define o objeto de resultado
+                        let result;
+                        if (scrapedProducts.length > 1) {
+                            // É um conjunto. Usamos o primeiro como base para campos globais.
+                            result = { ...scrapedProducts[0] };
+                            result.isConjunto = true;
+                            result.subProducts = scrapedProducts;
+                        } else {
+                            result = scrapedProducts[0];
+                        }
+
+                        // Metadados do Drive
+                        result.driveId = item.id;
+                        result.fileName = item.fileName;
+
+                        // Formatação da Mensagem (Passa array para o formatter se for conjunto)
+                        const formatterInput = scrapedProducts.length > 1 ? scrapedProducts : result;
+                        if (store === 'renner') {
+                            result.message = formatRennerMessage(formatterInput);
+                        } else if (store === 'riachuelo') {
+                            result.message = formatRiachueloMessage(formatterInput);
+                        } else if (store === 'cea') {
+                            result.message = formatCeaMessage(formatterInput);
+                        }
+
+                        allProducts.push(result);
                         successCount++;
 
-                        console.log(`   ✅ [${store}] Coletado: "${productData.nome}" (${successCount}/${limit})`);
+                        const msgDesc = scrapedProducts.length > 1 ? `${scrapedProducts.length} itens (conjunto)` : `"${result.nome}"`;
+                        console.log(`   ✅ [${store}] Coletado: ${msgDesc} (${successCount}/${limit})`);
 
                     } catch (parseErr) {
-                        console.error(`   ❌ [${store}] Erro ao parsear ${productId}: ${parseErr.message}`);
+                        console.error(`   ❌ [${store}] Erro ao processar ${rawProductId}: ${parseErr.message}`);
                     }
                 }
 

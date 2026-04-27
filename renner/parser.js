@@ -58,37 +58,8 @@ async function parseProductRenner(page, urlOrId) {
                 });
                 
                 if (!productLink) {
-                    // Tenta uma segunda chance se o ID tiver espaços (muito comum no Drive)
-                    if (url.includes(' ')) {
-                        const firstPart = url.split(/\s+/)[0];
-                        console.log(`[Renner] ID completo falhou. Tentando apenas primeira parte: ${firstPart}`);
-                        const retryUrl = `https://www.lojasrenner.com.br/b?Ntt=${firstPart}`;
-                        await page.goto(retryUrl, { waitUntil: 'load', timeout: 60000 });
-                        await new Promise(r => setTimeout(r, 2000));
-                        
-                        // Verifica se redirecionou
-                        if (page.url().includes('/p/')) {
-                            url = page.url();
-                            return parseProductRenner(page, url); // Recursão simples para processar a página do produto
-                        }
-
-                        await page.waitForSelector('a[href*="/p/"]', { timeout: 10000 }).catch(() => {});
-                        const retryLink = await page.evaluate(() => {
-                            const link = document.querySelector('a[class*="ProductBox_productBox"], [class*="product-card"] a[href*="/p/"], a[href*="/p/"]');
-                            return link ? link.href : null;
-                        });
-
-                        if (retryLink) {
-                            url = retryLink;
-                            console.log(`[Renner] Produto encontrado com ID parcial, navegando para: ${url}`);
-                        } else {
-                            console.log(`❌ [Renner] Produto não encontrado nem com ID parcial: ${firstPart}`);
-                            return null;
-                        }
-                    } else {
-                        console.log(`❌ [Renner] Produto não encontrado na busca para ID: ${url}`);
-                        return null;
-                    }
+                    console.log(`❌ [Renner] Produto não encontrado na busca para ID: ${url}`);
+                    return null;
                 } else {
                     url = productLink;
                     console.log(`[Renner] Produto encontrado nos resultados, navegando para: ${url}`);

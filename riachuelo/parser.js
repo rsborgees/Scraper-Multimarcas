@@ -17,7 +17,7 @@ async function parseProductRiachuelo(page, urlOrId) {
                 }
                 return null;
             }
-            await new Promise(r => setTimeout(r, 2000)); // Reduzido de 5s
+            await new Promise(r => setTimeout(r, 4000)); // Aumentado de 2s para 4s para garantir carregamento da vitrine
             
             // Caso A: Redirecionou direto para a página do produto
             if (page.url().includes('/p/') || page.url().includes('_sku')) {
@@ -32,8 +32,11 @@ async function parseProductRiachuelo(page, urlOrId) {
                         if (acceptBtn) await acceptBtn.click();
                     } catch (e) {}
                     await page.goto(searchUrl, { waitUntil: 'load', timeout: 60000 });
-                    await new Promise(r => setTimeout(r, 2000)); // Reduzido de 5s
+                    await new Promise(r => setTimeout(r, 4000));
                 }
+
+                // Aguarda a vitrine carregar (seletor genérico de produto da Riachuelo)
+                await page.waitForSelector('a[href*="/p/"], a[href*="_sku"], [class*="product-card"]', { timeout: 15000 }).catch(() => {});
 
                 let productLink = await page.evaluate((targetId) => {
                     const links = Array.from(document.querySelectorAll('a'));
@@ -56,13 +59,10 @@ async function parseProductRiachuelo(page, urlOrId) {
                     return candidates.length > 0 ? candidates[0].href : null;
                 }, url);
                 
-                // Caso B: Falhou busca inicial, tenta fallbacks
+                // Caso B: Falhou busca inicial, tenta fallback de 8 dígitos se for 10
                 if (!productLink) {
                     let retryId = null;
-                    if (url.includes(' ')) {
-                        retryId = url.split(/\s+/)[0];
-                        console.log(`[Riachuelo] ID com espaço falhou. Tentando apenas primeira parte: ${retryId}`);
-                    } else if (url.length === 10 && url.endsWith('00')) {
+                    if (url.length === 10 && url.endsWith('00')) {
                         retryId = url.substring(0, 8);
                         console.log(`[Riachuelo] ID de 10 dígitos (00) falhou. Tentando 8 dígitos: ${retryId}`);
                     }
@@ -70,7 +70,7 @@ async function parseProductRiachuelo(page, urlOrId) {
                     if (retryId) {
                         const retryUrl = `https://www.riachuelo.com.br/busca?q=${retryId}&gad_source=1`;
                         await page.goto(retryUrl, { waitUntil: 'load', timeout: 60000 });
-                        await new Promise(r => setTimeout(r, 2000));
+                        await new Promise(r => setTimeout(r, 3000));
 
                         if (page.url().includes('/p/') || page.url().includes('_sku')) {
                             console.log(`[Riachuelo] Redirecionamento direto detectado no retry: ${page.url()}`);
@@ -101,7 +101,6 @@ async function parseProductRiachuelo(page, urlOrId) {
 
                 if (!productLink && !page.url().includes('/p/') && !page.url().includes('_sku')) {
                     console.log(`❌ [Riachuelo] Produto não encontrado na busca para ID: ${url}`);
-                    await page.screenshot({ path: `debug_riachuelo_not_found_${url.replace(/\s+/g, '_')}.png` });
                     return null;
                 }
 
