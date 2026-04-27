@@ -5,7 +5,8 @@
 
 const MERCHANT_IDS = {
     'renner': '17801',
-    'riachuelo': '86587'
+    'riachuelo': '86587',
+    'cea': 'cea-minha' // Marcador para identificar que usa lógica própria
 };
 
 const PUBLISHER_IDS = {
@@ -13,23 +14,30 @@ const PUBLISHER_IDS = {
 };
 
 /**
- * Gera um link parametrizado longo via Awin.
+ * Gera um link parametrizado para o produto.
  * 
  * @param {string} originalUrl - A URL original do produto
  * @param {string} store - O nome da loja (ex: 'renner')
- * @returns {Promise<string>} - A URL parametrizada longa
+ * @returns {Promise<string>} - A URL parametrizada
  */
-async function generateAwinLink(originalUrl, store) {
+async function generateAffiliateLink(originalUrl, store) {
     const storeLower = store.toLowerCase();
     
-    // Agora processamos tanto Renner quanto Riachuelo
+    // Lógica específica para C&A (Minha C&A via UTMs)
+    if (storeLower === 'cea' || storeLower === 'c&a') {
+        const consultantId = process.env.MINHA_CEA_ID || 'franindica';
+        const cleanUrl = originalUrl.split('?')[0];
+        // Estrutura padrão Minha C&A: utm_source=mais&utm_medium=minhacea&utm_campaign=ID
+        return `${cleanUrl}?utm_source=mais&utm_medium=minhacea&utm_campaign=${consultantId}`;
+    }
+
+    // Lógica Awin para Renner e Riachuelo
     if (!MERCHANT_IDS[storeLower]) {
-        console.log(`ℹ️ [Awin] Ignorando parametrização para ${store} (Loja não configurada na Awin).`);
+        console.log(`ℹ️ [Affiliate] Ignorando parametrização para ${store} (Loja não configurada).`);
         return originalUrl;
     }
 
     const publisherId = PUBLISHER_IDS[storeLower] || process.env.AWIN_PUBLISHER_ID;
-    const apiToken = process.env.AWIN_API_TOKEN;
     const advertiserId = MERCHANT_IDS[storeLower];
 
     if (!publisherId) {
@@ -37,17 +45,15 @@ async function generateAwinLink(originalUrl, store) {
         return originalUrl;
     }
 
-    // Limpa a URL de parâmetros que podem quebrar o redirecionamento
     const cleanUrl = originalUrl.split('?')[0];
-
-    // Cria o link longo parametrizado
     const longTrackingUrl = `https://www.awin1.com/cread.php?awinmid=${advertiserId}&awinaffid=${publisherId}&p=${encodeURIComponent(cleanUrl)}`;
 
-    console.log(`🔗 [Awin] Parametrizando link longo para ${store.toUpperCase()} (ID: ${advertiserId})...`);
+    console.log(`🔗 [Awin] Parametrizando link para ${store.toUpperCase()}...`);
     return longTrackingUrl;
 }
 
 module.exports = {
-    generateAwinLink,
+    generateAwinLink: generateAffiliateLink, // Mantendo compatibilidade com o nome antigo no resto do código
+    generateAffiliateLink,
     MERCHANT_IDS
 };

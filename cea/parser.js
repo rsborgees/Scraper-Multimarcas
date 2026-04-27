@@ -6,159 +6,141 @@ async function parseProductCea(page, urlOrId) {
     try {
         let url = urlOrId;
         if (!url.startsWith('http')) {
-            const searchUrl = `https://www.cea.com.br/busca?ft=${url}`;
-            console.log(`[C&A] Buscando ID ${url} via pesquisa: ${searchUrl}`);
+            const cleanId = url.replace(/\s+(P|M|G|GG|PP|G1|G2|G3|G4|UNI|U|\d{2})$/i, '').trim();
+            const searchUrl = `https://www.cea.com.br/search/${cleanId}`;
+            console.log(`[C&A] Buscando ID ${cleanId} (original: ${url}) via: ${searchUrl}`);
             await page.goto(searchUrl, { waitUntil: 'load', timeout: 60000 });
-            await new Promise(r => setTimeout(r, 5000));
-            
+            await new Promise(r => setTimeout(r, 2000));
+
             const productLink = await page.evaluate(() => {
-                const link = document.querySelector('a[href*="/p"], section[class*="gallery"] a');
-                return link ? link.href : null;
+                const selectors = [
+                    '.vtex-product-summary-2-x-clearLink',
+                    'a[class*="product"][href*="/p"]',
+                    'a.product-details_name'
+                ];
+                for (const sel of selectors) {
+                    const link = document.querySelector(sel);
+                    if (link && link.href.includes('.cea.com.br/') && link.href.endsWith('/p')) {
+                        return link.href;
+                    }
+                }
+                return null;
             });
-            
+
             if (!productLink) {
                 console.log(`❌ [C&A] Produto não encontrado na busca para ID: ${url}`);
                 return null;
             }
             url = productLink;
-            console.log(`[C&A] Produto encontrado, navegando para: ${url}`);
         }
 
+        console.log(`[C&A] Navegando para PDP: ${url}`);
         await page.goto(url, { waitUntil: 'load', timeout: 60000 });
-        
-        // Espera de hidratação
-        await new Promise(r => setTimeout(r, 5000));
+        await new Promise(r => setTimeout(r, 6000));
 
-        const data = await page.evaluate(async () => {
-            const getSafeText = (el) => {
-                if (!el) return '';
-                const txt = el.innerText || el.textContent || '';
-                return (typeof txt === 'string') ? txt.trim() : '';
-            };
+        // Fecha modal de consultor se existir
+        await page.evaluate(() => {
+            const navBtn = Array.from(document.querySelectorAll('button, a'))
+                .find(b => b.innerText && b.innerText.includes('Navegar sem consultor'));
+            if (navBtn) navBtn.click();
+        }).catch(() => {});
 
-            // PLANO A: window.__STATE__ (VTEX IO)
-            const state = window.__STATE__;
-            let stateProduct = null;
-            if (state) {
-                const productKey = Object.keys(state).find(k => k.startsWith('Product:'));
-                if (productKey) stateProduct = state[productKey];
-            }
+        const result = await page.evaluate(() => {
+            const getSafeText = (el) => el ? el.innerText.trim() : '';
 
-            // Nome
-            const h1 = document.querySelector('h1, [class*="productName"], .cea-cea-store-6-x-productName');
-            let nome = getSafeText(h1);
-            if (!nome && stateProduct) nome = stateProduct.productName;
+            // ── Nome ────────────────────────────────────────────────────────────
+            const h1 = document.querySelector('h1');
+            const nome = getSafeText(h1);
             if (!nome) return null;
 
-            // Preços
-            const getPriceValue = (sel) => {
+            // ── Preços (seletores reais da C&A) ─────────────────────────────────
+            const parsePrice = (sel) => {
                 const el = document.querySelector(sel);
                 if (!el) return null;
-                let txt = getSafeText(el).replace('R$', '').replace(/\./g, '').replace(',', '.').trim();
-                return parseFloat(txt);
+                const m = el.innerText.match(/(\d{1,3}(\.\d{3})*,\d{2})/);
+                return m ? parseFloat(m[1].replace(/\./g, '').replace(',', '.')) : null;
             };
 
-            let precoOriginal = getPriceValue('.vtex-product-price-1-x-listPriceValue, [class*="listPrice"]');
-            let precoAtual = getPriceValue('.vtex-product-price-1-x-sellingPriceValue, [class*="sellingPrice"]');
+            let precoAtual    = parsePrice('.cea-store-ds-0-x-product-price__spotPrice');
+            let precoOriginal = parsePrice('.cea-store-ds-0-x-product-price__listPrice');
 
-            // Fallback via State
-            if (!precoAtual && stateProduct) {
-                const skuKey = (stateProduct.items && stateProduct.items.length > 0) ? stateProduct.items[0].id : null;
-                if (skuKey) {
-                    const priceKey = Object.keys(state).find(k => k.includes(`Price({"item":${JSON.stringify(skuKey)}`) || k.includes(`{"item":${JSON.stringify(skuKey)}`));
-                    if (priceKey && state[priceKey]) {
-                        precoAtual = state[priceKey].sellingPrice;
-                        precoOriginal = state[priceKey].listPrice || precoAtual;
-                    }
-                }
-            }
-
-            if (!precoOriginal) precoOriginal = precoAtual;
-            if (precoOriginal < precoAtual) precoOriginal = precoAtual;
-
-            // Tamanhos (Em estoque apenas)
-            const tamanhos = [];
-            const sizeElements = Array.from(document.querySelectorAll('.vtex-sku-selector-2-x-skuSelectorItem, [class*="skuSelectorItem"]'));
-            
-            sizeElements.forEach(el => {
-                const isUnavailable = el.className.includes('--unavailable') || 
-                                     el.className.includes('disabled') || 
-                                     el.getAttribute('aria-disabled') === 'true';
-                
-                if (!isUnavailable) {
-                    let sizeText = getSafeText(el);
-                    if (sizeText && sizeText.length <= 4) {
-                        tamanhos.push(sizeText.toUpperCase());
-                    }
-                }
-            });
-
-            // Fallback Tamanhos via State
-            if (tamanhos.length === 0 && stateProduct && stateProduct.items) {
-                stateProduct.items.forEach(item => {
-                    const isAvailable = item.sellers && item.sellers.some(s => {
-                        const comm = state[s.id];
-                        return comm && comm.commertialOffer && comm.commertialOffer.AvailableQuantity > 0;
-                    });
-
-                    if (isAvailable && item.name) {
-                        let sName = item.name.split('/').pop().trim();
-                        if (sName.length <= 4) tamanhos.push(sName.toUpperCase());
-                    }
+            // Fallback — pega de qualquer elemento que tenha R$
+            if (!precoAtual) {
+                document.querySelectorAll('[class*="price"], [class*="Price"]').forEach(el => {
+                    if (precoAtual) return;
+                    const m = el.innerText.match(/R\$\s*(\d{1,3}(\.\d{3})*,\d{2})/);
+                    if (m) precoAtual = parseFloat(m[1].replace(/\./g, '').replace(',', '.'));
                 });
             }
 
-            if (tamanhos.length === 0) return null;
+            if (!precoAtual || isNaN(precoAtual)) return null;
+            if (!precoOriginal || isNaN(precoOriginal)) precoOriginal = precoAtual;
 
-            // Categoria
-            let categoria = 'outros';
-            const categories = stateProduct ? (stateProduct.categories || []) : [];
-            const breadcrumb = categories.join(' ').toLowerCase();
-            const fullText = (nome + ' ' + breadcrumb).toLowerCase();
+            // ── Tamanhos (seletores reais da C&A) ───────────────────────────────
+            const tamanhosRaw = [];
+            // Seletor primário: pill-container-item (cada tamanho disponível)
+            document.querySelectorAll('.cea-store-ds-0-x-size-product--pill-container-item').forEach(el => {
+                const txt = getSafeText(el).toUpperCase();
+                if (txt && txt.length <= 8 && !txt.includes('\n')) tamanhosRaw.push(txt);
+            });
 
-            if (fullText.includes('vestido')) categoria = 'vestido';
-            else if (fullText.includes('macacão') || fullText.includes('macaquinho')) categoria = 'macacão';
-            else if (fullText.includes('saia')) categoria = 'saia';
-            else if (fullText.includes('short')) categoria = 'short';
-            else if (fullText.includes('blusa') || fullText.includes('top') || fullText.includes('camisa')) categoria = 'blusa';
-            else if (fullText.includes('brinco') || fullText.includes('bolsa') || fullText.includes('acessório')) categoria = 'acessório';
-            else if (fullText.includes('calça')) categoria = 'calça';
-            else if (fullText.includes('casaco') || fullText.includes('jaqueta')) categoria = 'casaco';
-
-            // ID
-            let id = stateProduct ? stateProduct.productReference : null;
-            if (!id && stateProduct) id = stateProduct.productId;
-            if (!id) {
-                const refEl = document.querySelector('.vtex-product-identifier');
-                id = getSafeText(refEl).replace(/\D/g, '');
+            // Fallback — pill genérico
+            if (tamanhosRaw.length === 0) {
+                document.querySelectorAll('[class*="pill--container"]').forEach(el => {
+                    const txt = getSafeText(el).split('\n')[0].trim().toUpperCase();
+                    if (txt && txt.length <= 8) tamanhosRaw.push(txt);
+                });
             }
 
-            // Imagem
-            let imageUrl = null;
-            if (stateProduct && stateProduct.items && stateProduct.items.length > 0) {
-                const item = stateProduct.items[0];
-                if (item.images && item.images.length > 0) {
-                    imageUrl = item.images[0].imageUrl;
+            // Fallback — __STATE__ priceRange + skuSpecifications
+            const tamanhos = [...new Set(tamanhosRaw)].filter(s => s.length > 0 && s.length <= 8);
+            const isAcessorio = /brinco|bolsa|colar|cinto|oculos/i.test(nome);
+            if (tamanhos.length === 0 && !isAcessorio) return null;
+
+            // ── Categoria ───────────────────────────────────────────────────────
+            let categoria = 'outros';
+            const low = nome.toLowerCase();
+            if (low.includes('vestido'))                         categoria = 'vestido';
+            else if (low.includes('macacão') || low.includes('macaquinho')) categoria = 'macacão';
+            else if (low.includes('saia'))                       categoria = 'saia';
+            else if (low.includes('short'))                      categoria = 'short';
+            else if (low.includes('blusa') || low.includes('top') || low.includes('camisa')) categoria = 'blusa';
+            else if (low.includes('jaqueta') || low.includes('casaco') || low.includes('puffer')) categoria = 'casaco';
+            else if (low.includes('calça'))                      categoria = 'calça';
+            else if (isAcessorio)                                categoria = 'acessório';
+
+            // ── ID e Imagem ─────────────────────────────────────────────────────
+            let id = null;
+            const state = window.__STATE__;
+            if (state) {
+                const pKey = Object.keys(state).find(k => /^Product:[a-z]/.test(k) && !k.includes('.'));
+                if (pKey) {
+                    const prod = state[pKey];
+                    id = prod && (prod.productReference || prod.productId);
+                }
+
+                // Preço pelo state se DOM falhou
+                if (!precoAtual || precoAtual === precoOriginal) {
+                    const priceKey = Object.keys(state).find(k => k.includes('priceRange.sellingPrice'));
+                    if (priceKey && state[priceKey]) {
+                        const sp = state[priceKey];
+                        if (sp.highPrice) precoAtual = sp.highPrice;
+                        if (sp.lowPrice && sp.lowPrice < precoOriginal) precoAtual = sp.lowPrice;
+                    }
+                    const listKey = Object.keys(state).find(k => k.includes('priceRange.listPrice'));
+                    if (listKey && state[listKey] && state[listKey].highPrice) {
+                        precoOriginal = state[listKey].highPrice;
+                    }
                 }
             }
-            if (!imageUrl) {
-                const imgEl = document.querySelector('.vtex-store-components-3-x-productImageTag, img[src*="arquivos"]');
-                if (imgEl) imageUrl = imgEl.src;
-            }
 
-            return {
-                id,
-                nome,
-                precoAtual,
-                precoOriginal,
-                tamanhos: [...new Set(tamanhos)],
-                categoria,
-                url: window.location.href,
-                imageUrl
-            };
+            const imgEl = document.querySelector('.vtex-store-components-3-x-productImageTag, img[src*="arquivos"]');
+            const imageUrl = imgEl ? imgEl.src : null;
+
+            return { id, nome, precoAtual, precoOriginal, tamanhos, categoria, url: window.location.href, imageUrl, store: 'cea' };
         });
 
-        return data;
+        return result;
 
     } catch (error) {
         console.error(`❌ Erro ao parsear C&A ${urlOrId}: ${error.message}`);

@@ -17,9 +17,10 @@ require('dotenv').config();
 
 const { parseProductRenner } = require('./renner/parser');
 const { parseProductRiachuelo } = require('./riachuelo/parser');
+const { parseProductCea } = require('./cea/parser');
 const { generateAwinLink } = require('./utils/affiliateManager');
 const { getSelectionPool } = require('./utils/historyManager');
-const { formatRennerMessage, formatRiachueloMessage } = require('./utils/messageFormatter');
+const { formatRennerMessage, formatRiachueloMessage, formatCeaMessage } = require('./utils/messageFormatter');
 
 // ─── Google Drive ─────────────────────────────────────────────────────────────
 
@@ -115,7 +116,8 @@ async function listDriveFilesByStore() {
 
 const PARSERS = {
     renner: parseProductRenner,
-    riachuelo: parseProductRiachuelo
+    riachuelo: parseProductRiachuelo,
+    cea: parseProductCea
 };
 
 // ─── Função Principal ─────────────────────────────────────────────────────────
@@ -150,7 +152,7 @@ async function runAllScrapers(storeLimits = {}) {
     let browser;
     try {
         browser = await puppeteer.launch({
-            headless: 'new',
+            headless: false,
             args: [
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
@@ -233,6 +235,8 @@ async function runAllScrapers(storeLimits = {}) {
                             productData.message = formatRennerMessage(productData);
                         } else if (store === 'riachuelo') {
                             productData.message = formatRiachueloMessage(productData);
+                        } else if (store === 'cea') {
+                            productData.message = formatCeaMessage(productData);
                         }
 
                         allProducts.push(productData);
