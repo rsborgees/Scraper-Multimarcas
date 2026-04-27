@@ -19,59 +19,108 @@ async function parseProductRiachuelo(page, urlOrId) {
             }
             await new Promise(r => setTimeout(r, 2000)); // Reduzido de 5s
             
-            // Anti-Redirect na busca
-            if (page.url().includes('privacidade.') || page.url().includes('politicas-de-privacidade')) {
-                console.log(`[Riachuelo] Redirecionamento de privacidade na BUSCA. Tentando contornar...`);
-                try {
-                    const acceptBtn = await page.waitForSelector('a.cc-btn.cc-allow, button#onetrust-accept-btn-handler', { timeout: 5000 });
-                    if (acceptBtn) await acceptBtn.click();
-                } catch (e) {}
-                await page.goto(searchUrl, { waitUntil: 'load', timeout: 60000 });
-                await new Promise(r => setTimeout(r, 2000)); // Reduzido de 5s
+            // Caso A: Redirecionou direto para a página do produto
+            if (page.url().includes('/p/') || page.url().includes('_sku')) {
+                console.log(`[Riachuelo] Redirecionamento direto detectado: ${page.url()}`);
+                url = page.url();
+            } else {
+                // Anti-Redirect na busca
+                if (page.url().includes('privacidade.') || page.url().includes('politicas-de-privacidade')) {
+                    console.log(`[Riachuelo] Redirecionamento de privacidade na BUSCA. Tentando contornar...`);
+                    try {
+                        const acceptBtn = await page.waitForSelector('a.cc-btn.cc-allow, button#onetrust-accept-btn-handler', { timeout: 5000 });
+                        if (acceptBtn) await acceptBtn.click();
+                    } catch (e) {}
+                    await page.goto(searchUrl, { waitUntil: 'load', timeout: 60000 });
+                    await new Promise(r => setTimeout(r, 2000)); // Reduzido de 5s
+                }
+
+                let productLink = await page.evaluate((targetId) => {
+                    const links = Array.from(document.querySelectorAll('a'));
+                    // 1. Tenta link que contém o ID exato e parece um produto
+                    const exactLink = links.find(l => 
+                        l.href.includes(targetId) && 
+                        (l.href.includes('_sku') || l.href.includes('/p/')) && 
+                        !l.href.includes('busca') && 
+                        !l.href.includes('privacidade')
+                    );
+                    if (exactLink) return exactLink.href;
+
+                    // 2. Tenta qualquer link que pareça um produto (pegando o primeiro da vitrine)
+                    const candidates = links.filter(l => 
+                        (l.href.includes('/p/') || l.href.includes('_sku')) && 
+                        !l.href.includes('busca') &&
+                        !l.href.includes('privacidade') &&
+                        !l.href.includes('google')
+                    );
+                    return candidates.length > 0 ? candidates[0].href : null;
+                }, url);
+                
+                // Caso B: Falhou busca inicial, tenta fallbacks
+                if (!productLink) {
+                    let retryId = null;
+                    if (url.includes(' ')) {
+                        retryId = url.split(/\s+/)[0];
+                        console.log(`[Riachuelo] ID com espaço falhou. Tentando apenas primeira parte: ${retryId}`);
+                    } else if (url.length === 10 && url.endsWith('00')) {
+                        retryId = url.substring(0, 8);
+                        console.log(`[Riachuelo] ID de 10 dígitos (00) falhou. Tentando 8 dígitos: ${retryId}`);
+                    }
+
+                    if (retryId) {
+                        const retryUrl = `https://www.riachuelo.com.br/busca?q=${retryId}&gad_source=1`;
+                        await page.goto(retryUrl, { waitUntil: 'load', timeout: 60000 });
+                        await new Promise(r => setTimeout(r, 2000));
+
+                        if (page.url().includes('/p/') || page.url().includes('_sku')) {
+                            console.log(`[Riachuelo] Redirecionamento direto detectado no retry: ${page.url()}`);
+                            url = page.url();
+                            productLink = url;
+                        } else {
+                            productLink = await page.evaluate((pid) => {
+                                const links = Array.from(document.querySelectorAll('a'));
+                                const link = links.find(l => 
+                                    l.href.includes(pid) && 
+                                    (l.href.includes('_sku') || l.href.includes('/p/')) && 
+                                    !l.href.includes('busca')
+                                );
+                                if (link) return link.href;
+                                
+                                // Último recurso: pega o primeiro produto que aparecer
+                                const firstProd = links.find(l => (l.href.includes('/p/') || l.href.includes('_sku')) && !l.href.includes('busca'));
+                                return firstProd ? firstProd.href : null;
+                            }, retryId);
+
+                            if (productLink) {
+                                url = productLink;
+                                console.log(`[Riachuelo] Produto encontrado com ID parcial, navegando para: ${url}`);
+                            }
+                        }
+                    }
+                }
+
+                if (!productLink && !page.url().includes('/p/') && !page.url().includes('_sku')) {
+                    console.log(`❌ [Riachuelo] Produto não encontrado na busca para ID: ${url}`);
+                    await page.screenshot({ path: `debug_riachuelo_not_found_${url.replace(/\s+/g, '_')}.png` });
+                    return null;
+                }
+
+                if (productLink && !page.url().includes(productLink)) {
+                    console.log(`[Riachuelo] Produto encontrado nos resultados, navegando para: ${productLink}`);
+                    await page.goto(productLink, { waitUntil: 'load', timeout: 60000 });
+                    await new Promise(r => setTimeout(r, 2000));
+                }
             }
 
-            const productLink = await page.evaluate((targetId) => {
-                const links = Array.from(document.querySelectorAll('a'));
-                // Prioridade para link que contém o ID exato e parece um produto
-                const exactLink = links.find(l => 
-                    l.href.includes(targetId) && 
-                    (l.href.includes('_sku') || l.href.includes('/p/')) && 
-                    !l.href.includes('busca') && 
-                    !l.href.includes('privacidade') && 
-                    !l.href.includes('politica')
-                );
-                if (exactLink) return exactLink.href;
-
-                const candidates = links.filter(l => 
-                    (l.href.includes('/p/') || l.href.includes('_sku') || l.href.includes('/produto/')) && 
-                    !l.href.includes('busca') &&
-                    !l.href.includes('privacidade') && 
-                    !l.href.includes('politica') &&
-                    !l.href.includes('google')
-                );
-                return candidates.length > 0 ? candidates[0].href : null;
-            }, url);
-            
-            if (!productLink) {
-                console.log(`❌ [Riachuelo] Produto não encontrado na busca para ID: ${url}`);
-                // Screenshot da busca frustrada
-                await page.screenshot({ path: `debug_riachuelo_not_found_${url}.png` });
-                return null;
-            }
-
-            console.log(`[Riachuelo] Produto encontrado nos resultados, navegando para: ${productLink}`);
-            await page.goto(productLink, { waitUntil: 'load', timeout: 60000 });
-            await new Promise(r => setTimeout(r, 2000)); // Reduzido de 5s
-
-            // Anti-Redirect no PDP
+            // Anti-Redirect no PDP final
             if (page.url().includes('privacidade.') || page.url().includes('politicas-de-privacidade')) {
                 console.log(`[Riachuelo] Redirecionamento de privacidade no PDP. Tentando contornar...`);
                 try {
                     const acceptBtn = await page.waitForSelector('a.cc-btn.cc-allow, button#onetrust-accept-btn-handler', { timeout: 5000 });
                     if (acceptBtn) await acceptBtn.click();
                 } catch (e) {}
-                await page.goto(productLink, { waitUntil: 'load', timeout: 60000 });
-                await new Promise(r => setTimeout(r, 2000)); // Reduzido de 5s
+                await page.goto(page.url(), { waitUntil: 'load', timeout: 60000 });
+                await new Promise(r => setTimeout(r, 2000));
             }
         } else {
              await page.goto(url, { waitUntil: 'load', timeout: 60000 });
