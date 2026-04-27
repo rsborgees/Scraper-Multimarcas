@@ -12,7 +12,7 @@ const { loadHistory, markAsSent } = require('./utils/historyManager');
  */
 const IDEAL_TARGETS = {
     'renner': 45,    // ~3 itens/hora (15h de janela = 45/dia)
-    'cea': 0,        // Desativado temporariamente
+    'cea': 10,       // Ajustado para 10/dia
     'riachuelo': 15  // ~1 item/hora (15h de janela = 15/dia)
 };
 
@@ -20,7 +20,7 @@ const IDEAL_TARGETS = {
 const BATCH_CONFIG = {
     'renner': { min: 3, max: 3 },
     'riachuelo': { min: 1, max: 1 },
-    'cea': { min: 0, max: 0 }
+    'cea': { min: 1, max: 1 }
 };
 
 /**
@@ -162,4 +162,4 @@ async function sendBatchToWebhook(items) {
 
 console.log('🛡️  [Server] Scraper 2.0 Daemon Ativo');
 console.log('📅 Agendamento: 07h-21h (De hora em hora)');
-console.log('🎯 Metas: Renner (~3/hora) | Riachuelo (1/hora) | C&A (OFF)');
+console.log('🎯 Metas: Renner (~3/hora) | Riachuelo (1/hora) | C&A (1/hora)');

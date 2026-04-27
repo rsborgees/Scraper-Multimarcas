@@ -50,8 +50,11 @@ async function parseProductCea(page, urlOrId) {
 
             // ── Nome ────────────────────────────────────────────────────────────
             const h1 = document.querySelector('h1');
-            const nome = getSafeText(h1);
+            let nome = getSafeText(h1);
             if (!nome) return null;
+            
+            // Limpa o nome (remove tamanho se houver no final, comum na C&A)
+            nome = nome.replace(/\s+(P|M|G|GG|PP|G1|G2|G3|G4|UNI|U|\d{2})$/i, '').trim();
 
             // ── Preços (seletores reais da C&A) ─────────────────────────────────
             const parsePrice = (sel) => {
@@ -78,22 +81,25 @@ async function parseProductCea(page, urlOrId) {
 
             // ── Tamanhos (seletores reais da C&A) ───────────────────────────────
             const tamanhosRaw = [];
-            // Seletor primário: pill-container-item (cada tamanho disponível)
-            document.querySelectorAll('.cea-store-ds-0-x-size-product--pill-container-item').forEach(el => {
-                const txt = getSafeText(el).toUpperCase();
-                if (txt && txt.length <= 8 && !txt.includes('\n')) tamanhosRaw.push(txt);
+            // Seletores comuns (incluindo o novo pill--container)
+            const sizeSelectors = [
+                '.cea-store-ds-0-x-size-product--pill-container-item',
+                '.cea-store-ds-0-x-pill--container',
+                '[class*="pill--container"]',
+                '.vtex-product-summary-2-x-sizePill'
+            ];
+
+            sizeSelectors.forEach(sel => {
+                document.querySelectorAll(sel).forEach(el => {
+                    const txt = getSafeText(el).split('\n')[0].trim().toUpperCase();
+                    // Filtra para pegar apenas tamanhos reais (curtos)
+                    if (txt && txt.length > 0 && txt.length <= 8 && !/VER|COMPRAR|AVISE/i.test(txt)) {
+                        tamanhosRaw.push(txt);
+                    }
+                });
             });
 
-            // Fallback — pill genérico
-            if (tamanhosRaw.length === 0) {
-                document.querySelectorAll('[class*="pill--container"]').forEach(el => {
-                    const txt = getSafeText(el).split('\n')[0].trim().toUpperCase();
-                    if (txt && txt.length <= 8) tamanhosRaw.push(txt);
-                });
-            }
-
-            // Fallback — __STATE__ priceRange + skuSpecifications
-            const tamanhos = [...new Set(tamanhosRaw)].filter(s => s.length > 0 && s.length <= 8);
+            const tamanhos = [...new Set(tamanhosRaw)].filter(s => s.length > 0);
             const isAcessorio = /brinco|bolsa|colar|cinto|oculos/i.test(nome);
             if (tamanhos.length === 0 && !isAcessorio) return null;
 
