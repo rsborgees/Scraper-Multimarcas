@@ -152,7 +152,7 @@ async function runAllScrapers(storeLimits = {}) {
     let browser;
     try {
         browser = await puppeteer.launch({
-            headless: false,
+            headless: process.env.HEADLESS === 'false' ? false : true,
             args: [
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
