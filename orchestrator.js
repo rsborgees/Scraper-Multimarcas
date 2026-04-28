@@ -191,8 +191,9 @@ async function runAllScrapers(storeLimits = {}) {
             // 5. Abre uma página e tenta parsear até atingir o limite
             let successCount = 0;
             let attemptIndex = 0;
-            // Tenta no máximo 10x o alvo para ter margem de falhas maior (pedido pelo usuário)
-            const maxAttempts = Math.min(selectionPool.length, limit * 10);
+            // Tenta no máximo 20x o alvo para ter margem de falhas maior (pedido pelo usuário)
+            // Se o pool for pequeno, tenta o pool todo.
+            const maxAttempts = Math.min(selectionPool.length, Math.max(limit * 20, 50)); 
 
             const page = await browser.newPage();
             try {
@@ -250,6 +251,18 @@ async function runAllScrapers(storeLimits = {}) {
                                 }
                                 
                                 p.tamanhoQueUsei = target.sizeUsed;
+                                p.searchId = target.id;
+
+                                // --- Filtro de Match de ID (Pedido pelo Usuário) ---
+                                if (store === 'riachuelo') {
+                                    const driveId = String(target.id);
+                                    const pageIds = p.allSkuIds || [String(p.id)];
+                                    if (!pageIds.includes(driveId)) {
+                                        console.log(`   ⚠️ [Riachuelo] Bloqueado: ID do Drive ${driveId} não encontrado na página (Página: ${p.id}).`);
+                                        continue;
+                                    }
+                                }
+
                                 scrapedProducts.push(p);
                             }
                         }

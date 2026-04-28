@@ -353,6 +353,13 @@ async function parseProductRiachuelo(page, urlOrId) {
 
             // ID e Imagem
             let id = vtexProduct ? (vtexProduct.productId || vtexProduct.id) : null;
+            let allSkuIds = [];
+            if (vtexProduct && vtexProduct.items) {
+                allSkuIds = vtexProduct.items.map(item => String(item.itemId || item.id || ''));
+            }
+            if (id) allSkuIds.push(String(id));
+            allSkuIds = [...new Set(allSkuIds.filter(Boolean))];
+
             let imageUrl = null;
             if (vtexProduct && vtexProduct.items && vtexProduct.items[0] && vtexProduct.items[0].images) {
                 imageUrl = vtexProduct.items[0].images[0].imageUrl;
@@ -364,6 +371,7 @@ async function parseProductRiachuelo(page, urlOrId) {
 
             return {
                 id,
+                allSkuIds,
                 nome,
                 precoAtual,
                 precoOriginal,
