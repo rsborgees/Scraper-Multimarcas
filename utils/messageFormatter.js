@@ -40,7 +40,7 @@ function formatRennerMessage(productOrProducts) {
         let block = `${product.nome}`;
         
         if (product.tamanhoQueUsei) {
-            block += `\n\nTamanho que usei: ${product.tamanhoQueUsei}`;
+            block += `\n\nMeu (Fran) tamanho ideal: ${product.tamanhoQueUsei}`;
         }
         
         block += `\n\n${tamanhosStr}\n${priceLine}\n\n🔗 ${product.url}`;
@@ -103,7 +103,7 @@ function formatRiachueloMessage(productOrProducts) {
         let block = `${product.nome}`;
         
         if (product.tamanhoQueUsei) {
-            block += `\n\nTamanho que usei: ${product.tamanhoQueUsei}`;
+            block += `\n\nMeu (Fran) tamanho ideal: ${product.tamanhoQueUsei}`;
         }
         
         block += `\n\n${tamanhosStr}\n${priceLine}\n\n🔗 ${product.url}`;
@@ -162,7 +162,7 @@ function formatCeaMessage(productOrProducts) {
         let block = `${product.nome}`;
         
         if (product.tamanhoQueUsei) {
-            block += `\n\nTamanho que usei: ${product.tamanhoQueUsei}`;
+            block += `\n\nMeu (Fran) tamanho ideal: ${product.tamanhoQueUsei}`;
         }
         
         block += `\n\n${tamanhosStr}\n${priceLine}\n\n🔗 ${product.url}`;
