@@ -80,26 +80,34 @@ async function parseProductCea(page, urlOrId) {
             if (!precoOriginal || isNaN(precoOriginal)) precoOriginal = precoAtual;
 
             // ── Tamanhos (seletores reais da C&A) ───────────────────────────────
-            const tamanhosRaw = [];
-            // Seletores comuns (incluindo o novo pill--container)
+            const sizeMap = {};
             const sizeSelectors = [
                 '.cea-store-ds-0-x-size-product--pill-container-item',
                 '.cea-store-ds-0-x-pill--container',
                 '[class*="pill--container"]',
                 '.vtex-product-summary-2-x-sizePill'
             ];
-
             sizeSelectors.forEach(sel => {
                 document.querySelectorAll(sel).forEach(el => {
-                    const txt = getSafeText(el).split('\n')[0].trim().toUpperCase();
-                    // Filtra para pegar apenas tamanhos reais (curtos)
-                    if (txt && txt.length > 0 && txt.length <= 8 && !/VER|COMPRAR|AVISE/i.test(txt)) {
-                        tamanhosRaw.push(txt);
+                    let txt = getSafeText(el).split('\n')[0].trim().toUpperCase();
+                    // Limpeza adicional para tamanhos
+                    txt = txt.replace(/[^A-Z0-9]/g, '').trim(); 
+                    if (!txt || txt.length === 0 || txt.length > 8 || /VER|COMPRAR|AVISE/i.test(txt)) return;
+
+                    const isDisabled = el.classList.contains('cea-store-ds-0-x-pill--container-disabled') || 
+                                     (el.getAttribute('aria-label') && el.getAttribute('aria-label').toLowerCase().includes('indisponível')) ||
+                                     el.querySelector('[class*="disabled"], [aria-label*="indisponível"]') !== null;
+                    
+                    if (sizeMap[txt] === undefined) {
+                        sizeMap[txt] = !isDisabled;
+                    } else {
+                        // Se encontrar qualquer indicação de que o tamanho está indisponível, marca como tal
+                        if (isDisabled) sizeMap[txt] = false;
                     }
                 });
             });
 
-            const tamanhos = [...new Set(tamanhosRaw)].filter(s => s.length > 0);
+            const tamanhos = Object.keys(sizeMap).filter(s => sizeMap[s]).sort();
             const isAcessorio = /brinco|bolsa|colar|cinto|oculos/i.test(nome);
             if (tamanhos.length === 0 && !isAcessorio) return null;
 
