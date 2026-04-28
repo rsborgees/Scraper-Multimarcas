@@ -239,6 +239,16 @@ async function runAllScrapers(storeLimits = {}) {
                         for (const target of targets) {
                             const p = await parser(page, target.id);
                             if (p && p.nome && p.precoAtual) {
+                                // --- Filtro de Tamanhos Restritos (PP/GG sozinhos) ---
+                                const availableSizes = p.tamanhos || [];
+                                if (availableSizes.length === 1) {
+                                    const s = availableSizes[0].toUpperCase();
+                                    if (s === 'PP' || s === 'GG') {
+                                        console.log(`   ⚠️ [${store}] Bloqueado: Apenas ${s} disponível para ${target.id}`);
+                                        continue;
+                                    }
+                                }
+                                
                                 p.tamanhoQueUsei = target.sizeUsed;
                                 scrapedProducts.push(p);
                             }
