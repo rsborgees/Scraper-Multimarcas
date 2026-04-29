@@ -5,16 +5,7 @@ require('dotenv').config();
 const { runAllScrapers } = require('./orchestrator');
 const { distributeLinks } = require('./utils/linkDistributor');
 const { loadHistory, markAsSent } = require('./utils/historyManager');
-
-/**
- * CONFIGURAÇÕES DE METAS (IDEAL_TARGETS)
- * Representam a quantidade total desejada por dia.
- */
-const IDEAL_TARGETS = {
-    'renner': 45,    // ~3 itens/hora (15h de janela = 45/dia)
-    'cea': 10,       // Ajustado para 10/dia
-    'riachuelo': 15  // ~1 item/hora (15h de janela = 15/dia)
-};
+const { loadQuotaTargets } = require('./utils/quotaManager');
 
 // Limites EXATOS por rodada horária (min = max = obrigatório)
 const BATCH_CONFIG = {
@@ -25,8 +16,9 @@ const BATCH_CONFIG = {
 
 /**
  * Cálculo de GAP (Meta - Enviados Hoje)
+ * @param {Object} idealTargets - Metas diárias por loja, carregadas do Supabase
  */
-function calculateDynamicQuotas() {
+function calculateDynamicQuotas(idealTargets) {
     const history = loadHistory();
     const today = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' }); // YYYY-MM-DD
     
@@ -39,9 +31,9 @@ function calculateDynamicQuotas() {
     });
 
     const quotas = {};
-    Object.keys(IDEAL_TARGETS).forEach(store => {
+    Object.keys(idealTargets).forEach(store => {
         const sent = counts[store] || 0;
-        const target = IDEAL_TARGETS[store];
+        const target = idealTargets[store];
         quotas[store] = Math.max(0, target - sent);
     });
 
@@ -94,7 +86,9 @@ cron.schedule('0 7-21 * * *', async () => {
     console.log(`\n⏰ [${new Date().toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo' })}] Iniciando Job Horário...`);
     
     try {
-        const { quotas, counts } = calculateDynamicQuotas();
+        // Carrega metas do Supabase a cada rodada (mudanças entram em vigor na próxima hora)
+        const IDEAL_TARGETS = await loadQuotaTargets();
+        const { quotas, counts } = calculateDynamicQuotas(IDEAL_TARGETS);
         const { hourlyLimits, totalBatchSize } = calculateHourlyBatchLimit(quotas);
         
         console.log('📊 [Quota Service] Status atual:', counts);
@@ -162,4 +156,4 @@ async function sendBatchToWebhook(items) {
 
 console.log('🛡️  [Server] Scraper 2.0 Daemon Ativo');
 console.log('📅 Agendamento: 07h-21h (De hora em hora)');
-console.log('🎯 Metas: Renner (~3/hora) | Riachuelo (1/hora) | C&A (1/hora)');
+console.log('🎯 Metas: Configuráveis via Supabase → tabela quota_config');
