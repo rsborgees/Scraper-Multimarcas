@@ -4,7 +4,7 @@
  */
 
 const MERCHANT_IDS = {
-    'renner': '17801',
+    'renner': '70694',
     'riachuelo': '86587',
     'cea': 'cea-minha' // Marcador para identificar que usa lógica própria
 };
@@ -46,7 +46,7 @@ async function generateAffiliateLink(originalUrl, store) {
     }
 
     const cleanUrl = originalUrl.split('?')[0];
-    const longTrackingUrl = `https://www.awin1.com/cread.php?awinmid=${advertiserId}&awinaffid=${publisherId}&p=${encodeURIComponent(cleanUrl)}`;
+    const longTrackingUrl = `https://www.awin1.com/cread.php?awinmid=${advertiserId}&awinaffid=${publisherId}&ued=${encodeURIComponent(cleanUrl + '?')}&platform=ma`;
 
     console.log(`🔗 [Awin] Parametrizando link para ${store.toUpperCase()}...`);
     return longTrackingUrl;
