@@ -46,7 +46,7 @@ async function generateAffiliateLink(originalUrl, store) {
     }
 
     const cleanUrl = originalUrl.split('?')[0];
-    const longTrackingUrl = `https://www.awin1.com/cread.php?awinmid=${advertiserId}&awinaffid=${publisherId}&ued=${encodeURIComponent(cleanUrl + '?')}&platform=ma`;
+    const longTrackingUrl = `https://www.awin1.com/cread.php?awinmid=${advertiserId}&awinaffid=${publisherId}&ued=${encodeURIComponent(cleanUrl)}`;
 
     console.log(`🔗 [Awin] Parametrizando link para ${store.toUpperCase()}...`);
     return longTrackingUrl;
