@@ -1,0 +1,271 @@
+{
+  "name": "Calça jeans feminina palazzo loose Silvia Braz - denim médio",
+  "description": "A estética despojada ganha força nesta <strong>Calça jeans feminina palazzo loose Silvia Braz - denim médio</strong>&nbsp;que combina leveza visual e presença marcante em cada detalhe. A proposta low na cintura cria um ar descontraído, enquanto o volume amplo acrescenta movimento natural ao look. Parte da collab <strong>Silvia Braz + Riachuelo</strong>, a peça traduz o estilo da influenciadora em uma leitura versátil que amplia as possibilidades do closet. O denim realça a silhueta de forma elegante e acompanha a rotina com conforto. Um jeans que inspira combinações modernas e convida a explorar produções cheias de personalidade.<br> <br> <strong>Características:</strong><br> •&nbsp;Marca: Silvia Braz + Riachuelo<br> • 100% Algodão<br> • Modelagem palazzo loose<br> • Cintura baixa<br> • Modelagem confortável<br> • Pernas amplas<br> • Cós com passantes<br> • Fechamento frontal por zíper e botão<br> • Bolsos frontais e posteriores<br> • Barra tradicional<br> <br> A união entre <strong>Riachuelo </strong>e<strong> Silvia Braz</strong> traz ícones do estilo da influenciadora para todo o país. Uma collab com modelagens e cores versáteis, criada para multiplicar as possibilidades de looks com peças que combinam entre si.<br> <br> <strong>A cor do produto nas fotos reproduzidas com modelos, pode sofrer alteração em decorrência do uso do flash.</strong>",
+  "sku": "16426592",
+  "skuGroup": "16426592",
+  "skuSubGroup": null,
+  "urlPath": "calca-jeans-feminina-palazzo-loose-silvia-braz-denim-medio-16426592_sku_sku",
+  "media": [
+    {
+      "type": "image",
+      "url": "https://static.riachuelo.com.br/RCHLO/16426592006/portrait/9e78847052191a8a3c03671f4570f89e8eace3cf.jpg"
+    },
+    {
+      "type": "image",
+      "url": "https://static.riachuelo.com.br/RCHLO/16426592006/portrait/710c84f4d411d6fff4ae0fde8ec39d66abb28bea.jpg"
+    },
+    {
+      "type": "image",
+      "url": "https://static.riachuelo.com.br/RCHLO/16426592006/portrait/5fd737971f6f206cd77d8eeb473a7ab0091467b8.jpg"
+    },
+    {
+      "type": "image",
+      "url": "https://static.riachuelo.com.br/RCHLO/16426592006/portrait/fa66c5269ddc12ab7e9be171b9d9db1fdec9410f.jpg"
+    },
+    {
+      "type": "image",
+      "url": "https://static.riachuelo.com.br/RCHLO/16426592006/portrait/8c2e0a026b1fa42cfcba5c951a987381b79215ff.jpg"
+    }
+  ],
+  "attributes": {
+    "washing_instruction": {
+      "id": "washing_instruction",
+      "label": "Instrução de Lavagem",
+      "value": "Lavar Em Temperatura Máxima De 30°; Não Usar Alvejante À Base De Cloro; Proibido Usar Secadora; Passar Em Temperatura Máxima De 110°; Não Limpar A Seco"
+    },
+    "custom_label_2": {
+      "id": "custom_label_2",
+      "label": "Custom Label 2",
+      "value": "Dia das M�es"
+    },
+    "modeling": {
+      "id": "modeling",
+      "label": "Modelagem",
+      "value": "Palazzo"
+    },
+    "gender": {
+      "id": "gender",
+      "label": "Gênero",
+      "value": "Feminino"
+    },
+    "catalog_class": {
+      "id": "catalog_class",
+      "label": "Sub Categoria",
+      "value": "Calça"
+    },
+    "pattern": {
+      "id": "pattern",
+      "label": "Padronagem",
+      "value": "Liso"
+    },
+    "gift_pack": {
+      "id": "gift_pack",
+      "label": "Embalagem para presente",
+      "value": "true"
+    },
+    "winter": {
+      "id": "winter",
+      "label": "Inverno",
+      "value": "Nao"
+    },
+    "catalog_line": {
+      "id": "catalog_line",
+      "label": "Categoria",
+      "value": "Jeans Feminino"
+    },
+    "program": {
+      "id": "program",
+      "label": "Programa",
+      "value": "VA"
+    },
+    "axis": {
+      "id": "axis",
+      "label": "Eixo",
+      "value": "K"
+    },
+    "dco": {
+      "id": "dco",
+      "label": "DCO",
+      "value": "206"
+    },
+    "product_measures": {
+      "id": "product_measures",
+      "label": "Medidas do Produto",
+      "value": "Peso: 0,350 Qui<br>"
+    },
+    "ocasion": {
+      "id": "ocasion",
+      "label": "Ocasião",
+      "value": "Casual, Home Office, Passeio Ao Ar Livre"
+    },
+    "department_description": {
+      "id": "department_description",
+      "label": "Descrição do Departamento",
+      "value": "Fem. Jeanseria"
+    },
+    "buy_together": {
+      "id": "buy_together",
+      "label": "Compre junto",
+      "value": "16321987001;16197038001;16294432001;16335295004"
+    },
+    "season": {
+      "id": "season",
+      "label": "Estação",
+      "value": "Silvia Braz + Riachuelo"
+    },
+    "generic_code": {
+      "id": "generic_code",
+      "label": "Código Genérico",
+      "value": "16426592"
+    },
+    "model": {
+      "id": "model",
+      "label": "Modelo",
+      "value": "Loose"
+    },
+    "theme": {
+      "id": "theme",
+      "label": "Tema",
+      "value": "Neutro"
+    },
+    "keyword": {
+      "id": "keyword",
+      "label": "Palavra Chave",
+      "value": "Calça Ampla, Moda Feminina, Look Casual, Peça Básica, Estilo Moderno"
+    },
+    "department": {
+      "id": "department",
+      "label": "Department",
+      "value": "Feminino"
+    },
+    "brand": {
+      "id": "brand",
+      "label": "Marca",
+      "value": "Silvia Braz + Riachuelo"
+    },
+    "class": {
+      "id": "class",
+      "label": "Classificação do Grupo",
+      "value": "Bottom"
+    },
+    "height": {
+      "id": "height",
+      "label": "Altura",
+      "value": "3.0000"
+    },
+    "catalog_subclass": {
+      "id": "catalog_subclass",
+      "label": "Modelagem",
+      "value": "Pantalona"
+    },
+    "gg": {
+      "id": "gg",
+      "label": "Categoria",
+      "value": "FEMININO"
+    },
+    "product": {
+      "id": "product",
+      "label": "Produto",
+      "value": "Calca"
+    },
+    "gm": {
+      "id": "gm",
+      "label": "GM",
+      "value": "206136"
+    },
+    "age_group": {
+      "id": "age_group",
+      "label": "Faixa Etária",
+      "value": "Adulto"
+    },
+    "length": {
+      "id": "length",
+      "label": "Comprimento",
+      "value": "34.0000"
+    },
+    "weight": {
+      "id": "weight",
+      "label": "Peso",
+      "value": "74.0g"
+    },
+    "collection": {
+      "id": "collection",
+      "label": "Coleção",
+      "value": "Inverno"
+    },
+    "productAge": {
+      "id": "productAge",
+      "label": "Idade do produto",
+      "value": "16 days"
+    },
+    "filter_color": {
+      "id": "filter_color",
+      "label": "Cor",
+      "value": "Azul"
+    },
+    "lifestyle": {
+      "id": "lifestyle",
+      "label": "Estilo de Vida",
+      "value": "Jovem"
+    },
+    "washing": {
+      "id": "washing",
+      "label": "Lavagem",
+      "value": "Lavagem Média"
+    },
+    "catalog_department": {
+      "id": "catalog_department",
+      "label": "Departamento",
+      "value": "Feminino"
+    },
+    "geek": {
+      "id": "geek",
+      "label": "Geek",
+      "value": "F"
+    },
+    "lining": {
+      "id": "lining",
+      "label": "Forro",
+      "value": "Forro Parcial"
+    },
+    "brand_description": {
+      "id": "brand_description",
+      "label": "Descrição da Marca",
+      "value": "Silvia Braz + Riachuelo"
+    },
+    "width": {
+      "id": "width",
+      "label": "Largura",
+      "value": "28.0000"
+    },
+    "update_date_ai": {
+      "id": "update_date_ai",
+      "label": "Data de Atualização - IA",
+      "value": "2026-04-20T07:52:49"
+    },
+    "family": {
+      "id": "family",
+      "label": "Família",
+      "value": "PAREDE"
+    },
+    "manufacturing_country": {
+      "id": "manufacturing_country",
+      "label": "País de Fabricação",
+      "value": "BR - Brasil"
+    }
+  },
+  "visibleAttributes": [
+    "brand",
+    "generic_code",
+    "filter_color",
+    "product_measures",
+    "washing_instruction",
+    "collection",
+    "manufacturing_country",
+    "modeling",
+    "weight"
+  ],
+  "listPrice": 199.99,
+  "salePrice": 199.99,
+  "soldOut": false
+}

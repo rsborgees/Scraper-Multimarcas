@@ -158,28 +158,7 @@ async function parseProductRiachuelo(page, urlOrId) {
                 
                 if (d && d.name) {
                     // Busca profunda por tamanhos em d
-                    const findSizesDeep = (obj) => {
-                        const results = [];
-                        const seen = new Set();
-                        const search = (o) => {
-                            if (!o || typeof o !== 'object' || seen.has(o)) return;
-                            seen.add(o);
-                            for (let k in o) {
-                                const val = o[k];
-                                if (typeof val === 'string' && /^(PP|P|M|G|GG|G1|G2|G3|G4|XG|XGG|UNI|U|\d{2})$/.test(val.toUpperCase())) {
-                                    results.push(val.toUpperCase());
-                                }
-                                search(val);
-                            }
-                        };
-                        search(obj);
-                        return [...new Set(results)];
-                    };
-                    
-                    const deepSizes = findSizesDeep(d);
-                    console.log(`[Riachuelo] Deep sizes found: ${deepSizes.join(', ')}`);
-
-                    // Tenta encontrar a lista de SKUs do produto principal
+                    // A busca profunda de tamanhos foi removida porque capturava valores falsos positivos (ex: ID "gg")                    // Tenta encontrar a lista de SKUs do produto principal
                     let skus = [];
                     const mainId = d.sku || d.skuGroup?.id || d.skuSubGroup?.id || d.id;
                     
@@ -210,7 +189,7 @@ async function parseProductRiachuelo(page, urlOrId) {
                                 }
                             }]
                         })) : [{
-                            name: deepSizes.length === 1 ? deepSizes[0] : (d.attributes ? (d.attributes.tamanho || d.attributes.Tamanho) : null),
+                            name: d.attributes ? (d.attributes.tamanho || d.attributes.Tamanho?.value || d.attributes.tamanho?.value || d.attributes.Tamanho) : null,
                             images: d.media ? d.media.map(m => ({ imageUrl: m.uri })) : [],
                             sellers: [{
                                 commertialOffer: {

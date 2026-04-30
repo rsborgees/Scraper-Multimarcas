@@ -95,9 +95,13 @@ async function parseProductCea(page, urlOrId) {
                     if (!txt || txt.length === 0 || txt.length > 8 || /VER|COMPRAR|AVISE/i.test(txt)) return;
 
                     const isDisabled = el.classList.contains('cea-store-ds-0-x-pill--container-disabled') || 
+                                     el.className.toLowerCase().includes('disabled') ||
+                                     el.className.toLowerCase().includes('unavailable') ||
+                                     el.hasAttribute('disabled') ||
+                                     el.getAttribute('aria-disabled') === 'true' ||
                                      (el.getAttribute('aria-label') && el.getAttribute('aria-label').toLowerCase().includes('indisponível')) ||
-                                     el.querySelector('[class*="disabled"], [aria-label*="indisponível"]') !== null;
-                    
+                                     el.querySelector('[class*="disabled"], [class*="unavailable"], [aria-label*="indisponível"]') !== null;
+
                     if (sizeMap[txt] === undefined) {
                         sizeMap[txt] = !isDisabled;
                     } else {
