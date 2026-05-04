@@ -111,23 +111,9 @@ async function parseProductCea(page, urlOrId) {
                 });
             });
 
-            const tamanhos = Object.keys(sizeMap).filter(s => sizeMap[s]).sort();
-            const isAcessorio = /brinco|bolsa|colar|cinto|oculos/i.test(nome);
-            if (tamanhos.length === 0 && !isAcessorio) return null;
-
-            // ── Categoria ───────────────────────────────────────────────────────
-            let categoria = 'outros';
-            const low = nome.toLowerCase();
-            if (low.includes('vestido'))                         categoria = 'vestido';
-            else if (low.includes('macacão') || low.includes('macaquinho')) categoria = 'macacão';
-            else if (low.includes('saia'))                       categoria = 'saia';
-            else if (low.includes('short'))                      categoria = 'short';
-            else if (low.includes('blusa') || low.includes('top') || low.includes('camisa')) categoria = 'blusa';
-            else if (low.includes('jaqueta') || low.includes('casaco') || low.includes('puffer')) categoria = 'casaco';
-            else if (low.includes('calça'))                      categoria = 'calça';
-            else if (isAcessorio)                                categoria = 'acessório';
-
-            // ── ID e Imagem ─────────────────────────────────────────────────────
+            let tamanhos = Object.keys(sizeMap).filter(s => sizeMap[s]).sort();
+            
+            // ── Dados do VTEX IO (Mais precisos para Tamanhos, Preço e ID) ──────
             let id = null;
             const state = window.__STATE__;
             if (state) {
@@ -135,6 +121,33 @@ async function parseProductCea(page, urlOrId) {
                 if (pKey) {
                     const prod = state[pKey];
                     id = prod && (prod.productReference || prod.productId);
+                    
+                    // Extrai tamanhos precisos via estoque do state
+                    const stateTamanhos = [];
+                    const itemsRef = prod.items || [];
+                    itemsRef.forEach(itemRef => {
+                        const itemData = state[itemRef.id];
+                        if (itemData && itemData.name) {
+                            const sellers = itemData.sellers || [];
+                            const isAvailable = sellers.some(sRef => {
+                                const sellerData = state[sRef.id];
+                                if (!sellerData) return false;
+                                const offerId = sellerData.commertialOffer?.id;
+                                const offerData = state[offerId];
+                                return offerData && offerData.AvailableQuantity > 0;
+                            });
+                            
+                            if (isAvailable) {
+                                let sizeName = itemData.name.toUpperCase().trim();
+                                sizeName = sizeName.replace(/[^A-Z0-9]/g, '').trim(); 
+                                if (sizeName) stateTamanhos.push(sizeName);
+                            }
+                        }
+                    });
+                    
+                    if (itemsRef.length > 0) {
+                        tamanhos = stateTamanhos.filter((v, i, a) => a.indexOf(v) === i).sort();
+                    }
                 }
 
                 // Preço pelo state se DOM falhou
@@ -151,6 +164,23 @@ async function parseProductCea(page, urlOrId) {
                     }
                 }
             }
+
+            const isIndisponivel = !!Array.from(document.querySelectorAll('p, span, div, button')).find(el => el.innerText && /produto indisponível|avise-me/i.test(el.innerText));
+            if (tamanhos.length === 0 || isIndisponivel) return null;
+
+            const isAcessorio = /brinco|bolsa|colar|cinto|oculos|pulseira|relogio|meia/i.test(nome);
+
+            // ── Categoria ───────────────────────────────────────────────────────
+            let categoria = 'outros';
+            const low = nome.toLowerCase();
+            if (low.includes('vestido'))                         categoria = 'vestido';
+            else if (low.includes('macacão') || low.includes('macaquinho')) categoria = 'macacão';
+            else if (low.includes('saia'))                       categoria = 'saia';
+            else if (low.includes('short'))                      categoria = 'short';
+            else if (low.includes('blusa') || low.includes('top') || low.includes('camisa')) categoria = 'blusa';
+            else if (low.includes('jaqueta') || low.includes('casaco') || low.includes('puffer')) categoria = 'casaco';
+            else if (low.includes('calça'))                      categoria = 'calça';
+            else if (isAcessorio)                                categoria = 'acessório';
 
             const imgEl = document.querySelector('.vtex-store-components-3-x-productImageTag, img[src*="arquivos"]');
             const imageUrl = imgEl ? imgEl.src : null;
