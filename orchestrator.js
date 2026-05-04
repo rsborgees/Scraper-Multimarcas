@@ -209,8 +209,8 @@ async function runAllScrapers(storeLimits = {}) {
                     const rawProductId = item.productId || item.fileName;
                     
                     // --- Lógica de Conjuntos (Parsing de IDs e Tamanhos) ---
-                    // Ex: "930773780 38 931151771" -> IDs: [930773780 (tam 38), 931151771 (sem tam)]
-                    const tokens = rawProductId.split(/\s+/);
+                    // Ex: "930773780 38 931151771" ou "930773780_38_931151771" -> IDs: [930773780 (tam 38), 931151771 (sem tam)]
+                    const tokens = rawProductId.split(/[\s_]+/);
                     const targets = [];
                     for (let i = 0; i < tokens.length; i++) {
                         const token = tokens[i];
