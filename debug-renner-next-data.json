@@ -1,0 +1,2409 @@
+{
+  "props": {
+    "pageProps": {
+      "target": "PRD",
+      "richRelevance": {
+        "richRelevanceBaseURL": "https://recs.algorecs.com/rrserver",
+        "richRelevanceJSLibURL": "https://media.algorecs.com/rrserver/js/2.1/p13n.js",
+        "richRelevanceSearchURL": "https://recs.algorecs.com/rrserver",
+        "richDynamicExperiencesClientKey": "183c31c31f964388",
+        "richRelevanceApiClientKey": "88cfb67f293b684a",
+        "richRelevanceApiKey": "24f07d816ef94d7f"
+      },
+      "content": {
+        "datalayer": "Produto",
+        "realmId": "renner",
+        "seoDescription": "",
+        "@type": "ReactPage",
+        "seoTitle": "Produto",
+        "saveUrl": false,
+        "seoConfig": "product",
+        "defaultNavigationActionContentPath": "/react/p",
+        "metaTags": [
+          "<link rel=\"icon\" href=\"https://www.lojasrenner.com.br/favicon.ico\" sizes=\"16x16\">",
+          "<meta name=\"google-site-verification\" content=\"NGs6afetb4rJIZ7uatwkXq3Tv9ij7-chGfKyr6J0t5s\" />",
+          "<link rel=\"dns-prefetch\" href=\"//api.zanox.com\">",
+          "<link rel=\"dns-prefetch\" href=\"//www.googletagmanager.com\">",
+          "<link rel=\"dns-prefetch\" href=\"//connect.facebook.net\">",
+          "<link rel=\"dns-prefetch\" href=\"//www.facebook.com\">",
+          "<link rel=\"dns-prefetch\" href=\"//cm.g.doubleclick.net\">",
+          "<link rel=\"dns-prefetch\" href=\"//service.maxymiser.net\">",
+          "<link rel=\"dns-prefetch\" href=\"//static.chaordicsystems.com\">",
+          "<link rel=\"preconnect\" href=\"//img.lojasrenner.com.br\">",
+          "<link rel=\"dns-prefetch\" href=\"//static.criteo.net\">",
+          "<link rel=\"dns-prefetch\" href=\"//www.google-analytics.com\">",
+          "<link rel=\"preconnect\" href=\"//media.richrelevance.com\">",
+          "<link rel=\"preconnect\" href=\"//cdn.richrelevance.com\">",
+          "<meta property=\"al:ios:url\" content=\"apprenner://store/api/native-store\" />",
+          "<meta property=\"al:ios:app_store_id\" content=\"567763947\" />",
+          "<meta property=\"al:ios:app_name\" content=\"Lojas Renner - Compras Online\" />",
+          "<meta property=\"al:android:url\" content=\"apprenner://store/api/native-store\">",
+          "<meta property=\"al:android:package\" content=\"br.com.lojasrenner\">",
+          "<meta property=\"al:android:app_name\" content=\"Lojas Renner\">",
+          "<script type=\"application/ld+json\"> { \"@context\" : \"https://schema.org\",   \"@type\" : \"Organization\",   \"url\" : \"https://www.lojasrenner.com.br\",   \"logo\" : \"https://img.lojasrenner.com.br/banner/img/logo_red3.png\" } </script>",
+          "<script type=\"application/ld+json\"> { \"@context\" : \"https://schema.org\", \"@type\" : \"ClothingStore\", \"name\" : \"Renner | Moda Feminina, Masculina, Infantil e Perfumes\", \"url\" : \"https://www.lojasrenner.com.br\" } </script>",
+          "<script type=\"application/ld+json\"> {\"@context\": \"https://schema.org\", \"@type\": \"Event\",\"name\": \"Black Friday 2025\", \"startDate\": \"2025-11-01t00:00:0Z\",  \"endDate\": \"2025-11-29t23: 59:50Z\", \"eventAttendanceMode\": \"https://schema.org/OnlineEventAttendanceMode\", \"eventStatus\": \"https://schema.org/EventScheduled\",\"location\": {\"@type\": \"VirtualLocation\", \"url\": \"https://www.lojasrenner.com.br/lp/black-friday\"}, \"image\": \"https://img.lojasrenner.com.br/banner/01-home/251001_LP_BLACKFRIDAY_VEMAI_DESK.jpg\",\"description\": \"Aproveite a melhor Black Friday de Roupas - Lojas Renner\"}</script>",
+          "<title>{prop.product.metaTitle} - Renner</title>",
+          "<meta name=\"ROBOTS\" content=\"INDEX,FOLLOW\">",
+          "<meta name=\"description\" content=\"{prop.product.metaDescription}\"/>",
+          "<link rel=\"canonical\" href=\"https://www.lojasrenner.com.br{prop.product.url}\">",
+          "<meta name=\"twitter:card\" content=\"product\">",
+          "<meta name=\"twitter:site\" content=\"@Lojas_Renner\">",
+          "<meta name=\"twitter:title\" content=\"{prop.product.metaTitle} - Lojas Renner\">",
+          "<meta name=\"twitter:description\" content=\"{prop.product.metaDescription}\">",
+          "<meta name=\"twitter:creator\" content=\"@Lojas_Renner\">",
+          "<meta name=\"twitter:image\" content=\"{prop.product.largeImageUrl}\">",
+          "<meta name=\"twitter:data1\" content=\"{prop.sku.activePrice}\">",
+          "<meta name=\"twitter:label1\" content=\"Preço\">",
+          "<meta name=\"twitter:data2\" content=\"{attributeValue1}\">",
+          "<meta name=\"twitter:label2\" content=\"{attribute1}\">",
+          "<meta name=\"twitter:data3\" content=\"{attributeValue2}\">",
+          "<meta name=\"twitter:label3\" content=\"{attribute2}\">",
+          "<meta property=\"og:title\" content=\"{prop.product.metaTitle} - Lojas Renner\"/>",
+          "<meta property=\"og:type\" content=\"product\" />",
+          "<meta property=\"og:image\" content=\"{prop.product.largeImageUrl}\" />",
+          "<meta property=\"og:description\" content=\"{prop.product.metaDescription}\"/>",
+          "<meta property=\"og:site_name\" content=\"Lojas Renner\" />",
+          "<meta property=\"fb:admins\" content=\" 160150784042061\" />",
+          "<meta property=\"og:price:amount\" content=\"{prop.sku.activePrice}\"/>",
+          "<meta property=\"og:price:currency\" content=\"R$\" />"
+        ],
+        "siteId": "rennerBrasilDesktop",
+        "buttonBackToTop": true,
+        "rrPage": "product",
+        "footerContent": [
+          {
+            "contents": [
+              {
+                "FooterInformation": [
+                  {
+                    "medias": [
+                      {
+                        "@type": "ReactIconLink",
+                        "icon": "",
+                        "link": "http://www.procon.rj.gov.br/",
+                        "redirectConfig": "_blank",
+                        "text": "Procon RJ"
+                      },
+                      {
+                        "@type": "ReactIconLink",
+                        "icon": "",
+                        "link": "http://www.procon.sc.gov.br/",
+                        "redirectConfig": "_blank",
+                        "text": "Procon SC"
+                      }
+                    ],
+                    "address": "Av. Joaquim Porto Villanova, 401 - B. Jardim Carvalho - Porto Alegre/RS CEP: 91410-400 CNPJ: 92.754.738/0001-62",
+                    "@type": "ReactFooterStoreInformation"
+                  },
+                  {
+                    "@type": "ReactHTMLFooter",
+                    "content_en": "",
+                    "content_es_UY": "",
+                    "content": "<div style=\"\n    font-size: 10px;\n    text-align: center;\n    margin-top: -60px;\n    padding: 10px 0 calc(48px + 20px);\n\"><span>A Lojas Renner S/A atua como correspondente banc&aacute;rio da <a href=\"https://www.realizesolucoesfinanceiras.com.br/\" rel=\"noopener noreferrer\" style=\"color: inherit; text-decoration: underline;\" target=\"_blank\">Realize CFI</a> no pa&iacute;s, prestando os servi&ccedil;os de abertura de conta p&oacute;s-paga (cart&otilde;es de cr&eacute;dito), empr&eacute;stimos e seguros, conforme a regula&ccedil;&atilde;o vigente. </span></div>\n"
+                  }
+                ],
+                "FooterGlossary": [
+                  {
+                    "ruleLimit": 0,
+                    "templateTypes": [
+                      "MainContent"
+                    ],
+                    "glossaryUrl": {
+                      "linkType": "Navigation State",
+                      "path": "/pages/RennerDesktopBR/glossario"
+                    },
+                    "@type": "ReactFooterManualGlossary",
+                    "endeca:auditInfo": {
+                      "ecr:resourcePath": "/content/React/Footer/Footer Content/Footer Default - React - sem CCR - sem modal frete gratis - copiar - copiar",
+                      "ecr:innerPath": "FooterGlossary[0]"
+                    },
+                    "name": "Footer Manual Glossary",
+                    "title": "GLOSSÁRIO",
+                    "letters": [
+                      "a",
+                      "b",
+                      "c",
+                      "d",
+                      "e",
+                      "f",
+                      "g",
+                      "h",
+                      "j",
+                      "l",
+                      "m",
+                      "n",
+                      "p",
+                      "s",
+                      "t",
+                      "u",
+                      "v",
+                      "w"
+                    ]
+                  },
+                  {
+                    "@type": "ReactHTMLFooter",
+                    "content_en": "",
+                    "content_es_UY": "",
+                    "content": "<div style=\"width: auto; text-align: center; background-color: rgb(224, 224, 224);\">\n<center>\n<div class=\"Links\" style=\"\n    padding: 22px 0;\n    text-align: left;\n\">\n<div>\n<div>\n<h4>Roupas femininas</h4>\n\n<ul>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/feminino/vestidos/-/N-cg003x?s_icid=250121_FOOTER_FEMININO_VESTIDOS\" target=\"_blank\"><span>Vestidos​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/feminino/casacos-e-jaquetas/blazers/-/N-1mkkd4g?s_icid=250121_FOOTER_FEMININO_BLAZERS\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Blazers​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/feminino/calcas/-/N-14t7lsy?s_icid=250121_FOOTER_FEMININO_CALCAS\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Cal&ccedil;as​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/feminino/blusas-e-camisetas/-/N-1w31qx8?s_icid=250121_FOOTER_FEMININO_BLUSAS\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Blusas e Camisetas​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/feminino/camisas/-/N-fvn7vn?s_icid=250121_FOOTER_FEMININO_CAMISAS\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Camisas​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/feminino/bermudas-e-shorts/-/N-comsxx?s_icid=250121_FOOTER_FEMININO_BERMUDAS\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Bermudas e Shorts​​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/feminino/casacos-e-jaquetas/-/N-1qn5lks?s_icid=250121_FOOTER_FEMININO_CASACOS\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Casacos e Jaquetas​​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/feminino/macacoes-e-jardineiras/-/N-1gtdak8?s_icid=250121_FOOTER_FEMININO_MACACOES\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Macac&otilde;es​​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/feminino/moda-intima/-/N-15ps9mi?s_icid=250121_FOOTER_FEMININO_MODAINTIMA\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Moda &iacute;ntima​​</span></a></div>\n\t</li>\n</ul>\n</div>\n</div>\n\n<div>\n<div>\n<h4>Roupas masculinas</h4>\n\n<ul>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/masculino/bermudas-e-shorts/-/N-1gu6hwo?s_icid=250121_FOOTER_MASCULINO_BERMUDAS\" target=\"_blank\"><span>Bermudas e Shorts​​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/masculino/casacos-e-jaquetas/blazers/-/N-bzezhf?s_icid=250121_FOOTER_MASCULINO_BLAZERS\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Blazers​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/masculino/calcas/-/N-kyxeyg?s_icid=250121_FOOTER_MASCULINO_CALCAS\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Cal&ccedil;as​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/masculino/camisetas/-/N-1gu70uy?s_icid=250121_FOOTER_MASCULINO_CAMISETAS\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Camisetas​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/masculino/camisas/-/N-1qa4gj6?s_icid=250121_FOOTER_MASCULINO_CAMISAS\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Camisas​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/masculino/casacos-e-jaquetas/-/N-1bpn6of?s_icid=250121_FOOTER_MASCULINO_CASACOS\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Casacos e Jaquetas​​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/masculino/esportivo/-/N-1xwl3dh?s_icid=250121_FOOTER_MASCULINO_ESPORTIVO\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Esportivo​​​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/masculino/esportivo/-/N-1xwl3dh?s_icid=250121_FOOTER_MASCULINO_POLOS\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Polos​​​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/masculino/regatas/-/N-xoh8et?s_icid=250121_FOOTER_MASCULINO_REGATAS\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Regatas​​​</span></a></div>\n\t</li>\n</ul>\n</div>\n</div>\n\n<div>\n<div>\n<h4>Roupas infantis</h4>\n\n<ul>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/infantil/bermudas-e-shorts/-/N-cn7r9i?s_icid=250121_FOOTER_INFANTIL_BERMUDAS\" target=\"_blank\"><span>Bermudas e Shorts​​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/infantil/blusa-e-camiseta/-/N-16i8n8c?s_icid=250121_FOOTER_INFANTIL_BLUSAS\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Blusas e Camisetas​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/infantil/bodies/-/N-1z9d4l?s_icid=250121_FOOTER_INFANTIL_BODY\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Body Beb&ecirc;</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/infantil/calcas/-/N-s0hsou?s_icid=250121_FOOTER_INFANTIL_CALCAS\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Cal&ccedil;a Infantil​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/infantil/calcados-infantis/-/N-o4g07s?s_icid=250121_FOOTER_INFANTIL_CALCADOS\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Cal&ccedil;ados Infantis​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/infantil/casacos-e-jaquetas/-/N-fsi1e?s_icid=250121_FOOTER_INFANTIL_CASACOS\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Casaco Infantil​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/infantil/conjuntos/-/N-ipmrgl?s_icid=250121_FOOTER_INFANTIL_CONJUNTOS\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Conjunto Infantil​​​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/infantil/pijama/-/N-64ay5w?s_icid=250121_FOOTER_INFANTIL_PIJAMAS\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Pijama Infantil​​​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/infantil/vestidos/-/N-9vhpfa?s_icid=250121_FOOTER_INFANTIL_VESTIDOS\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Vestido Infantil​​​</span></a></div>\n\t</li>\n</ul>\n</div>\n</div>\n\n<div>\n<div>\n<h4>Bolsas e Acess&oacute;rios</h4>\n\n<ul>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/feminino/acessorios/-/N-10ip4lq?s_icid=250121_FOOTER_ACESSORIOS_GERAL\" target=\"_blank\"><span>Acess&oacute;rios​​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/feminino/acessorios/bolsa/-/N-jz2vsr?s_icid=250121_FOOTER_ACESSORIOS_BOLSAS\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Bolsas​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/feminino/acessorios/joia-e-bijuteria/-/N-sz89y5?s_icid=250121_FOOTER_ACESSORIOS_JOIAS\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Bijuterias e Joias</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/bolsas-e-calcados/bolsas/carteiras/-/N-15hd4so?s_icid=250121_FOOTER_ACESSORIOS_CARTEIRAS\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Carteiras​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/oculos-e-relogios/oculos/-/N-1kuhout?s_icid=250121_FOOTER_ACESSORIOS_OCULOS\" rel=\"noopener noreferrer\" target=\"_blank\"><span>&Oacute;culos​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/oculos-e-relogios/relogios/-/N-xiqdqy?s_icid=250121_FOOTER_ACESSORIOS_RELOGIOS\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Rel&oacute;gios​</span></a></div>\n\t</li>\n</ul>\n</div>\n</div>\n\n<div>\n<div>\n<h4>Beleza</h4>\n\n<ul>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/perfumaria-e-cosmeticos/-/N-y9o0ku/p1?s_icid=250121_FOOTER_BELEZA_GERAL\" target=\"_blank\"><span>Beleza​​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/perfumaria-e-cosmeticos/cabelo/-/N-1i8ee4b?s_icid=250121_FOOTER_BELEZA_CABELOS\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Cabelos​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/perfumaria-e-cosmeticos/barba-e-cuidados-masculinos/-/N-12grq08?s_icid=250121_FOOTER_BELEZA_MASC\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Cuidados Masculinos</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/perfumaria-e-cosmeticos/perfume/-/N-o00vwb?s_icid=250121_FOOTER_BELEZA_PERFUMES\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Perfumes​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/perfumaria-e-cosmeticos/maquiagem/-/N-1wiot1s?s_icid=250121_FOOTER_BELEZA_MAQUIAGEM\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Maquiagem​</span></a></div>\n\t</li>\n\t<li>\n\t<div class=\"ReactIcon_linkBadgeIcon__AmutG\"><a href=\"/c/perfumaria-e-cosmeticos/skincare/-/N-rzdwxn?s_icid=250121_FOOTER_BELEZA_SKINCARE\" rel=\"noopener noreferrer\" target=\"_blank\"><span>Skincare​</span></a></div>\n\t</li>\n</ul>\n</div>\n</div>\n</div>\n</center>\n</div>\n"
+                  }
+                ],
+                "@type": "ReactFooter",
+                "FooterSocial": [
+                  {
+                    "name": "Renner nas Redes Sociais",
+                    "medias": [
+                      {
+                        "@type": "ReactIconLink",
+                        "icon": "ic-instagram",
+                        "link": "//www.instagram.com/lojasrenner/",
+                        "redirectConfig": "_blank",
+                        "text": "Instagram"
+                      },
+                      {
+                        "@type": "ReactIconLink",
+                        "icon": "ic-pinterest",
+                        "link": "//br.pinterest.com/lojasrenner/",
+                        "redirectConfig": "_blank",
+                        "text": "Pinterest"
+                      },
+                      {
+                        "@type": "ReactIconLink",
+                        "icon": "ic-youtube",
+                        "link": "//www.youtube.com/user/EstiloRenner",
+                        "redirectConfig": "_blank",
+                        "text": "Youtube"
+                      },
+                      {
+                        "@type": "ReactIconLink",
+                        "icon": "ic-facebook",
+                        "link": "//www.facebook.com/LojasRenner/",
+                        "redirectConfig": "_blank",
+                        "text": "Facebook"
+                      },
+                      {
+                        "@type": "ReactIconLink",
+                        "icon": "ic-twitter",
+                        "link": "//twitter.com/lojas_renner",
+                        "redirectConfig": "_blank",
+                        "text": "Twitter"
+                      },
+                      {
+                        "srcImage": "https://img.lojasrenner.com.br/banner/01-home/logo_threads_25px.png",
+                        "mobHeight": "25",
+                        "@type": "ReactImageLink",
+                        "link": "https://www.threads.net/@lojasrenner",
+                        "mobWidth": "25",
+                        "deskHeight": "25",
+                        "redirectConfig": "_blank",
+                        "text": "Threads",
+                        "deskWidth": "25"
+                      },
+                      {
+                        "srcImage": "https://img.lojasrenner.com.br/banner/01-home/logo_bluesky_25px.png",
+                        "mobHeight": "",
+                        "@type": "ReactImageLink",
+                        "link": "https://bsky.app/profile/lojasrenner.com.br",
+                        "mobWidth": "",
+                        "deskHeight": "",
+                        "redirectConfig": "_blank",
+                        "text": "Bluesky",
+                        "deskWidth": ""
+                      }
+                    ],
+                    "@type": "ReactFooterSocialMedia"
+                  },
+                  {
+                    "medias": [
+                      {
+                        "@type": "ReactIconLink",
+                        "icon": "ic-apple-store",
+                        "link": "//itunes.apple.com/br/app/lojas-renner/id567763947?mt=8",
+                        "redirectConfig": "_blank",
+                        "text": "Disponível na AppStore"
+                      },
+                      {
+                        "@type": "ReactIconLink",
+                        "icon": "ic-google-store",
+                        "link": "//play.google.com/store/apps/details?id=br.com.lojasrenner&hl=pt_BR",
+                        "redirectConfig": "_blank",
+                        "text": "Disponível no Google Play"
+                      }
+                    ],
+                    "@type": "ReactFooterApp"
+                  }
+                ],
+                "FooterFirst": [
+                  {
+                    "medias": [
+                      {
+                        "@type": "ReactIconLink",
+                        "icon": "ic-location",
+                        "link": "/nossas-lojas",
+                        "text": "Nossas Lojas"
+                      },
+                      {
+                        "@type": "ReactIconLink",
+                        "icon": "",
+                        "link": "",
+                        "text": "&nbsp;"
+                      }
+                    ],
+                    "@type": "ReactFooterPromotionalStamps"
+                  },
+                  {
+                    "@type": "ReactFooterNewsletter",
+                    "urlAction": "https://novidadeslojasrenner.com.br/pub/rf",
+                    "diKey": "jkv68ne8daegbi4g5qgti904g41tpi809civd6jh4m1t1gasbk9g",
+                    "selectBoxOptions": [
+                      {
+                        "name": "Feminino",
+                        "value": "1",
+                        "@type": "ReactSelectOptionItem"
+                      },
+                      {
+                        "name": "Masculino",
+                        "value": "2",
+                        "@type": "ReactSelectOptionItem"
+                      },
+                      {
+                        "name": "Infantil",
+                        "value": "3",
+                        "@type": "ReactSelectOptionItem"
+                      },
+                      {
+                        "name": "Ashua Curve & Plus Size",
+                        "value": "4",
+                        "@type": "ReactSelectOptionItem"
+                      },
+                      {
+                        "name": "Calçados",
+                        "value": "5",
+                        "@type": "ReactSelectOptionItem"
+                      },
+                      {
+                        "name": "Perfumaria & Cosméticos",
+                        "value": "6",
+                        "@type": "ReactSelectOptionItem"
+                      },
+                      {
+                        "name": "Moda Íntima",
+                        "value": "7",
+                        "@type": "ReactSelectOptionItem"
+                      },
+                      {
+                        "name": "Moda Praia",
+                        "value": "8",
+                        "@type": "ReactSelectOptionItem"
+                      }
+                    ],
+                    "eiKey": "EgEejONPNsdRkp7Npr9HYMM",
+                    "type": "renner",
+                    "riKey": "X0Gzc2X%3DAQpglLjHJlYQGkISWy6OCzgzdzagbjinnq5EnsN0vPzdzesMXzgGXyunVwjpnpgHlpgneHmgJoXX0Gzc2X%3DAQpglLjHJlYQGnGdHrUNtzcDXEgJ26hM7sb3N0vPzdzesMXzgGXyun",
+                    "sendResponsysMethod": true
+                  }
+                ],
+                "FooterMain": [
+                  {
+                    "name": "Servicos",
+                    "medias": [
+                      {
+                        "@type": "ReactIconLink",
+                        "icon": "ic-store",
+                        "link": "/lp/retire-na-loja",
+                        "text": "Retire na Loja"
+                      },
+                      {
+                        "@type": "ReactIconLink",
+                        "icon": "ic-bubbles",
+                        "link": "https://atendimento.lojasrenner.com.br",
+                        "text": "Tire sua dúvida e fale conosco"
+                      }
+                    ],
+                    "@type": "ReactFooterServiceStamps"
+                  },
+                  {
+                    "name": "Links",
+                    "medias": [
+                      {
+                        "name": "Sobre a Renner",
+                        "medias": [
+                          {
+                            "@type": "ReactIconLink",
+                            "icon": "",
+                            "link": "/nossas-lojas",
+                            "redirectConfig": "_blank",
+                            "text": "Nossas Lojas"
+                          },
+                          {
+                            "@type": "ReactIconLink",
+                            "icon": "",
+                            "link": "https://www.lojasrennersa.com.br",
+                            "redirectConfig": "_blank",
+                            "text": "Institucional"
+                          },
+                          {
+                            "@type": "ReactIconLink",
+                            "icon": "",
+                            "link": "https://www.lojasrennersa.com.br/imprensa/",
+                            "redirectConfig": "_blank",
+                            "text": "Imprensa"
+                          },
+                          {
+                            "@type": "ReactIconLink",
+                            "icon": "",
+                            "link": "https://www.lojasrennersa.com.br/patrocinios-e-projetos/",
+                            "redirectConfig": "_blank",
+                            "text": "Patrocínios e Projetos"
+                          },
+                          {
+                            "@type": "ReactIconLink",
+                            "icon": "",
+                            "link": "https://ri.lojasrenner.com.br/",
+                            "redirectConfig": "_blank",
+                            "text": "Investidores"
+                          },
+                          {
+                            "@type": "ReactIconLink",
+                            "icon": "",
+                            "link": "/cadastro-seller?s_icid=20221206_HOME_LIVRE_CADASTROSELLER_RESP_GERAL",
+                            "text": "Seja um parceiro Marketplace"
+                          },
+                          {
+                            "@type": "ReactIconLink",
+                            "icon": "",
+                            "link": "https://www.lojasrennersa.com.br/carreiras/",
+                            "redirectConfig": "_blank",
+                            "text": "Trabalhe Conosco"
+                          },
+                          {
+                            "@type": "ReactIconLink",
+                            "icon": "",
+                            "link": "/lp/black-friday",
+                            "text": "Black Friday"
+                          },
+                          {
+                            "@type": "ReactIconLink",
+                            "icon": "",
+                            "link": "/lp/dia-das-maes",
+                            "redirectConfig": "_blank",
+                            "text": "Dia das Mães"
+                          },
+                          {
+                            "@type": "ReactIconLink",
+                            "icon": "",
+                            "link": "https://www.lojasrennersa.com.br/seguranca-digital/",
+                            "text": "Segurança Digital"
+                          }
+                        ],
+                        "@type": "ReactFooterStoreLinks"
+                      },
+                      {
+                        "name": "Perguntas Frequentes",
+                        "medias": [
+                          {
+                            "@type": "ReactIconLink",
+                            "icon": "",
+                            "link": "/privacidade-seguranca",
+                            "redirectConfig": "_blank",
+                            "text": "Política de Privacidade"
+                          },
+                          {
+                            "@type": "ReactIconLink",
+                            "icon": "",
+                            "link": "/privacidade_protecao_dados_pessoais/pagina-inicial",
+                            "text": "Central de Privacidade"
+                          },
+                          {
+                            "@type": "ReactIconLink",
+                            "icon": "",
+                            "link": "/termos-de-uso",
+                            "redirectConfig": "_blank",
+                            "text": "Termo de Uso"
+                          },
+                          {
+                            "@type": "ReactIconLink",
+                            "icon": "",
+                            "link": "https://atendimento.lojasrenner.com.br",
+                            "text": "Trocas e Devoluções"
+                          },
+                          {
+                            "@type": "ReactIconLink",
+                            "icon": "",
+                            "link": "/minha-conta/meus-pedidos",
+                            "redirectConfig": "_blank",
+                            "text": "Acompanhe seu pedido"
+                          },
+                          {
+                            "@type": "ReactIconLink",
+                            "icon": "",
+                            "link": "",
+                            "redirectConfig": "_blank",
+                            "text": "&nbsp;"
+                          },
+                          {
+                            "@type": "ReactIconLink",
+                            "icon": "",
+                            "link": "/cupom-de-desconto?s_icid=250129_FOOTER_SOBRE_CUPOM",
+                            "text": "Cupom Renner"
+                          }
+                        ],
+                        "@type": "ReactFooterStoreLinks"
+                      }
+                    ],
+                    "@type": "ReactFooterLinksColumn"
+                  },
+                  {
+                    "name": "Acessibilidade",
+                    "medias": [
+                      {
+                        "medias": [
+                          {
+                            "srcImage": "//img.lojasrenner.com.br/banner/img/logo-blog-cor.png",
+                            "mobHeight": "30",
+                            "@type": "ReactImageLink",
+                            "link": "//www.lojasrenner.com.br/blog/pagina-inicial",
+                            "mobWidth": "90",
+                            "deskHeight": "30",
+                            "redirectConfig": "_blank",
+                            "text": "Estilo Renner",
+                            "deskWidth": "90"
+                          }
+                        ],
+                        "@type": "ReactFooterBlog"
+                      },
+                      {
+                        "medias": [
+                          {
+                            "srcImage": "//img.lojasrenner.com.br/banner/img/selo_certisign.png",
+                            "mobHeight": "40",
+                            "@type": "ReactImageLink",
+                            "link": "https://www.certisign.com.br/seal/splashcerti.htm",
+                            "mobWidth": "83",
+                            "deskHeight": "40",
+                            "text": "Certisign",
+                            "deskWidth": "83"
+                          }
+                        ],
+                        "@type": "ReactFooterSecurityStamps"
+                      }
+                    ],
+                    "@type": "ReactFooterAccessibility"
+                  }
+                ]
+              }
+            ],
+            "@type": "ReactContentSlotFooter"
+          }
+        ],
+        "canonicalLink": {
+          "siteRootPath": "/pages",
+          "siteState": {
+            "contentPath": "/react/p/-/A-929510704-br.lr",
+            "siteDefinition": {
+              "displayName": "Renner Brasil Desktop",
+              "id": "/RennerDesktopBR",
+              "patterns": [
+                "/store/renner/br"
+              ],
+              "urlPattern": "/store/renner/br"
+            },
+            "siteDisplayName": "Renner Brasil Desktop",
+            "siteId": "/RennerDesktopBR",
+            "validSite": true
+          },
+          "label": "",
+          "contentPath": "/react/p",
+          "recordState": "/-/A-929510704-br.lr"
+        },
+        "mainContent": [
+          {
+            "@type": "ReactContentSlotMain"
+          },
+          {
+            "warnMeBtnTextPreLaunch": "Tenho interesse",
+            "googleShoppingCampaignParam": "c_pdp=campaign_perfumaria,c_pdp=campaign_masccamisetas,c_pdp=campaign_femblusas,c_pdp=campaign_femvestidos,c_pdp=campaign_infantil",
+            "warnMeDescription": "Avise-me quando estiver disponível",
+            "addThisKey": "",
+            "activateSearchSimilar": true,
+            "@type": "ReactProductDetails",
+            "warnMeBtnText": "Avise-me",
+            "buyButtonText": "COMPRAR",
+            "postalCodeCheckAvailability": "Confira se o produto está disponível na sacola.",
+            "linkSoldByLrsa": "/lst/-/N-1hwylc0Zoe8q5Z18n23yi",
+            "tagPosition": "image",
+            "activateGiftSliderGeneral": false,
+            "carousel": "miniature",
+            "content": [],
+            "buyButtonColor": "d71920",
+            "ratingColor": "#daa81d",
+            "giftBoxTitlePlural": "",
+            "postalCodeDescription": "Os preços, prazos e tipos de entrega são válidos apenas para este produto em consulta. Se o produto for da Alameda Renner, a entrega, troca ou devolução será feito por ela.",
+            "warnMePlaceholder": "digite seu e-mail",
+            "imageQuality": "original",
+            "useInventoryCache": true,
+            "giftBoxTitleSingular": "",
+            "checkPostalCode": "https://buscacepinter.correios.com.br/app/endereco/index.php",
+            "tabDescription": "Descrição",
+            "warnMePlaceholderPreLaunch": "E-mail",
+            "tabMeasurementChart": "Tabela de medidas",
+            "activateGiftSliderFragrance": false,
+            "disableHeaderHeartUpdate": false,
+            "googleShoppingOriginParam": "s_pdp=gs",
+            "activateReviews": true,
+            "buyPosition": "fixed",
+            "brandPosition": "above",
+            "warnMeTitle": "Produto indisponível.",
+            "tabHowToMeasure": "Como se medir",
+            "measurementChartDescription": "",
+            "enableVTO": true,
+            "warnMeDescriptionPreLaunch": "Saiba em primeira mão quando o produto estiver disponível.",
+            "msgItemUnavailable": "Infelizmente, não encontramos esse produto na sua região.",
+            "warnMeTitlePreLaunch": "Pré-lançamento",
+            "record": {
+              "attributes": {
+                "prop.product.metaDescription": " Vestido midi em ribana com modelagem ajustada e recortes cut out na cintura. Possui gola redonda e viés contrastante que destaca o design moderno. Peça versátil para produções atuais e elegantes, garantindo conforto e visual marcante para diversas ocasiões.   Vestido feminino  Modelo new midi  Sem manga  Gola redonda  Ajustada  Recortes cut out na cintura  Viés contrastante  Tecido: Ribana    Versatilidade do fit  O New Midi tem como característica principal o comprimento da peça, que fica entre o Midi e o Longo (na altura do ossinho do tornozelo, sabe?). Agora que você já conhece um pouco sobre esse modelo que está super em alta, que tal levar a sua peça favorita e compor looks cheios de estilo?   O tecido que amamos  Superconhecida do grande público, a ribana é um tecido - em geral - composto por algodão, com superfície canelada. Confortável e respirável, tem uso frequente em blusas para o dia-a-dia, pijamas e até mesmo lingerie.   Detalhes    Marca: Blue Steel  Coleção: Outono/Inverno 2026&nbsp;    Composição    97.0% Poliéster 3.0% Elastano   Marrom",
+                "dim.product.categoryHierarchy": [
+                  "feminino|vestidos|vestido-midi"
+                ],
+                "prop.product.displayName": "Vestido New Midi em Ribana com Cut Out na Cintura e Viés Contrastante",
+                "record.aggregationKey": "930896851-COR930896851-19-1420TCX",
+                "dim.product.productModel": "product",
+                "prop.sku.activePrice": "139.900000",
+                "prop.product.url": "/p/vestido-new-midi-em-ribana-com-cut-out-na-cintura-e-vies-contrastante/-/A-930896851-br.lr",
+                "dim.product.parentCategorie.displayName": "Vestido Midi",
+                "prop.product.defaultSku": "930896860",
+                "prop.product.googleVtoEnabled": "0",
+                "prop.product.brand.name": "Blue Steel",
+                "prop.product.brand.thumbnailImageUrl": "https://img.lojasrenner.com.br/banner/marca/blue-Steel-marca-produto.png",
+                "prop.product.largeImageUrl": "//img.lojasrenner.com.br/item/930896878/large/3.jpg",
+                "prop.product.brand.smallImageUrl": "https://img.lojasrenner.com.br/banner/marca/blue-Steel-marca-produto.png",
+                "prop.product.brand.landingPage": "https://www.lojasrenner.com.br/marca/blue-steel/-/N-1qnx0d3",
+                "prop.product.parentCategories": [
+                  "category:cat340070uy",
+                  "category:cat5530002"
+                ],
+                "prop.product.repositoryId": "930896851",
+                "prop.product.metaTitle": "Vestido New Midi em Ribana com Cut Out na Cintura e Viés Contrastante Marrom",
+                "prop.product.groupModeView": "twoAttributeGrouping",
+                "prop.product.howToMeasure": "300003",
+                "prop.product.measurementChart": "mcl1200003",
+                "record.id": "930896851-br.lr",
+                "prop.product.skuListRefAttribute": [
+                  "930896860",
+                  "930896878",
+                  "930896915",
+                  "930896958"
+                ],
+                "prop.product.smallImageUrl": "//img.lojasrenner.com.br/item/930896878/small/3.jpg",
+                "prop.sku.freeGift": "",
+                "prop.product.availableStamps": [],
+                "dim.product.sellerName": "",
+                "prop.product.longDescription": "<p>Vestido midi em ribana com modelagem ajustada e recortes cut out na cintura. Possui gola redonda e viés contrastante que destaca o design moderno. Peça versátil para produções atuais e elegantes, garantindo conforto e visual marcante para diversas ocasiões.</p><ul><li>Vestido feminino</li><li>Modelo new midi</li><li>Sem manga</li><li>Gola redonda</li><li>Ajustada</li><li>Recortes cut out na cintura</li><li>Viés contrastante</li><li>Tecido: Ribana</li></ul><p><strong>Versatilidade do fit</strong><br />O New Midi tem como característica principal o comprimento da peça, que fica entre o Midi e o Longo (na altura do ossinho do tornozelo, sabe?). Agora que você já conhece um pouco sobre esse modelo que está super em alta, que tal levar a sua peça favorita e compor looks cheios de estilo?</p><p><strong>O tecido que amamos</strong><br />Superconhecida do grande público, a ribana é um tecido - em geral - composto por algodão, com superfície canelada. Confortável e respirável, tem uso frequente em blusas para o dia-a-dia, pijamas e até mesmo lingerie.</p><p><strong>Detalhes</strong></p><ul><li>Marca: Blue Steel</li><li>Coleção: Outono/Inverno 2026&nbsp;</li></ul><p><strong>Composição</strong></p><ul><li>97.0% Poliéster 3.0% Elastano</li></ul>",
+                "prop.product.sellerId": ""
+              },
+              "groupView": {
+                "groupOneId": "color",
+                "groupOneName": "Cor",
+                "groupOneViewType": "image",
+                "groupOneViewTitle": "Cor",
+                "groupTwoId": "size",
+                "groupTwoName": "Tamanho",
+                "groupTwoViewType": "text",
+                "groupTwoViewTitle": "Tamanho",
+                "groupOne": [
+                  {
+                    "skuId": "930896860",
+                    "id": "COR930896851-19-1420TCX",
+                    "name": "Marrom",
+                    "hexCode": "#3c201e",
+                    "type": "color",
+                    "priority": 999999,
+                    "hasHotProductStamps": false,
+                    "refs": [
+                      {
+                        "id": "TAMPP",
+                        "skuId": "930896915",
+                        "name": "PP",
+                        "priority": 2,
+                        "type": "size",
+                        "hexCode": null,
+                        "image": null
+                      },
+                      {
+                        "id": "TAMP",
+                        "skuId": "930896894",
+                        "name": "P",
+                        "priority": 3,
+                        "type": "size",
+                        "hexCode": null,
+                        "image": null
+                      },
+                      {
+                        "id": "TAMM",
+                        "skuId": "930896878",
+                        "name": "M",
+                        "priority": 4,
+                        "type": "size",
+                        "hexCode": null,
+                        "image": null
+                      },
+                      {
+                        "id": "TAMG",
+                        "skuId": "930896860",
+                        "name": "G",
+                        "priority": 5,
+                        "type": "size",
+                        "hexCode": null,
+                        "image": null
+                      },
+                      {
+                        "id": "TAMGG",
+                        "skuId": "930896958",
+                        "name": "GG",
+                        "priority": 6,
+                        "type": "size",
+                        "hexCode": null,
+                        "image": null
+                      }
+                    ]
+                  },
+                  {
+                    "skuId": "930896886",
+                    "id": "COR930896851-19-4007TCX",
+                    "name": "Preto",
+                    "hexCode": "#1a1c1b",
+                    "type": "color",
+                    "priority": 999999,
+                    "hasHotProductStamps": false,
+                    "refs": [
+                      {
+                        "id": "TAMPP",
+                        "skuId": "930896940",
+                        "name": "PP",
+                        "priority": 2,
+                        "type": "size",
+                        "hexCode": null,
+                        "image": null
+                      },
+                      {
+                        "id": "TAMP",
+                        "skuId": "930896931",
+                        "name": "P",
+                        "priority": 3,
+                        "type": "size",
+                        "hexCode": null,
+                        "image": null
+                      },
+                      {
+                        "id": "TAMM",
+                        "skuId": "930896923",
+                        "name": "M",
+                        "priority": 4,
+                        "type": "size",
+                        "hexCode": null,
+                        "image": null
+                      },
+                      {
+                        "id": "TAMG",
+                        "skuId": "930896907",
+                        "name": "G",
+                        "priority": 5,
+                        "type": "size",
+                        "hexCode": null,
+                        "image": null
+                      },
+                      {
+                        "id": "TAMGG",
+                        "skuId": "930896886",
+                        "name": "GG",
+                        "priority": 6,
+                        "type": "size",
+                        "hexCode": null,
+                        "image": null
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "breadcrumbs": [
+              {
+                "name": "Feminino",
+                "url": "/c/feminino/-/N-4zo6za"
+              },
+              {
+                "name": "Vestidos",
+                "url": "/c/feminino/vestidos/-/N-cg003x"
+              },
+              {
+                "name": "Vestido Midi",
+                "url": "/c/feminino/vestidos/vestido-midi/-/N-1kmrg77"
+              }
+            ]
+          },
+          {
+            "seeing": "Você está vendo",
+            "completeLook": "Complete seu visual",
+            "@type": "ReactRichRelevanceCombinedProducts",
+            "width": "397",
+            "placement": "item_page.compre_junto",
+            "buyLabel": "Compre os 2 produtos",
+            "buyButton": "Comprar junto",
+            "height": "460"
+          },
+          {
+            "@type": "ReactProductExchangeAndReturn"
+          },
+          {
+            "watcher": "rr-p13n-loaded",
+            "@type": "ReactRRShowcase",
+            "fastBuy": true,
+            "placement": "item_page.vitrineRecomendacao_middle1"
+          },
+          {
+            "watcher": "rr-p13n-loaded",
+            "@type": "ReactRRShowcase",
+            "fastBuy": false,
+            "placement": "item_page.vitrineRecomendacao_middle2"
+          },
+          {
+            "watcher": "rr-p13n-loaded",
+            "@type": "ReactRRShowcase",
+            "fastBuy": true,
+            "placement": "item_page.vitrineComplementar_middle"
+          },
+          {
+            "seeMore": "Carregar mais",
+            "title": "Avaliações",
+            "@type": "ReactTrustvoxProductReview"
+          },
+          {
+            "changeText": "É simples e prático trocar os seus produtos nas mais de 300 Lojas Renner.",
+            "installmentTitle": "FORMAS DE PAGAMENTO",
+            "changeLink": "/troca-facil",
+            "@type": "ReactProductDetailsBottomInfo",
+            "changeTitle": "TROCAS E DEVOLUÇÕES",
+            "changeButton": "Quero saber como trocar",
+            "changeSubTitle": " CONHEÇA O troca fácil",
+            "paymentList": [
+              {
+                "name": "CARTÃO RENNER",
+                "description": "até 7x sem juros",
+                "highlighted": false
+              },
+              {
+                "name": "OUTROS CARTÕES",
+                "description": "até 5x sem juros",
+                "highlighted": false
+              },
+              {
+                "name": "PIX",
+                "description": "pagamento instantâneo",
+                "highlighted": false
+              }
+            ]
+          },
+          {
+            "@type": "ReactHTMLItem",
+            "content": "<style type=\"text/css\">.ProductDetails_description__1wqpz {\n  max-height: 100px;\n}\n</style>\n"
+          },
+          {
+            "@type": "ReactHTMLItem",
+            "content": "<style type=\"text/css\">.product_page .header.fix .header__carousel-container { display: none; }\n</style>\n"
+          },
+          {
+            "@type": "ReactHTMLItem",
+            "content": "<style type=\"text/css\">.ReactRRShowcase_shimmer__q6FUq { display: none;}\n</style>\n"
+          },
+          {
+            "contents": [
+              {
+                "attributes": [
+                  {
+                    "value": "home_page",
+                    "@type": "ReactRichRelevanceDynamicExperiencesItem",
+                    "key": "placements"
+                  }
+                ],
+                "@type": "ReactRichRelevanceDynamicExperiences"
+              }
+            ],
+            "@type": "ReactContentSlotMainMedia"
+          },
+          {
+            "@type": "ReactContentSlotMain"
+          },
+          {
+            "@type": "ReactHTMLItem",
+            "content": "<style type=\"text/css\">a {\n    color: inherit !important;\n    text-decoration: inherit !important;\n}\n</style>\n"
+          }
+        ],
+        "headerContent": [
+          {
+            "contents": [
+              {
+                "menuNavigation": [
+                  {
+                    "hideOnMobile": false,
+                    "menuColumnItem": {
+                      "contents": [
+                        {}
+                      ],
+                      "@type": "ContentSlotMenuColumn",
+                      "contentPaths": [
+                        "/content/Shared/Header/Menu Itens/Menu-Ofertas"
+                      ]
+                    },
+                    "searchFilterApp": "",
+                    "bannerApi": "/api/native-store/produtos/lista/N-wxqas2Z1hwylc0Z1l95pyv",
+                    "@type": "ReactMenuNavigation",
+                    "bannerUrl": "/lista/-/N-wxqas2Z1hwylc0Z1l95pyv?s_icid=250724_HOME_MENU_OFERTAS_VERTUDO",
+                    "link": "/lista/desconto-todos-produto/-/N-1l95pyv?s_icid=231128_MENU_OFERTAS_VERTUDO",
+                    "mosaicImage": "https://img.lojasrenner.com.br/banner/01-home/280126_BR_BANNER_MENU_OFERTAS_MOB_V2.jpg",
+                    "tracking": "",
+                    "lowResolutionHide": false,
+                    "bannerImage": "https://img.lojasrenner.com.br/banner/01-home/280126_BR_BANNER_MENU_OFERTAS_DESK.jpg",
+                    "name": "Ofertas",
+                    "redirectConfig": "_self",
+                    "onlyForMobile": false,
+                    "text": "Ofertas",
+                    "searchFilter": ""
+                  },
+                  {
+                    "hideOnMobile": false,
+                    "menuColumnItem": {
+                      "contents": [
+                        {}
+                      ],
+                      "@type": "ContentSlotMenuColumn",
+                      "contentPaths": [
+                        "/content/Shared/Header/Menu Itens/Menu-Lancamentos"
+                      ]
+                    },
+                    "searchFilterApp": "",
+                    "bannerApi": "/api/native-store/produtos/lst/N-1hwylc0Z1gqg3qeZ18n23yiZoe8q5",
+                    "@type": "ReactMenuNavigation",
+                    "bannerUrl": "/lista/-/N-1hwylc0Z1gqg3qeZ18n23yiZoe8q5",
+                    "link": "/lista/lancamentos-geral/-/N-1hwylc0Z1gqg3qeZ18n23yiZoe8q5?s_icid=230228_MENU_NOVIDADES_GERAL",
+                    "mosaicImage": "https://img.lojasrenner.com.br/banner/01-home/280126_BR_BANNER_MENU_NOVIDADES_MOB.jpg",
+                    "tracking": "",
+                    "lowResolutionHide": false,
+                    "bannerImage": "https://img.lojasrenner.com.br/banner/01-home/280126_BR_BANNER_MENU_NOVIDADES_DESK.jpg",
+                    "name": "NOVIDADES",
+                    "redirectConfig": "_self",
+                    "onlyForMobile": false,
+                    "text": "NOVIDADES",
+                    "searchFilter": ""
+                  },
+                  {
+                    "hideOnMobile": false,
+                    "menuColumnItem": {
+                      "contents": [
+                        {}
+                      ],
+                      "@type": "ContentSlotMenuColumn",
+                      "contentPaths": [
+                        "/content/Shared/Header/Menu Itens/Menu-Feminino"
+                      ]
+                    },
+                    "searchFilterApp": "{!tag=gender}gender:\"Feminino\"",
+                    "bannerApi": "/api/native-store/produtos/c/N-4zo6za",
+                    "@type": "ReactMenuNavigation",
+                    "bannerUrl": "/c/feminino/-/N-4zo6za?s_icid=230228_MENU_FEM_VERTUDO",
+                    "link": "/c/feminino/-/N-4zo6za?s_icid=230228_MENU_FEM_GERAL",
+                    "mosaicImage": "https://img.lojasrenner.com.br/banner/01-home/260408_BANNER_MENU_FEMININO_MOB.jpg",
+                    "tracking": "",
+                    "lowResolutionHide": false,
+                    "bannerImage": "https://img.lojasrenner.com.br/banner/01-home/260408_BANNER_MENU_FEMININO_DESK.jpg",
+                    "name": "FEMININO",
+                    "redirectConfig": "_self",
+                    "onlyForMobile": false,
+                    "text": "FEMININO",
+                    "searchFilter": "filtros=gender%3AFeminino%3B"
+                  },
+                  {
+                    "hideOnMobile": false,
+                    "menuColumnItem": {
+                      "contents": [
+                        {}
+                      ],
+                      "@type": "ContentSlotMenuColumn",
+                      "contentPaths": [
+                        "/content/Shared/Header/Menu Itens/Menu-Masculino"
+                      ]
+                    },
+                    "searchFilterApp": "{!tag=gender}gender:\"Masculino\"",
+                    "bannerApi": "/api/native-store/produtos/c/N-1xeiyoy",
+                    "@type": "ReactMenuNavigation",
+                    "bannerUrl": "/c/masculino/-/N-1xeiyoy?s_icid=230228_MENU_MASC_GERAL",
+                    "link": "/c/masculino/-/N-1xeiyoy?s_icid=230228_MENU_MASC_GERAL",
+                    "mosaicImage": "https://img.lojasrenner.com.br/banner/01-home/280126_BR_BANNER_MENU_MASCULINO_MOB.jpg",
+                    "tracking": "",
+                    "lowResolutionHide": false,
+                    "bannerImage": "https://img.lojasrenner.com.br/banner/01-home/280126_BR_BANNER_MENU_MASCULINO_DESK.jpg",
+                    "name": "MASCULINO",
+                    "redirectConfig": "_self",
+                    "onlyForMobile": false,
+                    "text": "MASCULINO",
+                    "searchFilter": "filtros=gender%3AMasculino%3B"
+                  },
+                  {
+                    "hideOnMobile": false,
+                    "menuColumnItem": {
+                      "contents": [
+                        {}
+                      ],
+                      "@type": "ContentSlotMenuColumn",
+                      "contentPaths": [
+                        "/content/Shared/Header/Menu Itens/Menu-Infantil"
+                      ]
+                    },
+                    "searchFilterApp": "{!tag=gender}gender:\"Menino\",{!tag=gender}gender:\"Menina\"",
+                    "bannerApi": "/api/native-store/produtos/c/N-10xdweq",
+                    "@type": "ReactMenuNavigation",
+                    "bannerUrl": "/c/infantil/-/N-10xdweq?s_icid=230228_MENU_INF_GERAL",
+                    "link": "/c/infantil/-/N-10xdweq?s_icid=230228_MENU_INF_GERAL",
+                    "mosaicImage": "https://img.lojasrenner.com.br/banner/01-home/280126_BR_BANNER_MENU_INFANTIL_MOB.jpg",
+                    "tracking": "",
+                    "lowResolutionHide": false,
+                    "bannerImage": "https://img.lojasrenner.com.br/banner/01-home/280126_BR_BANNER_MENU_INFANTIL_DESK.jpg",
+                    "name": "INFANTIL",
+                    "redirectConfig": "_self",
+                    "onlyForMobile": false,
+                    "text": "INFANTIL",
+                    "searchFilter": "filtros=gender%3AMenino%2CMenina%3B"
+                  },
+                  {
+                    "hideOnMobile": false,
+                    "menuColumnItem": {
+                      "contents": [
+                        {}
+                      ],
+                      "@type": "ContentSlotMenuColumn",
+                      "contentPaths": [
+                        "/content/Shared/Header/Menu Itens/Menu-Beleza"
+                      ]
+                    },
+                    "searchFilterApp": "",
+                    "bannerApi": "/api/native-store/produtos/c/N-y9o0ku",
+                    "@type": "ReactMenuNavigation",
+                    "bannerUrl": "/d/perfumaria-e-cosmeticos/-/N-y9o0ku?s_icid=241007_MENU_BEL_GERAL",
+                    "link": "/d/perfumaria-e-cosmeticos/-/N-y9o0ku?s_icid=241007_MENU_BEL_GERAL",
+                    "mosaicImage": "https://img.lojasrenner.com.br/banner/01-home/280126_BR_BANNER_MENU_BELEZA_MOB.jpg",
+                    "tracking": "",
+                    "lowResolutionHide": false,
+                    "bannerImage": "https://img.lojasrenner.com.br/banner/01-home/280126_BR_BANNER_MENU_BELEZA_DESK.jpg",
+                    "name": "BELEZA",
+                    "redirectConfig": "_self",
+                    "onlyForMobile": false,
+                    "text": "BELEZA",
+                    "searchFilter": ""
+                  },
+                  {
+                    "hideOnMobile": false,
+                    "menuColumnItem": {
+                      "contents": [
+                        {}
+                      ],
+                      "@type": "ContentSlotMenuColumn",
+                      "contentPaths": [
+                        "/content/Shared/Header/Menu Itens/Menu-Conforto"
+                      ]
+                    },
+                    "searchFilterApp": "",
+                    "bannerApi": "/api/native-store/produtos/lista/N-c78iyn",
+                    "@type": "ReactMenuNavigation",
+                    "bannerUrl": "/lista/-/N-c78iyn",
+                    "link": "/lst/-/N-1ijsn3uZxv9uauZtglctz?s_icid=230228_HOME_MENU_BASICOS_GERAL",
+                    "mosaicImage": "https://img.lojasrenner.com.br/banner/01-home/280126_BR_BANNER_MENU_BASICOS_MOB.jpg",
+                    "tracking": "",
+                    "lowResolutionHide": true,
+                    "bannerImage": "https://img.lojasrenner.com.br/banner/01-home/280126_BR_BANNER_MENU_BASICOS_DESK.jpg",
+                    "name": "BÁSICOS",
+                    "redirectConfig": "_self",
+                    "onlyForMobile": false,
+                    "text": "BÁSICOS",
+                    "searchFilter": ""
+                  },
+                  {
+                    "hideOnMobile": false,
+                    "menuColumnItem": {
+                      "contents": [
+                        {}
+                      ],
+                      "@type": "ContentSlotMenuColumn",
+                      "contentPaths": [
+                        "/content/Shared/Header/Menu Itens/Menu-Jeans"
+                      ]
+                    },
+                    "searchFilterApp": "",
+                    "bannerApi": "/api/native-store/produtos/lista/N-1fy54ba",
+                    "@type": "ReactMenuNavigation",
+                    "bannerUrl": "/lista/all-jeans/-/N-1fy54ba?s_icid=230323_MENU_JEANS_GERAL",
+                    "link": "/lista/all-jeans/-/N-1fy54ba?s_icid=230323_MENU_JEANS_GERAL",
+                    "mosaicImage": "https://img.lojasrenner.com.br/banner/01-home/280126_BR_BANNER_MENU_JEANS_MOB.jpg",
+                    "tracking": "",
+                    "lowResolutionHide": true,
+                    "bannerImage": "https://img.lojasrenner.com.br/banner/01-home/280126_BR_BANNER_MENU_JEANS_DESK.jpg",
+                    "name": "JEANS",
+                    "redirectConfig": "_self",
+                    "onlyForMobile": false,
+                    "text": "JEANS",
+                    "searchFilter": ""
+                  },
+                  {
+                    "hideOnMobile": false,
+                    "menuColumnItem": {
+                      "contents": [
+                        {}
+                      ],
+                      "@type": "ContentSlotMenuColumn",
+                      "contentPaths": [
+                        "/content/Shared/Header/Menu Itens/Menu-Bolsas-e-Acessorios"
+                      ]
+                    },
+                    "searchFilterApp": "",
+                    "bannerApi": "/api/native-store/produtos/lista/N-16mv3qt",
+                    "@type": "ReactMenuNavigation",
+                    "bannerUrl": "/lista/bolsas-e-acessorios/-/N-16mv3qt?s_icid=230228_MENU_ACESSORIOS_GERAL",
+                    "link": "/lista/bolsas-e-acessorios/-/N-16mv3qt?s_icid=230228_MENU_ACESSORIOS_GERAL",
+                    "mosaicImage": "https://img.lojasrenner.com.br/banner/01-home/280126_BR_BANNER_MENU_ACESSORIOS_MOB.jpg",
+                    "tracking": "",
+                    "lowResolutionHide": true,
+                    "bannerImage": "https://img.lojasrenner.com.br/banner/01-home/280126_BR_BANNER_MENU_ACESSORIOS_DESK.jpg",
+                    "name": "ACESSÓRIOS",
+                    "redirectConfig": "_self",
+                    "onlyForMobile": false,
+                    "text": "ACESSÓRIOS",
+                    "searchFilter": ""
+                  },
+                  {
+                    "hideOnMobile": false,
+                    "menuColumnItem": {
+                      "contents": [
+                        {}
+                      ],
+                      "@type": "ContentSlotMenuColumn",
+                      "contentPaths": [
+                        "/content/Shared/Header/Menu Itens/Menu-Calcados"
+                      ]
+                    },
+                    "searchFilterApp": "",
+                    "bannerApi": "/api/native-store/produtos/lst/N-qjg8ik",
+                    "@type": "ReactMenuNavigation",
+                    "bannerUrl": "/lista/-/N-qjg8ik",
+                    "link": "/lista/-/N-qjg8ik",
+                    "mosaicImage": "https://img.lojasrenner.com.br/banner/01-home/250415_BANNER_MENU_CALCADOS_MOB.jpg",
+                    "tracking": "",
+                    "lowResolutionHide": true,
+                    "bannerImage": "https://img.lojasrenner.com.br/banner/01-home/280126_BR_BANNER_MENU_CALCADOS_DESK.jpg",
+                    "name": "CALÇADOS",
+                    "redirectConfig": "_self",
+                    "onlyForMobile": false,
+                    "text": "CALÇADOS",
+                    "searchFilter": ""
+                  },
+                  {
+                    "hideOnMobile": false,
+                    "menuColumnItem": {
+                      "contents": [
+                        {}
+                      ],
+                      "@type": "ContentSlotMenuColumn",
+                      "contentPaths": [
+                        "/content/Shared/Header/Menu Itens/Menu-Esportivo"
+                      ]
+                    },
+                    "searchFilterApp": "",
+                    "bannerApi": "/api/native-store/produtos/lista/N-7kpw7w",
+                    "@type": "ReactMenuNavigation",
+                    "bannerUrl": "/lista/-/N-7kpw7w",
+                    "link": "/lst/esportivo/-/N-t1s1ba?s_icid=230228_MENU_ESPORTIVO_GERAL",
+                    "mosaicImage": "https://img.lojasrenner.com.br/banner/01-home/280126_BR_BANNER_MENU_ESPORTIVO_MOB.jpg",
+                    "tracking": "",
+                    "lowResolutionHide": true,
+                    "bannerImage": "https://img.lojasrenner.com.br/banner/01-home/280126_BR_BANNER_MENU_ESPORTIVO_DESK.jpg",
+                    "name": "ESPORTIVO",
+                    "redirectConfig": "_self",
+                    "onlyForMobile": false,
+                    "text": "ESPORTIVO",
+                    "searchFilter": ""
+                  },
+                  {
+                    "hideOnMobile": false,
+                    "menuColumnItem": {
+                      "contents": [
+                        {}
+                      ],
+                      "@type": "ContentSlotMenuColumn",
+                      "contentPaths": [
+                        "/content/Shared/Header/Menu Itens/Moda-Praia"
+                      ]
+                    },
+                    "searchFilterApp": "",
+                    "bannerApi": "/api/native-store/produtos/lst/N-8cpphn",
+                    "@type": "ReactMenuNavigation",
+                    "bannerUrl": "/lst/-/N-8cpphn",
+                    "link": "/c/feminino/moda-praia/-/N-1mglth9?s_icid=240920_MENU_MODAPRAIA_GERAL",
+                    "mosaicImage": "https://img.lojasrenner.com.br/banner/01-home/280126_BR_BANNER_MENU_MODAPRAIA_MOB.jpg",
+                    "tracking": "",
+                    "lowResolutionHide": false,
+                    "bannerImage": "https://img.lojasrenner.com.br/banner/01-home/280126_BR_BANNER_MENU_MODAPRAIA_DESK.jpg",
+                    "name": "MODA PRAIA",
+                    "redirectConfig": "_self",
+                    "onlyForMobile": false,
+                    "text": "MODA PRAIA",
+                    "searchFilter": ""
+                  },
+                  {
+                    "hideOnMobile": false,
+                    "menuColumnItem": {
+                      "contents": [
+                        {}
+                      ],
+                      "@type": "ContentSlotMenuColumn",
+                      "contentPaths": [
+                        "/content/Shared/Header/Menu Itens/Menu-Moda-Intima"
+                      ]
+                    },
+                    "searchFilterApp": "",
+                    "bannerApi": "/api/native-store/produtos/lista/N-1a0l30y",
+                    "@type": "ReactMenuNavigation",
+                    "bannerUrl": "/lista/-/N-1a0l30y?s_icid=230405_MENU_INTIMA_GERAL",
+                    "link": "/c/moda-intima/-/N-1au9571?s_icid=230405_MENU_INTIMA_GERAL",
+                    "mosaicImage": "https://img.lojasrenner.com.br/banner/01-home/280126_BR_BANNER_MENU_MODAINTIMA_MOB.jpg",
+                    "tracking": "",
+                    "lowResolutionHide": true,
+                    "bannerImage": "https://img.lojasrenner.com.br/banner/01-home/280126_BR_BANNER_MENU_MODAINTIMA_DESK.jpg",
+                    "name": "MODA ÍNTIMA",
+                    "redirectConfig": "_self",
+                    "onlyForMobile": false,
+                    "text": "MODA ÍNTIMA",
+                    "searchFilter": ""
+                  },
+                  {
+                    "hideOnMobile": false,
+                    "menuColumnItem": {
+                      "contents": [
+                        {}
+                      ],
+                      "@type": "ContentSlotMenuColumn",
+                      "contentPaths": [
+                        "/content/Shared/Header/Menu Itens/Menu-Alameda"
+                      ]
+                    },
+                    "searchFilterApp": "",
+                    "bannerApi": "/api/native-store/produtos/lst/N-kk57ib",
+                    "@type": "ReactMenuNavigation",
+                    "bannerUrl": "/lst/-/N-kk57ib?s_icid=231020_MENU_ALAMEDA_GERAL",
+                    "link": "/d/lojas-parceiras?s_icid=230605_MENU_ALAMEDA_GERAL",
+                    "mosaicImage": "https://img.lojasrenner.com.br/banner/01-home/280126_BR_BANNER_MENU_ALAMEDA_MOB.jpg",
+                    "tracking": "",
+                    "lowResolutionHide": false,
+                    "bannerImage": "https://img.lojasrenner.com.br/banner/01-home/280126_BR_BANNER_MENU_ALAMEDA_DESK.jpg",
+                    "name": "LOJAS PARCEIRAS",
+                    "redirectConfig": "_self",
+                    "onlyForMobile": false,
+                    "text": "LOJAS PARCEIRAS",
+                    "searchFilter": ""
+                  },
+                  {
+                    "hideOnMobile": false,
+                    "menuColumnItem": {
+                      "contents": [
+                        {}
+                      ],
+                      "@type": "ContentSlotMenuColumn",
+                      "contentPaths": [
+                        "/content/Shared/Header/Menu Itens/Menu-Ashua"
+                      ]
+                    },
+                    "searchFilterApp": "",
+                    "bannerApi": "/api/native-store/produtos/lst/N-1xvqrun",
+                    "@type": "ReactMenuNavigation",
+                    "bannerUrl": "/lst/-/N-1xvqrun?s_icid=240904_MENU_ASHUA_GERAL",
+                    "link": "",
+                    "mosaicImage": "https://img.lojasrenner.com.br/banner/01-home/260408_BANNER_MENU_ASHUA_MOB.jpg",
+                    "tracking": "",
+                    "lowResolutionHide": false,
+                    "bannerImage": "https://img.lojasrenner.com.br/banner/01-home/260408_BANNER_MENU_ASHUA_DESK.jpg",
+                    "name": "ASHUA",
+                    "redirectConfig": "_self",
+                    "onlyForMobile": false,
+                    "text": "ASHUA",
+                    "searchFilter": ""
+                  }
+                ],
+                "showCategoryTitle": false,
+                "phraseModalSubTitle": "Veja mais produtos disponíveis para o seu CEP",
+                "@type": "ReactHeader",
+                "menuMyAccount": [
+                  {
+                    "@type": "ReactIconLink",
+                    "icon": "ic-user",
+                    "link": "/minha-conta/meus-dados?s_icid=20180807_Menu_menu-dropdown_meus-dados_desk_01",
+                    "text": "Meu Cadastro"
+                  },
+                  {
+                    "@type": "ReactIconLink",
+                    "icon": "ic-order",
+                    "link": "/minha-conta/meus-pedidos?s_icid=20180807_Menu_menu-dropdown_meus-pedidos_desk_02",
+                    "text": "Meus Pedidos"
+                  },
+                  {
+                    "@type": "ReactIconLink",
+                    "icon": "IcCoupon",
+                    "link": "/cupom-de-desconto",
+                    "text": "Cupons"
+                  },
+                  {
+                    "@type": "ReactIconLink",
+                    "icon": "ic-order-back",
+                    "link": "/minha-conta/minhas-devolucoes",
+                    "text": "Devoluções"
+                  },
+                  {
+                    "@type": "ReactIconLink",
+                    "icon": "ic-vale-troca",
+                    "link": "/minha-conta/vales-troca?s_icid=20180807_Menu_menu-dropdown_vales-troca_desk_03",
+                    "text": "Vale-Troca"
+                  },
+                  {
+                    "@type": "ReactIconLink",
+                    "icon": "ic-gift",
+                    "link": "/minha-conta/cartao-presente",
+                    "text": "Cartão-Presente"
+                  },
+                  {
+                    "@type": "ReactIconLink",
+                    "icon": "ic-location",
+                    "link": "/minha-conta/meus-enderecos?s_icid=20180807_Menu_menu-dropdown_meus-enderecos_desk_04",
+                    "text": "Meus Endereços"
+                  },
+                  {
+                    "@type": "ReactIconLink",
+                    "icon": "ic-preferences",
+                    "link": "/minha-conta/preferencias?s_icid=20180807_Menu_menu-dropdown_preferencias_desk_05",
+                    "text": "Minhas Preferências"
+                  }
+                ],
+                "activeHeaderOmni": true,
+                "cartContent": {
+                  "icons": [
+                    {
+                      "@type": "ReactWishlistLink",
+                      "link": "/lista-de-desejos",
+                      "redirectConfig": "_self",
+                      "text": "Wishlist"
+                    },
+                    {
+                      "emptyCartModalBuy": "/c",
+                      "@type": "ReactMiniCartIconLink",
+                      "icon": "ic-sacola",
+                      "link": "/sacola",
+                      "emptyCartModalTitle": "Sua sacola está vazia!",
+                      "emptyCartModalLogin": "/minha-conta-login",
+                      "redirectConfig": "_self",
+                      "text": "Sacola",
+                      "emptyCartModal": true,
+                      "cartModal": true
+                    }
+                  ],
+                  "@type": "ReactCartContent"
+                },
+                "buttonAlterPostalCode": "Alterar CEP",
+                "phraseHeaderLogged": "Entregar para:",
+                "phraseModalToLogin": "ENDEREÇO JÁ CADASTRADO? FAÇA LOGIN.",
+                "phraseHeaderDisconnectedLink": "DIGITE O SEU CEP",
+                "phraseHeaderDisconnected": "Entregar para:",
+                "firstContent": [
+                  {
+                    "contents": [
+                      {
+                        "@type": "ReactHTMLItem",
+                        "content": "<script type=\"text/javascript\">\nwindow.onload = function(){\n  document.getElementById('close').onclick = function(){\n      this.parentNode.parentNode.remove();\n      return false;\n  };\n};</script>\n<style type=\"text/css\">@keyframes headerautoplay {\n    0% {\n      top: 100%\n    }\n  \n    4% {\n      top: 0%\n    }\n  \n    50% {\n      top: 0%\n    }\n  \n    53% {\n      top: -100%\n    }\n  \n    100% {\n      top: -100%\n    }\n  }\n  \n  .header__carousel-container {\n    height: 42px;\n    width: 100%;\n    background-color: rgb(12, 12, 12);\n    overflow: hidden;\n    position: relative;\n    font-size: 13px;\n  }\n  \n  .header__carousel-container p {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    color: #FFFFFF;\n    text-align: center;\n  }\n  \n  .header__carousel-container p {\n    position: absolute;\n    top: 100%;\n    animation: 10s headerautoplay infinite ease-in-out\n  }\n  \n  .header__carousel-container>*:nth-child(1) {\n    animation-delay: 0s;\n    top: 0%;\n  }\n  \n  .header__carousel-container>*:nth-child(2) {\n    animation-delay: 5s;\n  \n  }\n  \n  .menu-navigation li:nth-child(3) {\n        color: #d71920;\n    }\n  \n    .submenu {color: black;}\n  \n    .submenu-content li:nth-child(3) {\n        color: black;\n    }\n\n.header .main-content .wrap ul li {\n    font-size: 12px;\n    font-weight: 400;\n    margin-right: 6px;\n}\n\n\n.header .main-content .wrap ul li i {\n    margin-right: -12px;\n    font-size: 15px;\n    display: inline-block;\n    vertical-align: bottom;\n}\n\n@media (max-width: 1000px) {\n    .cupom-primeira-compra {\n        display: none;\n    }\n}\n</style>\n<div class=\"header__carousel-container\">\n<p><a _msthash=\"359\" _msttexthash=\"3166787\" href=\"/lista/-/N-1mmowr7?s_icid=240923_HOME_STRIP_PROMO_RESP_GERAL\">Ganhe<span style=\"font-weight: bold; color: #FFFFFF;\"> 50% OFF*</span> na pe&ccedil;a de menor valor da sele&ccedil;&atilde;o + frete gr&aacute;tis com cupom <b> FRETEGRATIS </b></a></p>\n\n<p><a _msthash=\"359\" _msttexthash=\"3166787\" href=\"/lista/-/N-1mmowr7?s_icid=240923_HOME_STRIP_PROMO_RESP_GERAL\">Ganhe<span style=\"font-weight: bold; color: #FFFFFF;\"> 50% OFF*</span> na pe&ccedil;a de menor valor da sele&ccedil;&atilde;o + frete gr&aacute;tis com cupom <b> FRETEGRATIS </b></a></p>\n</div>\n"
+                      }
+                    ],
+                    "@type": "ReactContentSlotMain"
+                  },
+                  {
+                    "buttonHeaderOmniLogin": "Fazer login",
+                    "phraseModalSubTitle": "Veja mais produtos disponíveis para o seu CEP",
+                    "@type": "ReactMediaBannerIcons",
+                    "activeHeaderOmni": true,
+                    "phraseHeaderLogged": "Entregar para:",
+                    "phraseModalTitle": "Escolha o endereço mais perto de você:",
+                    "phraseModalToLogin": "Endereço já cadastrado? Faça Login.",
+                    "phraseHeaderDisconnectedLink": "Digite seu cep",
+                    "phraseHeaderDisconnected": "Entregar para:",
+                    "menuIcons": [
+                      {
+                        "mobHeight": "35",
+                        "mediaIcon": "https://img.lojasrenner.com.br/banner/img/logo_black.png",
+                        "highlighted": true,
+                        "@type": "ReactMenuIcons",
+                        "deskWidth": "200",
+                        "target": "_self",
+                        "mobWidth": "200",
+                        "mediaLink": "https://www.lojasrenner.com.br/",
+                        "deskHeight": "35"
+                      },
+                      {
+                        "mobHeight": "35",
+                        "mediaIcon": "https://img.lojasrenner.com.br/banner/01-home/logo-tarja-ashua-branco.png",
+                        "highlighted": false,
+                        "@type": "ReactMenuIcons",
+                        "deskWidth": "155",
+                        "target": "_self",
+                        "mobWidth": "155",
+                        "mediaLink": "/ashua/",
+                        "deskHeight": "35"
+                      }
+                    ],
+                    "linkPostalCodeOmni": "http://www.buscacep.correios.com.br/sistemas/buscacep/buscaCepEndereco.cfm",
+                    "phraseModalUsePostalCode": "NOVO LOCAL DE ENTREGA?",
+                    "phraseModalWhatIsPostalCode": "Não sei meu CEP"
+                  },
+                  {
+                    "@type": "ReactContentSlotMainMedia"
+                  },
+                  {
+                    "content_nocookie_pt_BR": "<p>Seu navegador n&atilde;o est&aacute; habilitado para a grava&ccedil;&atilde;o de cookies. Esta a&ccedil;&atilde;o &eacute; necess&aacute;ria para sua maior seguran&ccedil;a e atende as&nbsp;<a href=\"/privacidade-seguranca\" target=\"_blank\">Politicas de Privacidade</a>&nbsp;e&nbsp;<a href=\"/termos-de-uso\" target=\"_blank\">Termos de Uso</a>&nbsp;do site (clique para ler). Para concluir o Aceite destes termos &eacute; necess&aacute;ria a ativa&ccedil;&atilde;o dos cookies.</p>\n",
+                    "content_nocookie_en": "",
+                    "@type": "ReactFooterCivilMark",
+                    "content_nocookie_es_UY": "",
+                    "active": true,
+                    "content_pt_BR": "<p>Para sua maior seguran&ccedil;a, atualizamos as&nbsp;<a href=\"/privacidade-seguranca\" target=\"_blank\">Pol&iacute;ticas de Privacidade</a>&nbsp;e&nbsp;<a href=\"/termos-de-uso\" target=\"_blank\">Termos de Uso</a>&nbsp;do site. Ao continuar navegando na nossa p&aacute;gina, entendemos que voc&ecirc; est&aacute; ciente e de acordo.</p>\n",
+                    "content_en": "",
+                    "input_label": "Li, aceito os Termos de Uso e estou ciente da Política de Privacidade.",
+                    "content_es_UY": ""
+                  },
+                  {
+                    "@type": "ReactHTMLItem",
+                    "content": "<script>\nsetTimeout(()=> {\n    if(window.localStorage.getItem('pocsyte') === 'syte') {\n        document.body.classList.add('pocsyte');\n    }\n}, 1000);\n</script>\n<style type=\"text/css\">div[class^=\"ProductBox_similarClickingArea\"] {\n    display: none;\n}\nbody.pocsyte div[class^=\"ProductBox_similarClickingArea\"] {\n    display: block;\n}\n@media (max-width: 1000px) {\n    body:not(.pocsyte) span[class^=\"ProductBox_title\"] {\n        margin-top: 8px !important;\n    }\n}\n</style>\n"
+                  },
+                  {
+                    "@type": "ReactHTMLItem",
+                    "content": "<script type=\"application/ld+json\">\n  {\n  \"@context\": \"https://schema.org\",\n  \"@graph\":\n    [\n      {\n        \"@context\": \"https://schema.org\",\n        \"@type\":\"SiteNavigationElement\",\n        \"@id\":\"#pagination\",\n        \"name\": \"Moda Feminina\",\n        \"url\": \"https://www.lojasrenner.com.br/d/feminino\"\n      },\n      {\n        \"@context\": \"https://schema.org\",\n        \"@type\":\"SiteNavigationElement\",\n        \"@id\":\"#pagination\",\n        \"name\": \"Moda Masculina\",\n        \"url\": \"https://www.lojasrenner.com.br/d/masculino\"\n      },\n      {\n        \"@context\": \"https://schema.org\",\n        \"@type\":\"SiteNavigationElement\",\n        \"@id\":\"#pagination\",\n        \"name\": \"Moda Infantil\",\n        \"url\": \"https://www.lojasrenner.com.br/d/infantil\"\n      },\n      {\n        \"@context\": \"https://schema.org\",\n        \"@type\":\"SiteNavigationElement\",\n        \"@id\":\"#pagination\",\n        \"name\": \"Ofertas\",\n        \"url\": \"https://www.lojasrenner.com.br/lista/desconto-todos-produto/-/N-1l95pyv\"\n      }\n    ]\n  }\n</script><script type=\"application/ld+json\">\n{\n   \"@context\":\"http://schema.org\",\n   \"@type\":\"WebSite\",\n   \"name\":\"Lojas Renner\",\n   \"alternateName\":\"Lojas Renner\",\n   \"url\":\"https://www.lojasrenner.com.br/\",\n   \"potentialAction\":{\n      \"@type\":\"SearchAction\",\n      \"target\":\"https://www.lojasrenner.com.br/b?Ntt={search_term_string}\",\n      \"query-input\":\"required name=search_term_string\"\n   }\n}\n</script>"
+                  },
+                  {
+                    "@type": "ReactHTMLItem",
+                    "content": "<style type=\"text/css\">/**** esconder modo de visualização no desktop ****/\ndiv[class^=\"ResultListToolbar_gridControl\"]{\n    display: none !important;\n}\n</style>\n"
+                  },
+                  {
+                    "@type": "ReactHTMLItem",
+                    "content": "<style type=\"text/css\">body .modal-login__form-container .modal-login__social-login-btn:nth-child(1) {\n        display: none;\n    }\n</style>\n"
+                  },
+                  {
+                    "@type": "ReactHTMLItem",
+                    "content": "<!--Container A/B Test Tool--><noscript\n  ><iframe\n    src=\"https://www.googletagmanager.com/ns.html?id=GTM-NM2ZVH42\"\n    height=\"0\"\n    width=\"0\"\n    style=\"display: none; visibility: hidden\"\n  ></iframe\n></noscript><script>\n  (function (w, d, s, l, i) {\n    w[l] = w[l] || [];\n    w[l].push({ \"gtm.start\": new Date().getTime(), event: \"gtm.js\" });\n    var f = d.getElementsByTagName(s)[0],\n      j = d.createElement(s),\n      dl = l != \"dataLayer\" ? \"&l=\" + l : \"\";\n    j.async = true;\n    j.src = \"https://www.googletagmanager.com/gtm.js?id=\" + i + dl;\n    f.parentNode.insertBefore(j, f);\n  })(window, document, \"script\", \"dataLayer\", \"GTM-NM2ZVH42\");\n</script>"
+                  },
+                  {
+                    "@type": "ReactHTMLItem",
+                    "content": "<script>\nlocalStorage.removeItem('pocsyte');\n</script>"
+                  },
+                  {
+                    "@type": "ReactHTMLItem",
+                    "content": "<!-- Start VWO Async SmartCode -->\n<link href=\"https://dev.visualwebsiteoptimizer.com\" rel=\"preconnect\" /><script type='text/javascript' id='vwoCode'>\nwindow._vwo_code ||\n(function () {\nvar w=window,\nd=document;\nvar account_id=1175215,\nversion=2.2,\nsettings_tolerance=2000,\nhide_element='body',\nhide_element_style = 'opacity:0 !important;filter:alpha(opacity=0) !important;background:none !important';\n/* DO NOT EDIT BELOW THIS LINE */\nif(f=!1,v=d.querySelector('#vwoCode'),cc={},-1<d.URL.indexOf('__vwo_disable__')||w._vwo_code)return;try{var e=JSON.parse(localStorage.getItem('_vwo_'+account_id+'_config'));cc=e&&'object'==typeof e?e:{}}catch(e){}function r(t){try{return decodeURIComponent(t)}catch(e){return t}}var s=function(){var e={combination:[],combinationChoose:[],split:[],exclude:[],uuid:null,consent:null,optOut:null},t=d.cookie||'';if(!t)return e;for(var n,i,o=/(?:^|;\\s*)(?:(_vis_opt_exp_(\\d+)_combi=([^;]*))|(_vis_opt_exp_(\\d+)_combi_choose=([^;]*))|(_vis_opt_exp_(\\d+)_split=([^:;]*))|(_vis_opt_exp_(\\d+)_exclude=[^;]*)|(_vis_opt_out=([^;]*))|(_vwo_global_opt_out=[^;]*)|(_vwo_uuid=([^;]*))|(_vwo_consent=([^;]*)))/g;null!==(n=o.exec(t));)try{n[1]?e.combination.push({id:n[2],value:r(n[3])}):n[4]?e.combinationChoose.push({id:n[5],value:r(n[6])}):n[7]?e.split.push({id:n[8],value:r(n[9])}):n[10]?e.exclude.push({id:n[11]}):n[12]?e.optOut=r(n[13]):n[14]?e.optOut=!0:n[15]?e.uuid=r(n[16]):n[17]&&(i=r(n[18]),e.consent=i&&3<=i.length?i.substring(0,3):null)}catch(e){}return e}();function i(){var e=function(){if(w.VWO&&Array.isArray(w.VWO))for(var e=0;e<w.VWO.length;e++){var t=w.VWO[e];if(Array.isArray(t)&&('setVisitorId'===t[0]||'setSessionId'===t[0]))return!0}return!1}(),t='a='+account_id+'&u='+encodeURIComponent(w._vis_opt_url||d.URL)+'&vn='+version+'&ph=1'+('undefined'!=typeof platform?'&p='+platform:'')+'&st='+w.performance.now();e||((n=function(){var e,t=[],n={},i=w.VWO&&w.VWO.appliedCampaigns||{};for(e in i){var o=i[e]&&i[e].v;o&&(t.push(e+'-'+o+'-1'),n[e]=!0)}if(s&&s.combination)for(var r=0;r<s.combination.length;r++){var a=s.combination[r];n[a.id]||t.push(a.id+'-'+a.value)}return t.join('|')}())&&(t+='&c='+n),(n=function(){var e=[],t={};if(s&&s.combinationChoose)for(var n=0;n<s.combinationChoose.length;n++){var i=s.combinationChoose[n];e.push(i.id+'-'+i.value),t[i.id]=!0}if(s&&s.split)for(var o=0;o<s.split.length;o++)t[(i=s.split[o]).id]||e.push(i.id+'-'+i.value);return e.join('|')}())&&(t+='&cc='+n),(n=function(){var e={},t=[];if(w.VWO&&Array.isArray(w.VWO))for(var n=0;n<w.VWO.length;n++){var i=w.VWO[n];if(Array.isArray(i)&&'setVariation'===i[0]&&i[1]&&Array.isArray(i[1]))for(var o=0;o<i[1].length;o++){var r,a=i[1][o];a&&'object'==typeof a&&(r=a.e,a=a.v,r&&a&&(e[r]=a))}}for(r in e)t.push(r+'-'+e[r]);return t.join('|')}())&&(t+='&sv='+n)),s&&s.optOut&&(t+='&o='+s.optOut);var n=function(){var e=[],t={};if(s&&s.exclude)for(var n=0;n<s.exclude.length;n++){var i=s.exclude[n];t[i.id]||(e.push(i.id),t[i.id]=!0)}return e.join('|')}();return n&&(t+='&e='+n),s&&s.uuid&&(t+='&id='+s.uuid),s&&s.consent&&(t+='&consent='+s.consent),w.name&&-1<w.name.indexOf('_vis_preview')&&(t+='&pM=true'),w.VWO&&w.VWO.ed&&(t+='&ed='+w.VWO.ed),t}code={nonce:v&&v.nonce,library_tolerance:function(){return'undefined'!=typeof library_tolerance?library_tolerance:void 0},settings_tolerance:function(){return cc.sT||settings_tolerance},hide_element_style:function(){return'{'+(cc.hES||hide_element_style)+'}'},hide_element:function(){return performance.getEntriesByName('first-contentful-paint')[0]?'':'string'==typeof cc.hE?cc.hE:hide_element},getVersion:function(){return version},finish:function(e){var t;f||(f=!0,(t=d.getElementById('_vis_opt_path_hides'))&&t.parentNode.removeChild(t),e&&((new Image).src='https://dev.visualwebsiteoptimizer.com/ee.gif?a='+account_id+e))},finished:function(){return f},addScript:function(e){var t=d.createElement('script');t.type='text/javascript',e.src?t.src=e.src:t.text=e.text,v&&t.setAttribute('nonce',v.nonce),d.getElementsByTagName('head')[0].appendChild(t)},load:function(e,t){t=t||{};var n=new XMLHttpRequest;n.open('GET',e,!0),n.withCredentials=!t.dSC,n.responseType=t.responseType||'text',n.onload=function(){if(t.onloadCb)return t.onloadCb(n,e);200===n.status?w._vwo_code.addScript({text:n.responseText}):w._vwo_code.finish('&e=loading_failure:'+e)},n.onerror=function(){if(t.onerrorCb)return t.onerrorCb(e);w._vwo_code.finish('&e=loading_failure:'+e)},n.send()},init:function(){var e,t=this.settings_tolerance();w._vwo_settings_timer=setTimeout(function(){w._vwo_code.finish()},t),'body'!==this.hide_element()?(n=d.createElement('style'),e=(t=this.hide_element())?t+this.hide_element_style():'',t=d.getElementsByTagName('head')[0],n.setAttribute('id','_vis_opt_path_hides'),v&&n.setAttribute('nonce',v.nonce),n.setAttribute('type','text/css'),n.styleSheet?n.styleSheet.cssText=e:n.appendChild(d.createTextNode(e)),t.appendChild(n)):(n=d.getElementsByTagName('head')[0],(e=d.createElement('div')).style.cssText='z-index: 2147483647 !important;position: fixed !important;left: 0 !important;top: 0 !important;width: 100% !important;height: 100% !important;background: white !important;',e.setAttribute('id','_vis_opt_path_hides'),e.classList.add('_vis_hide_layer'),n.parentNode.insertBefore(e,n.nextSibling));var n='https://dev.visualwebsiteoptimizer.com/j.php?'+i();-1!==w.location.search.indexOf('_vwo_xhr')?this.addScript({src:n}):this.load(n+'&x=true',{l:1})}};w._vwo_code=code;code.init();})();function d(){var e;t._vwo_code&&(e=d.hidingStyle=document.getElementById('_vis_opt_path_hides')||d.hidingStyle,t._vwo_code.finished()||_vwo_code.libExecuted||t.VWO&&VWO.dNR||(document.getElementById('_vis_opt_path_hides')||document.getElementsByTagName('head')[0].appendChild(e),requestAnimationFrame(d)))}var t;t=window,d();\n</script><!-- End VWO Async SmartCode -->"
+                  },
+                  {
+                    "@type": "ReactHTMLItem",
+                    "content": "<script type=\"text/javascript\">\n!function(e,t,r,s,a){if(Array.isArray(a))for(var n=0;n<a.length;n++)o(e,t,r,s,a[n]);else o(e,t,r,s,a);function o(e,t,r,s,a){var n=e[a]||{};e[a]=n,n.q=n.q||[],n.factory=function(e){return function(){var t=Array.prototype.slice.call(arguments);return t.unshift(e),n.q.push(t),n}},n.methods=[\"set\",\"setKeys\",\"sendEvent\",\"sendEvents\",\"productMultisearch\",\"productMultisearchAutocomplete\",\"productSearchByImage\",\"productSearchById\",\"productRecommendations\",\"productSearchByIdByPost\",\"productRecommendationsByPost\",\"setUid\",\"getUid\",\"getSid\",\"getLastQueryId\",\"getSessionTimeRemaining\",\"getDefaultTrackingParams\",\"resetSession\",\"resizeImage\",\"generateUuid\",];for(var o=0;o<n.methods.length;o++){var i=n.methods[o];n[i]=n.factory(i)}if(e.viInit)viInit(e,a);else{var c,d,u,f,g,m=(c=t,d=r,u=s,(f=c.createElement(d)).type=\"text/javascript\",f.async=!0,f.src=u,(g=c.getElementsByTagName(d)[0]).parentNode.insertBefore(f,g),f);m.onload=function(){viInit(e,a)},m.onerror=function(){console.log(\"Javascript SDK load fails\")}}}}(window,document,\"script\",\"https://cdn.visenze.com/visearch/dist/js/visearch-5.0.0.min.js\",[\"visenzeImageSearch\", \"visenzeSimilarSearch\"]);\nvisenzeImageSearch.set('app_key', '0e97f51396404888a3762145bb971266');\nvisenzeImageSearch.set('placement_id', '9355');\nvisenzeSimilarSearch.set('app_key', '0e97f51396404888a3762145bb971266');\nvisenzeSimilarSearch.set('placement_id', '9166');\n</script>"
+                  }
+                ],
+                "menuAuxiliary": [
+                  {
+                    "@type": "ReactIconLink",
+                    "icon": "ic-gift",
+                    "link": "/cartao-presente",
+                    "text": "Cartão-Presente"
+                  },
+                  {
+                    "@type": "ReactIconLink",
+                    "icon": "ic-help-payment",
+                    "link": "//www.realizesolucoesfinanceiras.com.br/cartoes-renner/login?s_icid=20180807_Menu_menu-negocio_pagamento_desk_02",
+                    "text": "Pagamento"
+                  },
+                  {
+                    "@type": "ReactIconLink",
+                    "icon": "ic-help-stores",
+                    "link": "/nossas-lojas",
+                    "text": "Lojas"
+                  },
+                  {
+                    "@type": "ReactIconLink",
+                    "icon": "ic-help-contact",
+                    "link": "https://atendimento.lojasrenner.com.br/hc/pt-br?s_icid=20200902_Menu_menu-negocio_atendimento_desk_04",
+                    "text": "Atendimento"
+                  },
+                  {
+                    "@type": "ReactIconLink",
+                    "icon": "ic-blog",
+                    "link": "https://blog.lojasrenner.com.br/",
+                    "text": "Blog"
+                  },
+                  {
+                    "@type": "ReactIconLink",
+                    "icon": "",
+                    "link": "/sustentabilidade?s_icid=230721_MENU_SUST_PRINCIPAL",
+                    "redirectConfig": "_blank",
+                    "text": "Sustentabilidade"
+                  },
+                  {
+                    "@type": "ReactIconLink",
+                    "icon": "ic-whatsapp",
+                    "link": "https://wa.me/555139214004?text=Ol%C3%A1%20Renner%2C%20gostaria%20de%20atendimento%20personalizado",
+                    "redirectConfig": "_blank",
+                    "text": "Compre pelo WhatsApp"
+                  },
+                  {
+                    "@type": "ReactIconLink",
+                    "icon": "ic-help-payment",
+                    "link": "https://www.realizesolucoesfinanceiras.com.br/promocoes/cashback-recompra",
+                    "redirectConfig": "_blank",
+                    "text": "Cartões Renner"
+                  }
+                ],
+                "linkPostalCodeOmni": "http://www.buscacep.correios.com.br/sistemas/buscacep/buscaCepEndereco.cfm",
+                "phraseModalUsePostalCode": "NOVO LOCAL DE ENTREGA?",
+                "phraseModalWhatIsPostalCode": "Não sei meu CEP",
+                "menuServices": [
+                  {
+                    "hexColor": "#333333",
+                    "urlApi": "",
+                    "@type": "ReactMenuServices",
+                    "icon": "ic-payment",
+                    "redirectConfig": "_self",
+                    "text": "Cartões",
+                    "url": "https://www.realizesolucoesfinanceiras.com.br/cartoes-renner/login?s_icid=20180807_Menu_menu-negocio_pagamento_desk_02"
+                  },
+                  {
+                    "hexColor": "#333333",
+                    "urlApi": "",
+                    "@type": "ReactMenuServices",
+                    "icon": "ic-gift",
+                    "redirectConfig": "_self",
+                    "text": "Cartão-presente",
+                    "url": "/cartao-presente"
+                  },
+                  {
+                    "hexColor": "#03623F",
+                    "urlApi": "",
+                    "@type": "ReactMenuServices",
+                    "icon": "ic-whatsapp",
+                    "redirectConfig": "_blank",
+                    "text": "Compre pelo WhatsApp",
+                    "url": "https://bit.ly/4bU8mSO"
+                  },
+                  {
+                    "hexColor": "#333333",
+                    "urlApi": "",
+                    "@type": "ReactMenuServices",
+                    "icon": "ic-bubbles",
+                    "redirectConfig": "_self",
+                    "text": "Atendimento",
+                    "url": "https://atendimento.lojasrenner.com.br/hc/pt-br?s_icid=20200902_Menu_menu-negocio_atendimento_desk_04"
+                  },
+                  {
+                    "hexColor": "#333333",
+                    "urlApi": "",
+                    "@type": "ReactMenuServices",
+                    "icon": "ic-order",
+                    "redirectConfig": "_self",
+                    "text": "Meus pedidos",
+                    "url": "/minha-conta/meus-pedidos?s_icid=20180807_Menu_menu-dropdown_meus-pedidos_desk_02"
+                  },
+                  {
+                    "hexColor": "#333333",
+                    "urlApi": "",
+                    "@type": "ReactMenuServices",
+                    "icon": "ic-order-back",
+                    "redirectConfig": "_self",
+                    "text": "Devoluções",
+                    "url": "/minha-conta/minhas-devolucoes"
+                  },
+                  {
+                    "hexColor": "#333333",
+                    "urlApi": "",
+                    "@type": "ReactMenuServices",
+                    "icon": "ic-user",
+                    "redirectConfig": "_self",
+                    "text": "Meu cadastro",
+                    "url": "/minha-conta/meus-dados?s_icid=20180807_Menu_menu-dropdown_meus-dados_desk_01"
+                  },
+                  {
+                    "hexColor": "#333333",
+                    "urlApi": "",
+                    "@type": "ReactMenuServices",
+                    "icon": "ic-location",
+                    "redirectConfig": "_self",
+                    "text": "Meus endereços",
+                    "url": "/minha-conta/meus-enderecos?s_icid=20180807_Menu_menu-dropdown_meus-enderecos_desk_04"
+                  },
+                  {
+                    "hexColor": "#333333",
+                    "urlApi": "",
+                    "@type": "ReactMenuServices",
+                    "icon": "IcCoupon",
+                    "redirectConfig": "_self",
+                    "text": "Cupons",
+                    "url": "/cupom-de-desconto"
+                  },
+                  {
+                    "hexColor": "#333333",
+                    "urlApi": "",
+                    "@type": "ReactMenuServices",
+                    "icon": "ic-vale-troca",
+                    "redirectConfig": "_self",
+                    "text": "Vale-Troca",
+                    "url": "/minha-conta/vales-troca?s_icid=20180807_Menu_menu-dropdown_vales-troca_desk_03"
+                  },
+                  {
+                    "hexColor": "#333333",
+                    "urlApi": "",
+                    "@type": "ReactMenuServices",
+                    "icon": "ic-help-stores",
+                    "redirectConfig": "_self",
+                    "text": "Nossas Lojas",
+                    "url": "/nossas-lojas"
+                  },
+                  {
+                    "hexColor": "#333333",
+                    "urlApi": "",
+                    "@type": "ReactMenuServices",
+                    "icon": "ic-blog",
+                    "redirectConfig": "_self",
+                    "text": "Blog",
+                    "url": "https://blog.lojasrenner.com.br/"
+                  },
+                  {
+                    "hexColor": "#333333",
+                    "urlApi": "",
+                    "@type": "ReactMenuServices",
+                    "icon": "ic-help-social",
+                    "redirectConfig": "_blank",
+                    "text": "Sustentabilidade",
+                    "url": "/sustentabilidade?s_icid=230721_MENU_SUST_PRINCIPAL"
+                  }
+                ],
+                "buttonHeaderOmniLogin": "Fazer Login",
+                "departmentsDisplay": false,
+                "linkLogo": {
+                  "linkType": "Global",
+                  "path": "https://www.lojasrenner.com.br/"
+                },
+                "layout": "new",
+                "srcLogoDefault": "//img.lojasrenner.com.br/banner/img/logo_red3.png",
+                "phraseModalTitle": "Escolha o endereço mais perto de você:",
+                "searchBox": {
+                  "imageSearchEnabled": true,
+                  "rrRecommendationPlacement": "search_page.suggestions",
+                  "@type": "ReactSearchBoxItem",
+                  "imageSearchSuggestions": [
+                    {
+                      "imageAlt": "Alt da primeira imagem",
+                      "@type": "ReactImageSearchSuggestionItem",
+                      "url": "https://img.lojasrenner.com.br/banner/01-home/NH_23_803_RENNER_RJ_DIA01_0430.jpg"
+                    },
+                    {
+                      "imageAlt": "Segunda imagem",
+                      "@type": "ReactImageSearchSuggestionItem",
+                      "url": "https://img.lojasrenner.com.br/banner/01-home/NH23_803_RENNER_RJ_DIA022016.jpg "
+                    },
+                    {
+                      "imageAlt": "Imagem 3",
+                      "@type": "ReactImageSearchSuggestionItem",
+                      "url": "https://img.lojasrenner.com.br/banner/01-home/NH_23_803_RENNER_RJ_DIA01_0581.jpg"
+                    },
+                    {
+                      "imageAlt": "Imagem 4",
+                      "@type": "ReactImageSearchSuggestionItem",
+                      "url": "https://img.lojasrenner.com.br/banner/01-home/NH_23_803_RENNER_RJ_DIA01_1464.jpg"
+                    },
+                    {
+                      "imageAlt": "Imagem 5",
+                      "@type": "ReactImageSearchSuggestionItem",
+                      "url": "https://img.lojasrenner.com.br/banner/01-home/NH_23_803_RENNER_RJ_DIA01_0158.jpg"
+                    },
+                    {
+                      "imageAlt": "Imagem 6",
+                      "@type": "ReactImageSearchSuggestionItem",
+                      "url": "https://img.lojasrenner.com.br/banner/01-home/NH_23_803_RENNER_RJ_DIA01_1707.jpg"
+                    }
+                  ],
+                  "searchBaseAction": "/b",
+                  "voiceSearchRecordTime": 3,
+                  "rrAutosugestPlacement": "search_page.find",
+                  "input": "Buscar produtos",
+                  "minAutoSuggestInputLength": 3,
+                  "useRRAutosugest": true
+                }
+              }
+            ],
+            "@type": "ReactContentSlotHeader"
+          }
+        ],
+        "headerHash": "a24e0f36b997031b577418f4201f73a1db9225510ba935dcdd3c76af811f6043"
+      },
+      "product": {
+        "mediaSets": [
+          {
+            "smallImageUrl": "//img.lojasrenner.com.br/item/930896878/small/3.jpg",
+            "zoomImageUrl": "//img.lojasrenner.com.br/item/930896878/zoom/3.jpg",
+            "mediumImageUrl": "//img.lojasrenner.com.br/item/930896878/medium/3.jpg",
+            "thumbImageUrl": "//img.lojasrenner.com.br/item/930896878/thumb/3.jpg",
+            "showcaseImageUrl": "//img.lojasrenner.com.br/item/930896878/vitrine/3.jpg",
+            "largeImageUrl": "//img.lojasrenner.com.br/item/930896878/large/3.jpg",
+            "id": "2799628"
+          },
+          {
+            "smallImageUrl": "//img.lojasrenner.com.br/item/930896878/small/4.jpg",
+            "zoomImageUrl": "//img.lojasrenner.com.br/item/930896878/zoom/4.jpg",
+            "mediumImageUrl": "//img.lojasrenner.com.br/item/930896878/medium/4.jpg",
+            "thumbImageUrl": "//img.lojasrenner.com.br/item/930896878/thumb/4.jpg",
+            "showcaseImageUrl": "//img.lojasrenner.com.br/item/930896878/vitrine/4.jpg",
+            "largeImageUrl": "//img.lojasrenner.com.br/item/930896878/large/4.jpg",
+            "id": "2800491"
+          },
+          {
+            "smallImageUrl": "//img.lojasrenner.com.br/item/930896878/small/5.jpg",
+            "zoomImageUrl": "//img.lojasrenner.com.br/item/930896878/zoom/5.jpg",
+            "mediumImageUrl": "//img.lojasrenner.com.br/item/930896878/medium/5.jpg",
+            "thumbImageUrl": "//img.lojasrenner.com.br/item/930896878/thumb/5.jpg",
+            "showcaseImageUrl": "//img.lojasrenner.com.br/item/930896878/vitrine/5.jpg",
+            "largeImageUrl": "//img.lojasrenner.com.br/item/930896878/large/5.jpg",
+            "id": "2799629"
+          },
+          {
+            "smallImageUrl": "//img.lojasrenner.com.br/item/930896878/small/6.jpg",
+            "zoomImageUrl": "//img.lojasrenner.com.br/item/930896878/zoom/6.jpg",
+            "mediumImageUrl": "//img.lojasrenner.com.br/item/930896878/medium/6.jpg",
+            "thumbImageUrl": "//img.lojasrenner.com.br/item/930896878/thumb/6.jpg",
+            "showcaseImageUrl": "//img.lojasrenner.com.br/item/930896878/vitrine/6.jpg",
+            "largeImageUrl": "//img.lojasrenner.com.br/item/930896878/large/6.jpg",
+            "id": "2800492"
+          },
+          {
+            "smallImageUrl": "//img.lojasrenner.com.br/item/930896878/small/13.jpg",
+            "zoomImageUrl": "//img.lojasrenner.com.br/item/930896878/zoom/13.jpg",
+            "mediumImageUrl": "//img.lojasrenner.com.br/item/930896878/medium/13.jpg",
+            "thumbImageUrl": "//img.lojasrenner.com.br/item/930896878/thumb/13.jpg",
+            "showcaseImageUrl": "//img.lojasrenner.com.br/item/930896878/vitrine/13.jpg",
+            "largeImageUrl": "//img.lojasrenner.com.br/item/930896878/large/13.jpg",
+            "id": "2799630"
+          },
+          {
+            "smallImageUrl": "//img.lojasrenner.com.br/item/930896878/small/14.jpg",
+            "zoomImageUrl": "//img.lojasrenner.com.br/item/930896878/zoom/14.jpg",
+            "mediumImageUrl": "//img.lojasrenner.com.br/item/930896878/medium/14.jpg",
+            "thumbImageUrl": "//img.lojasrenner.com.br/item/930896878/thumb/14.jpg",
+            "showcaseImageUrl": "//img.lojasrenner.com.br/item/930896878/vitrine/14.jpg",
+            "largeImageUrl": "//img.lojasrenner.com.br/item/930896878/large/14.jpg",
+            "id": "2799347"
+          },
+          {
+            "smallImageUrl": "//img.lojasrenner.com.br/item/930896878/small/15.jpg",
+            "zoomImageUrl": "//img.lojasrenner.com.br/item/930896878/zoom/15.jpg",
+            "mediumImageUrl": "//img.lojasrenner.com.br/item/930896878/medium/15.jpg",
+            "thumbImageUrl": "//img.lojasrenner.com.br/item/930896878/thumb/15.jpg",
+            "showcaseImageUrl": "//img.lojasrenner.com.br/item/930896878/vitrine/15.jpg",
+            "largeImageUrl": "//img.lojasrenner.com.br/item/930896878/large/15.jpg",
+            "id": "2800862"
+          }
+        ],
+        "purchasable": true,
+        "midiaFromSku": true,
+        "displayName": "Vestido New Midi em Ribana com Cut Out na Cintura e Viés Contrastante",
+        "salePriceFormatted": "R$ 0,00",
+        "variants": "Marrom|G",
+        "maxQuantityItem": 100,
+        "omniStock": false,
+        "backOrder": false,
+        "outOfStock": false,
+        "onSale": false,
+        "preOrder": false,
+        "installmentValueFormatted": "R$ 34,98",
+        "stamps": [],
+        "skuId": "930896860",
+        "percentDiscount": 0,
+        "characteristics": {},
+        "productAttributes": [
+          {
+            "code": null,
+            "displayName": "Gênero / Feminino",
+            "label": "Gênero - Feminino",
+            "creationDate": {
+              "time": 1505507745000
+            },
+            "priority": 2,
+            "enabled": true,
+            "mediaSet": null,
+            "internalName": null,
+            "hexCode": null,
+            "attributeType": "gender",
+            "name": "Feminino",
+            "attributeName": "Gênero"
+          },
+          {
+            "code": null,
+            "displayName": "Marca / Blue Steel",
+            "label": "Marca - Blue Steel",
+            "creationDate": {
+              "time": 1505507745000
+            },
+            "priority": 1,
+            "enabled": true,
+            "mediaSet": {
+              "smallImageUrl": "https://img.lojasrenner.com.br/banner/marca/blue-Steel-marca-produto.png",
+              "zoomImageUrl": "https://img.lojasrenner.com.br/banner/marca/blue-Steel-marca-produto.png",
+              "mediumImageUrl": "https://img.lojasrenner.com.br/banner/marca/blue-Steel-marca-produto.png",
+              "thumbImageUrl": "https://img.lojasrenner.com.br/banner/marca/blue-Steel-marca-produto.png",
+              "showcaseImageUrl": null,
+              "largeImageUrl": "https://img.lojasrenner.com.br/banner/marca/blue-Steel-marca-produto.png",
+              "id": "49002"
+            },
+            "internalName": null,
+            "hexCode": null,
+            "attributeType": "brand",
+            "name": "Blue Steel",
+            "attributeName": "Marca"
+          }
+        ],
+        "aggregationKey": "930896851-COR930896851-19-1420TCX",
+        "ccInstallment": 3,
+        "installmentWithoutInterestValueFormatted": "R$ 34,98",
+        "discountinued": false,
+        "skuAttributes": [
+          {
+            "code": "19-1420TCX",
+            "displayName": "Cor / Marrom",
+            "label": "Cor - Marrom",
+            "creationDate": {
+              "time": 1763802145000
+            },
+            "priority": null,
+            "enabled": true,
+            "mediaSet": null,
+            "internalName": "Deep Mahogany",
+            "hexCode": "#3c201e",
+            "attributeType": "color",
+            "name": "Marrom",
+            "attributeName": "Cor"
+          },
+          {
+            "code": null,
+            "displayName": "Tamanho / G",
+            "label": "Tamanho - G",
+            "creationDate": {
+              "time": 1506960925000
+            },
+            "priority": 5,
+            "enabled": true,
+            "mediaSet": null,
+            "internalName": null,
+            "hexCode": null,
+            "attributeType": "size",
+            "name": "G",
+            "attributeName": "Tamanho"
+          }
+        ],
+        "listPriceFormatted": "R$ 139,90",
+        "installment": 4,
+        "ccInstallmentValueFormatted": "R$ 46,63",
+        "installmentWithoutInterest": 4,
+        "listPrice": 139.9,
+        "preLaunch": false,
+        "productId": "930896851",
+        "review": {
+          "average": 4.9,
+          "count": 18
+        },
+        "productModel": "product",
+        "parentCategories": "cat340070uy|cat5530002"
+      },
+      "lcpImage": {
+        "mob": "//img.lojasrenner.com.br/item/930896878/large/3.jpg",
+        "desk": "//img.lojasrenner.com.br/item/930896878/large/3.jpg"
+      },
+      "urls": {
+        "checkoutLogin": "/checkout-login",
+        "giftListReceivedPageProduct": "/lista/interno/produtos-recebidos",
+        "myAccountEasyExchange": "/minha-conta/troca-facil",
+        "securityPrivacity": "/privacidade-seguranca",
+        "myOrders": "/minha-conta/meus-pedidos",
+        "checkoutPayment": "/checkout/pagamento",
+        "giftListEditPage": "/lista/interno/editar-lista",
+        "cart": "/sacola",
+        "giftListAgreementLetter": "/carta-acordo",
+        "inputNewPassword": "/minha-conta/cadastrar-nova-senha",
+        "forgotPassword": "/minha-conta/esqueci-minha-senha",
+        "createGiftList": "/listas-criar",
+        "myAccountRegisterLogin": "/minha-conta-login",
+        "checkout": "/checkout",
+        "order": "/minha-conta/pedido?id=",
+        "giftCardDetails": "/cartao-presente/crie-o-seu",
+        "partnerPage": "/b2b",
+        "giftListAddGifts": "/lista/interno/add-presentes",
+        "productRegion": "/product-region",
+        "externalOrder": "/minha-conta/pedido?externalId=",
+        "preferences": "/minha-conta/preferencias",
+        "myAccountHome": "/minha-conta",
+        "index": "/",
+        "giftListReceivedPageQuota": "/lista/interno/experiencias-recebidas",
+        "giftListGiftListSettings": "/lista/interno/configuracoes",
+        "myAccountOneClick": "/minha-conta/compra-1-click",
+        "giftListSearch": "/lista/busca",
+        "easyExchangeInfo": "/minha-conta/troca-facil",
+        "changePassword": "/minha-conta/alterar-senha",
+        "checkoutOneClick": "/checkout/1-click",
+        "termsOfUse": "/termos-de-uso",
+        "orderConfirmation": "/confirmacao-pedido",
+        "returnOrder": "/minha-conta/troca-facil/pedido?id=",
+        "giftListHome": "/lista/home",
+        "category": "/c",
+        "myData": "/minha-conta/meus-dados",
+        "myAddresses": "/minha-conta/meus-enderecos"
+      },
+      "site": {
+        "enableOmniVR": false,
+        "recaptchaSiteKey": "6LfItzYUAAAAAPJ1Dfs-a51e-pktyO4cPAriCdrK",
+        "ajaxRequestMethod": 2,
+        "language": "pt_BR",
+        "enableUserAlwaysLogged": false,
+        "mfaHelpCenterUrl": "https://atendimento.lojasrenner.com.br/hc/pt-br/sections/360006974214-Meu-Cadastro",
+        "facebookApiKey": "115329245802489",
+        "securePassword": {
+          "enableRegisterBlock": true,
+          "enableRegisterFront": true
+        },
+        "enableRegisterProviderEmail": true,
+        "enableRegisterCaptcha": true,
+        "enableLoyaltyGetCashback": false,
+        "googleApiKey": "345473299402-jvidror58o39juri9d9gk77v5viui2gs.apps.googleusercontent.com",
+        "enableNearestStoreStock": true,
+        "realmId": "renner",
+        "mfaExtraSendMethods": [],
+        "lazyLoadTolerance": 840,
+        "freightGateway": "BROKER",
+        "newMfaCodeTimeRequest": 30,
+        "inventoryGroup": {
+          "omniStockEnabled": true,
+          "validRegionsForCD": [
+            "AC",
+            "AL",
+            "AM",
+            "AP",
+            "BA",
+            "CE",
+            "DF",
+            "ES",
+            "GO",
+            "MA",
+            "MG",
+            "MS",
+            "MT",
+            "PA",
+            "PB",
+            "PE",
+            "PI",
+            "PR",
+            "RJ",
+            "RN",
+            "RO",
+            "RR",
+            "RS",
+            "SC",
+            "SE",
+            "SP",
+            "TO"
+          ],
+          "validRegion": [
+            "AC",
+            "AL",
+            "AM",
+            "AP",
+            "BA",
+            "CE",
+            "DF",
+            "ES",
+            "GO",
+            "MA",
+            "MG",
+            "MS",
+            "MT",
+            "PA",
+            "PB",
+            "PE",
+            "PI",
+            "PR",
+            "RJ",
+            "RN",
+            "RO",
+            "RR",
+            "RS",
+            "SC",
+            "SE",
+            "SP",
+            "TO"
+          ],
+          "thresholdPerc": null,
+          "restoreStockLevelEnabled": true,
+          "defaultInventoryRule": null,
+          "thresholdEnabled": false,
+          "userRegionIntegration": {},
+          "ignoreLevel": null,
+          "name": "Grupo de estoque Renner Brasil",
+          "id": "renner_br",
+          "categoryInventoryGroupInventoryRuleConfig": [],
+          "considerOmniStockForItemsInStock": true
+        },
+        "ajaxRequestURLLength": 2048,
+        "optInEnable": true,
+        "maskLocale": "pt_BR",
+        "disableToggleFilter": false,
+        "publicUrl": "https://www.lojasrenner.com.br",
+        "siteId": "rennerBrasilDesktop",
+        "wideEyes": {
+          "wideEyesURL": "https://api.wide-eyes.it",
+          "wideEyesURLSimilar": "https://pro.api-mirror.wide-eyes.it/",
+          "wideEyesToken": "1b05844f233ac5255e40325136fe2a0fcead510e"
+        },
+        "richRelevance": {
+          "richRelevanceApiKey": "24f07d816ef94d7f",
+          "richDynamicExperiencesClientKey": "183c31c31f964388",
+          "richRelevanceBaseURL": "https://recs.algorecs.com/rrserver",
+          "richRelevanceSearchURL": "https://recs.algorecs.com/rrserver",
+          "richRelevanceApiClientKey": "88cfb67f293b684a",
+          "richRelevanceJSLibURL": "https://media.algorecs.com/rrserver/js/2.1/p13n.js"
+        },
+        "gaKey": "GTM-57GGRB",
+        "currencyCode": "BRL",
+        "mfaRetriesLimit": 3
+      },
+      "i18n": {
+        "common": {
+          "wishlist": "Acesso à lista de desejos",
+          "cart": "Acesso ao carrinho de compras",
+          "do.search": "Realizar busca",
+          "do.searchTextOrPhoto": "Buscar produtos por texto ou foto",
+          "close.modal": "Fechar modal",
+          "go.to.page": "Ir para a página",
+          "header.loginMessage": "Entre ou cadastre-se",
+          "header.welcomeMessage": "Olá,",
+          "header.logout": "Sair",
+          "header.logoRenner": "Logo das lojas Renner",
+          "header.logoAshua": "Clicar em Ashua",
+          "newsletter.title": "Receba ofertas e novidades por e-mail",
+          "newsletter.interest": "Interesse",
+          "newsletter.type.email": "E-mail",
+          "newsletter.type.name": "Digite seu nome",
+          "newsletter.register": "Cadastrar",
+          "newsletter.required": "Este campo é obrigatório",
+          "store.complaint": "Para reclamações, clique aqui",
+          "store.copyright": "Todos os direitos reservados",
+          "search.suggestions": "Produtos Sugeridos",
+          "ops": "Ops!",
+          "error.message": "Ocorreu um erro ao carregar a página, por favor tente novamente.",
+          "goto.home": "IR PARA A HOME",
+          "update.pwa": "Temos uma nova versão do site disponível!",
+          "click.here": "clique aqui",
+          "please": "Por favor",
+          "to.refresh.page": "para atualizar a página",
+          "pagination.message": "VOCÊ ESTÁ NA PÁGINA",
+          "url.filter.label": "filtros",
+          "url.page.label": "pagina",
+          "url.page.sortBy": "sortBy",
+          "backToTop.label": "VOLTAR AO TOPO",
+          "lightbox.session.expired": "Sessão Expirada",
+          "lightbox.session.expired.message": "Sua sessão expirou, por favor atualize a página e tente novamente.",
+          "minicart.empty.buy": "Comprar",
+          "minicart.empty.login": "Fazer Login",
+          "minicart.itemAdded": "ITEM ADICIONADO À SACOLA",
+          "minicart.keepShopping": "COMPRAR MAIS PRODUTOS",
+          "cart.subtotal": "Subtotal",
+          "cart.finalize": "Finalizar Compra",
+          "cart.goToCart": "IR PARA A SACOLA",
+          "cart.giftItem.free": "Grátis",
+          "cart.giftCard.sender": "'De:'",
+          "cart.giftCard.giftEmail": "'Para:'",
+          "fastbuy.size.required": "Selecione um tamanho",
+          "checkCommerceItemsInventory.changedTitle": "Atenção",
+          "commom.error.title": "Erro",
+          "commom.error.message": "Por favor, tente novamente.",
+          "commom.error.refresh.message": "Ocorreu um erro ao processar sua solicitação. Favor recarregar a página e tente novamente.",
+          "commom.alert.button.ok": "OK",
+          "common.alert.button.understand": "ENTENDI",
+          "common.alert.button.tryAgain": "TENTAR NOVAMENTE",
+          "emailAlreadyRegistered.message": "Avise-me ja cadastrado para o e-mail informado.",
+          "forgotPassword.invalidCpf.title": "Ops. Ocorreu um erro.",
+          "forgotPassword.invalidCpf.message": "O CPF informado é inválido.",
+          "forgotPassword.cpfNotFound.title": "Ops. Ocorreu um erro.",
+          "forgotPassword.cpfNotFound.message": "CPF não cadastrado.",
+          "login.invalidCaptcha.title": "Atenção",
+          "invalidPassword.title": "Atenção",
+          "invalidPassword.message": "Esta combinação de usuário e senha é inválida.",
+          "invalidLogin.title": "Atenção",
+          "invalidLogin.message": "Esta combinação de usuário e senha é inválida.",
+          "cart.quantity.genericError.message": "Ocorreu um erro ao carregar os itens do seu pedido.<br/>Por favor, tente novamente.",
+          "cart.resume.genericError.message": "Ocorreu um erro ao carregar os dados do seu pedido.<br/>Por favor, tente novamente.",
+          "resultlist.get.message": "Ocorreu um erro ao carregar os itens da sua requisição.<br/>Por favor, tente novamente.",
+          "resultlist.filters.get.message": "Ocorreu um erro ao carregar os itens da sua requisição.<br/>Por favor, tente novamente.",
+          "productbuy.size.invalid.message": "Favor selecionar um tamanho.",
+          "checkInventory.changedItems.title": "Atenção",
+          "modalProductAdded.genericError.message": "Não foi possível exibir o produto recentemente adicionado.",
+          "guidedNavigation.get.message": "Ocorreu um erro ao carregar os itens da sua requisição.<br/>Por favor, tente novamente.",
+          "guidedNavigation.filters.message": "Ocorreu um erro ao carregar os filtros.<br/>Por favor, tente novamente.",
+          "newsletter.emailInvalid.title": "Ops! E-mail inválido",
+          "newsletter.emailInvalid.message": "O e-mail não foi digitado corretamente. Tente novamente.",
+          "forgotPassword.ciNotFound.message": "",
+          "registerLogin.profileNotActived.title": "E-mail não confirmado",
+          "registerLogin.profileNotActived.button": "REENVIAR E-MAIL",
+          "registerLogin.mfa.blockedProfile.title": "Não foi possível acessar sua conta",
+          "registerLogin.login.resetPassword.title": "Atualize sua senha",
+          "mfa.blockedProfile.title": "VALIDAÇÃO DE ACESSO",
+          "mfa.alert.title.systemInstability": "O sistema teve uma instabilidade",
+          "mfa.alert.title.validation": "Não foi possível continuar a validação",
+          "header.menu.all.departments": "Todos os Departamentos",
+          "header.menu.sidebar.menu": "MENU",
+          "header.menu.sidebar.browse": "Navegue por",
+          "header.menu.sidebar.services": "Serviços",
+          "header.menu.sidebar.departments": "Departamentos",
+          "header.menu.sidebar.searchFor": "Buscar em",
+          "header.menu.sidebar.searchInDepts": "Buscar em Departamentos",
+          "header.omni.postalCode": "CEP",
+          "header.omni.type.your.postalCode": "Digite seu CEP",
+          "header.omni.your.postalCode": "CEP",
+          "header.omni.button.postalCode": "OK",
+          "header.omni.postalCode.invalid": "Oi, este CEP está inválido. Verifique e digite de novo.",
+          "header.omni.your.addresses": "Seus endereços",
+          "header.omni.to.use.address": "Usar endereço",
+          "header.omni.postalCode.tag": "CEP ativo na sua busca",
+          "modal.location.show.more.address": "Ver mais endereços cadastrados",
+          "newslletter.success.title": "OBA! E-MAIL CADASTRADO COM SUCESSO!",
+          "newslletter.success.message": "Agradecemos por se inscrever na nossa newsletter! Agora é só aguardar e aproveitar as nossas novidades.",
+          "notifyme.success.title": "E-mail cadastrado com sucesso.",
+          "stampDiscount.coupon.copy": "COPIAR",
+          "stampDiscount.coupon.paste": "Cole no carrinho e boas compras :)",
+          "stampDiscount.coupon.box": "Aproveite seu cupom",
+          "installment": "{0}x de {1} s/juros no cartão renner",
+          "prelaunch": "Pré-Lançamento",
+          "discountinued": "Produto esgotado",
+          "outOfStock": "Avise-me. Quero muito!",
+          "infinite_recommendation.view_more": "VER MAIS",
+          "installmentShort": "{0}x de {1}*",
+          "soldOut": "Indisponível",
+          "unavailable": "Avise-me",
+          "productBox.similar": "Ver similares",
+          "sort.orderBy": "Ordenar",
+          "sort.mostDiscount": "Maior Desconto",
+          "sort.mostViewed": "Mais vistos",
+          "sort.newest": "Novidades",
+          "sort.priceAscending": "Menor preço",
+          "sort.priceDescending": "Maior preço",
+          "sort.nameAscending": "A - Z",
+          "sort.nameDescending": "Z - A",
+          "sort.recent": "Recentes",
+          "sort.discover": "Melhores resultados",
+          "sort.productSells": "Mais Vendidos",
+          "sort.descDate": "Lançamentos",
+          "refine.clean": "LIMPAR",
+          "refine": "APLICAR",
+          "commom.button.yes": "sim",
+          "commom.button.no": "não",
+          "commom.button.continue": "continue",
+          "modal.location.user.without.address": "Você não tem nenhum endereço cadastrado.",
+          "modal.location.register.address": "Cadastrar novo endereço",
+          "do.imageSearch": "Buscar por foto",
+          "try.on.using.ai.sm.screen": "Provar",
+          "try.on.using.ai.lg.screen": "Experimentar",
+          "try.on.onboarding.header.title": "Experimente sem sair de casa",
+          "try.on.onboarding.header.subtitle": "Escolha uma foto e deixe nossa Inteligência Artificial mostrar como a peça vai ficar.",
+          "try.on.onboarding.start.button": "Começar",
+          "try.on.onboarding.footer.title": "A Renner se preocupa com a proteção dos seus dados pessoais!",
+          "try.on.onboarding.footer.content": "A imagem enviada é usada exclusivamente para a simulação de roupas neste provador virtual. A foto não é armazenada, nem vinculada a qualquer dado pessoal. O processamento da imagem é temporário e realizado apenas para experimentação virtual. Para mais informações, acesse nossa",
+          "try.on.onboarding.footer.privacy": "Política de privacidade.",
+          "try.on.upload.modal.title": "Dicas para ter a melhor foto",
+          "try.on.upload.modal.subtitle": "Não armazenamos ou compartilhamos sua foto com mais ninguém.",
+          "try.on.upload.modal.upload.button": "Escolher foto",
+          "try.on.upload.modal.good.practice.title": "Escolha uma foto:",
+          "try.on.upload.modal.bad.practice.title": "Evite fotos:",
+          "try.on.upload.modal.good.practice.body.instructions": "De corpo inteiro, com braços abaixados",
+          "try.on.upload.modal.good.practice.lighting.instructions": "Com boa iluminação",
+          "try.on.upload.modal.good.practice.surounding.area.instructions": "Sem ninguém ao redor",
+          "try.on.upload.modal.bad.practice.lighting.instructions": "Escuras, com baixa qualidade ou selfies",
+          "try.on.upload.modal.bad.practice.large.clothing.instructions": "Usando roupas muito largas",
+          "try.on.upload.modal.bad.practice.no.clothing.instructions": "Com pouca roupa ou nudez",
+          "try.on.loading.message": "Estamos vestindo sua foto! Aguarde um momentinho...",
+          "try.on.footer.message": "Imagens geradas por IA podem conter erros. Para mais informações sobre tamanho, use nosso",
+          "try.on.footer.first.info.reference": "Provador Virtual",
+          "try.on.footer.second.info.reference": "Tabela de medidas.",
+          "try.on.footer.option.text": "ou a",
+          "try.on.error.main.message": "Erro ao processar a imagem",
+          "try.on.error.secondary.message": "Siga as dicas para ter a melhor foto e tente novamente.",
+          "try.on.server.error.main.message": "Erro de processamento",
+          "try.on.server.error.secondary.message": "Tivemos um problema técnico ao processar a sua solicitação. Por favor, tente novamente.",
+          "try.on.error.button.message": "Tentar novamente",
+          "try.on.result.header.title": "Gostou do resultado?",
+          "try.on.result.payment.options.first.part": "x de",
+          "try.on.result.payment.options.second.part": "sem juros no cartão Renner",
+          "try.on.result.action.button.label": "Adicionar à sacola",
+          "try.on.result.warning.message": "Selecione o tamanho desejado para continuar.",
+          "try.on.result.image.alt": "Imagem processada do Virtual Try-On",
+          "try.on.sizes.title": "Tamanho",
+          "try.on.old.price.first.prefix": "de",
+          "try.on.old.price.second.prefix": "por",
+          "modal.attributes.warning": "Selecione o tamanho desejado para continuar.",
+          "modal.attributes.title": "Selecione os detalhes do item"
+        },
+        "product": {
+          "installment": "{0}x de {1} s/juros no cartão renner",
+          "product.box.preOrder.label": "Pré-Venda | Compre Agora",
+          "product.box.preOrder.label.text": "e Receba a Partir de {0}",
+          "product.box.preOrder.mobile.label": "Pré-Venda",
+          "product.box.preOrder.nodate.label": "Pré-Venda - Compre Agora",
+          "product.box.preOrder.nodate.label.text": "e Receba a Partir da data de lançamento",
+          "product.box.addToCart.button": "ADICIONAR À SACOLA",
+          "product.box.select.size": "Tamanho",
+          "product.box.attribute.color": "Cor:",
+          "product.home": "Início",
+          "product.soldAndDeliveredBy": "Vendido e Entregue por",
+          "product.carousel.seeVideo": "Veja o vídeo desta peça",
+          "product.carousel.gift": "Brinde",
+          "product.carousel.giftLabel": "Na compra de um produto da lista ganhe",
+          "product.calculateShipping": "Calcular frete",
+          "product.simulateShipping": "Simular frete",
+          "product.postalCode.title": "Digite seu CEP",
+          "product.postalCode.invalid": "Digite um CEP válido.",
+          "product.unknown.postalCode": "CEP temporariamente indisponível para entrega. Tente novamente com outro endereço.",
+          "product.deliveryMethods.warning": "Os preços e prazos são válidos apenas para este produto em consulta.",
+          "product.dontKnow.postalCode": "Não sei meu CEP",
+          "product.ok": "Ok",
+          "product.what.is.my.postalCode": "Qual é o meu código postal?",
+          "product.search.postalCode": "Buscar CEP",
+          "product.postalCode": "CEP",
+          "product.address": "endereço",
+          "product.neighborhood": "bairro",
+          "product.city": "cidade",
+          "product.state": "estado",
+          "product.error": "Error",
+          "product.cityAndState.invalid.message": "A cidade ou departamento informado é inválido. Insira a cidade ou departamento correto.",
+          "product.error.emptyCity": "Por favor, digite uma cidade válida",
+          "product.error.emptyState": "Por favor, digite um estado válido",
+          "product.simulate": "Simular",
+          "product.email.invalid": "Digite um endereço de e-mail válido",
+          "product.postalCode.noDeliveryMethodsAvailable": "Ops! Este produto não está disponível para entrega no CEP informado. Escolha outro produto ou digite um novo CEP.",
+          "product.soldBy.lrsa": "Lojas Renner",
+          "product.information.buy": "Adicionar à sacola",
+          "product.information.fullpage": "Ver mais detalhes",
+          "product.information.installment": "{0}x de {1}*",
+          "product.information.installment.text": "sem juros no Cartão Renner",
+          "product.information.discountPercent": "- {0}%",
+          "product.information.listPriceFormatted.withDiscount": "De {0}",
+          "product.information.listPriceFormatted.withoutDiscount": "{0}",
+          "product.information.salePriceFormatted": "por {0}",
+          "trustvox.product.review.description": "Avaliações",
+          "trustvox.product.review.loadMore": "carregar mais",
+          "trustvox.product.review.showComments": "mostrar comentários",
+          "trustvox.product.review.noComments": "Ops! Não temos esta opção de comentário para o produto escolhido. Por favor, escolha outro.",
+          "trustvox.product.review.certified": "A Trustvox certifica que a nota média da loja é:",
+          "trustvox.product.review.storeScore": "Nota da Loja",
+          "trustvox.product.review.store.titleSurveys": "Média por atributo",
+          "trustvox.product.review.store.totalReviews": "Calculamos a média com base em {0} avaliações desta loja",
+          "trustvox.product.review.footer": "Avaliações reais, auditadas por",
+          "product.review.seeReviews": "Avaliações",
+          "product.review.error": "Não foi possível obter as avaliações deste produto.",
+          "product.review.noData": "Nenhuma avaliação disponível para este produto.",
+          "product.review.storeReview.note": "Esta loja se preocupa tanto com você que contratou uma empresa independente para auditar as avaliações da loja. Legal, né? :)",
+          "product.information.ref": "Código:",
+          "product.information.details": "Detalhes técnicos",
+          "product.button.seeMore": "Ver mais detalhes",
+          "product.button.seeLess": "Ver menos detalhes",
+          "product.button.showMore": "Mostrar mais",
+          "product.button.colorCount": "{0} cores",
+          "product.button.showLess": "Mostrar menos",
+          "product.freight.free": "Grátis",
+          "product.freight.disclaimer": "(valor de frete estimado)",
+          "product.freight.deliveryTimePrefix": "A partir de ",
+          "product.freight.checkStoreAvailability": "Consulte as lojas disponíveis para retirada na finalização da compra.",
+          "product.priceUnavailable": "Indisponível",
+          "product.prelaunch": "Pré-lançamento",
+          "trustvox.product.review.check.note": "Essa é a nota que este produto recebeu dos nossos clientes.",
+          "trustvox.product.review.averageof": "Média de",
+          "trustvox.product.review.assessments": "{0} avaliações",
+          "trustvox.product.review.assessment": "{0} avaliação",
+          "trustvox.product.review.comments": "Comentários",
+          "trustvox.product.comment.rating": "Esse comentário foi útil?",
+          "trustvox.product.comment.nocomment": "Cliente não escreveu uma avaliação, apenas deu a nota do produto.",
+          "product.see.similar": "Buscar similares",
+          "product.error.attribute.default": "Selecione o atributo",
+          "product.error.attribute.size": "Selecione um tamanho",
+          "product.error.attribute.color": "Selecione uma cor",
+          "product.error.attribute.sizeAndcolor": "Selecione a cor e/ou tamanho",
+          "product.share.product": "Compartilhar produto",
+          "product.combinedProduct.error": "Não foi possível atualizar as informações do produto. Por favor, tente novamente.",
+          "product.combinedProduct.selectionError": "Selecione o tamanho desejado para continuar.",
+          "trustvox.product.review.labelFilter.older": "Mais Antigos",
+          "trustvox.product.review.labelFilter.latest": "Mais Recentes",
+          "trustvox.product.review.labelFilter.positive": "Positivos",
+          "trustvox.product.review.labelFilter.negative": "Negativos",
+          "product.share.this.piece": "Curtiu? Compartilhe esta peça!",
+          "product.link.renner": "https://www.lojasrenner.com.br",
+          "product.select.attribute": "Selecione a cor e/ou tamanho",
+          "product.sizeBy": "Tabela de Medidas",
+          "product.mask.zipCode": "#####-###",
+          "product.finds.for.you": "Achados só para você!",
+          "trustvox.product.review.certified.renner": "A Trustvox certifica que a nota média da loja Lojas Renner é",
+          "trustvox.product.review.storeScore.renner": "Nota da Loja Lojas Renner",
+          "carousel.video": "Vídeo",
+          "product.details": "Detalhes",
+          "product.exchange.and.return": "Troca e devolução",
+          "product.exchange.and.return.first.text": "O jeito de fazer a devolução de um produto",
+          "product.exchange.and.return.first.text.bold": " Lojas Parceiras ",
+          "product.exchange.and.return.first.text.final": "quem escolhe é você.",
+          "product.exchange.and.return.second.text": "Recebeu o produto? Você tem até",
+          "product.exchange.and.return.second.text.bold": " 7 dias corridos ",
+          "product.exchange.and.return.second.text.final": "para devolver, sem crise.",
+          "product.exchange.and.return.third.text": "A devolução não é feita em lojas físicas Renner. Mas,",
+          "product.exchange.and.return.third.text.bold": " você pode iniciar sua solicitação sem sair de casa 🏠.",
+          "product.exchange.and.return.fourth.text": "O produto só pode ser devolvido se estiver com a",
+          "product.exchange.and.return.fourth.text.bold": " etiqueta interna ",
+          "product.exchange.and.return.fourth.text.bold.second": " sem marcas de uso.",
+          "product.exchange.and.return.fourth.text.final": "e",
+          "product.exchange.and.return.first.collapsible": "Onde devolver",
+          "product.exchange.and.return.first.collapsible.text": "Depois de ter decidido pela devolução,",
+          "product.exchange.and.return.first.collapsible.textStrong": "escolha por onde deseja começar o processo.",
+          "product.exchange.and.return.first.collapsible.dotted.list.title": "AUTOATENDIMENTO",
+          "product.exchange.and.return.first.collapsible.dotted.list.number": "1",
+          "product.exchange.and.return.first.collapsible.dotted.list.text": "Em sua conta, vá até “Meus Pedidos”.",
+          "product.exchange.and.return.first.collapsible.second.dotted.list.number": "2",
+          "product.exchange.and.return.first.collapsible.second.dotted.list.text": "Clique no botão “Solicitar Devolução”, depois é só seguir o passo a passo.",
+          "product.exchange.and.return.first.collapsible.icon.and.text.title": "Canais de atendimento",
+          "product.exchange.and.return.first.collapsible.icon.and.text.text": "Mande um e-mail com o número do pedido para",
+          "product.exchange.and.return.first.collapsible.icon.and.text.textStrong": "atendimento@lojasrenner.com.br",
+          "product.exchange.and.return.first.collapsible.icon.and.text.secondText": "pedindo a devolução do produto.",
+          "product.exchange.and.return.first.collapsible.second.icon.and.text.text": "Ou fale com a gente pelo",
+          "product.exchange.and.return.first.collapsible.second.icon.and.text.textStrong": "0800 725 0025",
+          "product.exchange.and.return.first.collapsible.second.icon.and.text.secondText": "(capitais e regiões metropolitanas) ou ",
+          "product.exchange.and.return.first.collapsible.second.icon.and.text.secondTextStrong": "3004 5030",
+          "product.exchange.and.return.first.collapsible.second.icon.and.text.thirdText": "(estado do Rio de Janeiro).",
+          "product.exchange.and.return.first.collapsible.attention": "O time está disponível de segunda a sábado, das 8h às 20h, exceto feriados nacionais.",
+          "product.exchange.and.return.second.collapsible": "Como devolver",
+          "product.exchange.and.return.second.collapsible.text": "O jeito Lojas Parceiras de trocar envolve algumas etapas. Conheça as principais:",
+          "product.exchange.and.return.second.collapsible.dotted.list.title": "AUTOATENDIMENTO",
+          "product.exchange.and.return.second.collapsible.dotted.list.number": "1",
+          "product.exchange.and.return.second.collapsible.dotted.list.text": "Seja online, telefone ou e-mail é",
+          "product.exchange.and.return.second.collapsible.dotted.list.strongText": "você quem decide os produtos que deseja devolver.",
+          "product.exchange.and.return.second.collapsible.second.dotted.list.number": "2",
+          "product.exchange.and.return.second.collapsible.second.dotted.list.strongText": "Fique de olho no seu e-mail.",
+          "product.exchange.and.return.second.collapsible.second.dotted.list.text": "É por lá que vamos enviar o código de postagem para devolver seus produtos.",
+          "product.exchange.and.return.second.collapsible.third.dotted.list.number": "3",
+          "product.exchange.and.return.second.collapsible.third.dotted.list.text": "Vá até uma agência dos Correios com seu",
+          "product.exchange.and.return.second.collapsible.third.dotted.list.strongText": "produto embalado, código de postagem e nota fiscal em mãos.",
+          "product.exchange.and.return.second.collapsible.fourty.dotted.list.number": "4",
+          "product.exchange.and.return.second.collapsible.fourty.dotted.list.text": "Seu produto será analisado e, se estiver tudo certo, seu",
+          "product.exchange.and.return.second.collapsible.fourty.dotted.list.strongText": "vale troca ou reembolso",
+          "product.exchange.and.return.second.collapsible.fourty.dotted.list.secondText": "estará disponível dentro de alguns dias!",
+          "product.exchange.and.return.third.collapsible": "Vale troca ou reembolso",
+          "product.exchange.and.return.third.collapsible.text": "Há duas opções de estorno:",
+          "product.exchange.and.return.third.collapsible.strongText": "vale troca ou reembolso.",
+          "product.exchange.and.return.third.collapsible.secondText": "Conheça as regras de cada uma delas:",
+          "product.exchange.and.return.third.collapsible.icon.and.text.title": "VALE TROCA",
+          "product.exchange.and.return.third.collapsible.icon.and.text.text": "Use o vale troca no app, site ou lojas físicas. Assim que disponível, o valor do estorno estará",
+          "product.exchange.and.return.third.collapsible.icon.and.text.textStrong": "dentro da área",
+          "product.exchange.and.return.third.collapsible.icon.and.text.secondText": "“Vale troca”.",
+          "product.exchange.and.return.third.collapsible.second.icon.and.text.title": "Reembolso",
+          "product.exchange.and.return.third.collapsible.second.icon.and.text.text": "Se o reembolso estiver disponível pra você, fique atento à sua conta bancária ou fatura do cartão.",
+          "product.exchange.and.return.title": "O que você precisa saber?",
+          "product.buyTogether.selectProducts": "Selecione os produtos que gostaria de comprar. 😍",
+          "product.buyTogether.youAreSeeing": "VOCÊ ESTÁ VENDO",
+          "product.webstories.title": "Conteúdo para você",
+          "product.about.title": "Sobre o produto:",
+          "product.storeAvailability.title": "Quer comprar na loja?",
+          "product.storeAvailability.description": "Consulte a disponibilidade do produto em uma loja perto de você.",
+          "product.storeAvailability.button": "Consultar",
+          "product.storeAvailability.drawer.title": "Compre na loja",
+          "product.storeAvailability.drawer.description": "Consulte a disponibilidade do produto em uma loja perto de você.",
+          "product.storeAvailability.drawer.priceValidity": "Preço válido para compra online",
+          "product.storeAvailability.drawer.closeButton": "Fechar",
+          "product.storeAvailability.drawer.nearbyStoresTitle": "Lojas próximas ao endereço:",
+          "product.storeAvailability.drawer.changeCEP": "ALTERAR CEP",
+          "product.storeAvailability.drawer.noResults.title": "Não encontrarmos o produto selecionado em uma loja perto de você",
+          "product.storeAvailability.drawer.noResults.subtitle": "Tente novamente usando outro CEP ou tamanho e cor",
+          "product.storeAvailability.drawer.disclaimer": "A disponibilidade do produto pode variar de acordo com o estoque da loja escolhida",
+          "product.storeAvailability.drawer.buyToday": "Compre",
+          "product.storeAvailability.drawer.buyTodayHighlight": "hoje",
+          "product.storeAvailability.drawer.inStore": "na loja",
+          "product.storeAvailability.drawer.error.title": "Não encontramos o produto selecionado em uma loja perto de você",
+          "product.storeAvailability.drawer.error.subtitle": "Tente novamente usando outro CEP ou tamanho e cor.",
+          "product.toast.buy.success": "Produto adicionado",
+          "product.toast.buy.success.cart": "Abrir Sacola",
+          "product.toast.buy.warning": "Não foi possível adicionar o produto à sacola.",
+          "product.toast.buy.warning.reload": "Atualizar"
+        }
+      },
+      "prefetch": false,
+      "appKey": "renner.navigation.react",
+      "apiUrl": "https://www.lojasrenner.com.br/",
+      "endecaHost": "https://www.lojasrenner.com.br/react",
+      "cms": "endeca",
+      "staticPrefix": "/sr",
+      "staticPrefixPageApi": "/nextjs",
+      "google": {
+        "gaKey": "GTM-MHTJQ8W"
+      },
+      "vendors": {
+        "jquery": {
+          "enabled": true,
+          "scripts": [
+            {
+              "host": "//img.lojasrenner.com.br/banner/img/mmapi_react.js",
+              "enabled": false
+            }
+          ]
+        },
+        "trustvox": {
+          "endpoint": "https://trustvox.com.br",
+          "storeId": "110773",
+          "survey": "https://surveyor.trustvox.com.br"
+        },
+        "dynatrace": "https://js-cdn.dynatrace.com/jstag/157944990f8/bf73995led/6bf664d5ae047701_complete.js"
+      },
+      "language": "pt-BR",
+      "currency": "BRL",
+      "reactRoutes": [
+        "/dior",
+        "/home",
+        "/b",
+        "/c",
+        "/d",
+        "/lista",
+        "/lst",
+        "/lookbook",
+        "/marca",
+        "/p"
+      ],
+      "pushSite": "rennerBrasilDesktop"
+    },
+    "__N_SSP": true
+  },
+  "page": "/p/[...path]",
+  "query": {
+    "path": [
+      "vestido-new-midi-em-ribana-com-cut-out-na-cintura-e-vies-contrastante",
+      "-",
+      "A-930896851-br.lr"
+    ]
+  },
+  "buildId": "Sc86jw7tb5fvAI7daaOwW",
+  "isFallback": false,
+  "dynamicIds": [
+    62056,
+    69188,
+    40456,
+    27194,
+    65529
+  ],
+  "gssp": true,
+  "scriptLoader": []
+}
