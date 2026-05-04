@@ -9,9 +9,9 @@ const { loadQuotaTargets } = require('./utils/quotaManager');
 
 // Limites EXATOS por rodada horária (min = max = obrigatório)
 const BATCH_CONFIG = {
-    'renner': { min: 3, max: 3 },
-    'riachuelo': { min: 1, max: 1 },
-    'cea': { min: 1, max: 1 }
+    'renner': { min: 3, max: 6 },    // Meta 45/15h = 3. Max 6 permite recuperar atrasos.
+    'riachuelo': { min: 1, max: 3 }, // Meta 15/15h = 1.
+    'cea': { min: 1, max: 2 }       // Meta 10/15h = 0.6.
 };
 
 /**
@@ -22,10 +22,16 @@ function calculateDynamicQuotas(idealTargets) {
     const history = loadHistory();
     const today = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' }); // YYYY-MM-DD
     
-    // Contagem de hoje por loja
+    // Contagem de hoje por loja (Respeitando fuso de São Paulo)
     const counts = {};
     Object.values(history).forEach(entry => {
-        if (entry.lastSent && entry.lastSent.startsWith(today)) {
+        if (entry.timestamp) {
+            const entryDate = new Date(entry.timestamp).toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' });
+            if (entryDate === today) {
+                counts[entry.store] = (counts[entry.store] || 0) + 1;
+            }
+        } else if (entry.lastSent && entry.lastSent.startsWith(today)) {
+            // Fallback para entradas antigas que não tinham timestamp numérico
             counts[entry.store] = (counts[entry.store] || 0) + 1;
         }
     });
