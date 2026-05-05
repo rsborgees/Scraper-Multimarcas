@@ -12,7 +12,7 @@ async function scanCeaListing(page, categoryUrl = 'https://www.cea.com.br/novida
         await page.goto(categoryUrl, { waitUntil: 'load', timeout: 60000 });
         
         // Espera carregar os primeiros itens
-        await page.waitForTimeout(3000);
+        await new Promise(r => setTimeout(r, 3000));
         
         let scrolls = 0;
         const maxScrolls = 20;
@@ -26,7 +26,7 @@ async function scanCeaListing(page, categoryUrl = 'https://www.cea.com.br/novida
             await page.evaluate(() => {
                 window.scrollBy(0, 1000);
             });
-            await page.waitForTimeout(2000);
+            await new Promise(r => setTimeout(r, 2000));
             
             // Extrai URLs do DOM
             const urls = await page.evaluate(() => {

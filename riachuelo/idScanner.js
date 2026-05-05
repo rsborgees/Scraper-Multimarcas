@@ -12,7 +12,7 @@ async function scanRiachueloListing(page, categoryUrl = 'https://www.riachuelo.c
         await page.goto(categoryUrl, { waitUntil: 'load', timeout: 60000 });
         
         // Espera carregar os primeiros itens
-        await page.waitForTimeout(4000);
+        await new Promise(r => setTimeout(r, 4000));
         
         let scrolls = 0;
         const maxScrolls = 20;
@@ -26,7 +26,7 @@ async function scanRiachueloListing(page, categoryUrl = 'https://www.riachuelo.c
             await page.evaluate(() => {
                 window.scrollBy(0, 1000);
             });
-            await page.waitForTimeout(2500);
+            await new Promise(r => setTimeout(r, 2500));
             
             // Extrai URLs do DOM
             const urls = await page.evaluate(() => {

@@ -269,9 +269,18 @@ async function runAllScrapers(storeLimits = {}) {
 
                                     // --- Filtro de Match de ID (Riachuelo) ---
                                     if (store === 'riachuelo') {
-                                        const driveId = String(target.id);
+                                        let driveId = String(target.id);
+                                        let driveBaseId = (driveId.length === 10 && driveId.endsWith('00')) ? driveId.substring(0, 8) : driveId;
                                         const pageIds = p.allSkuIds || [String(p.id)];
-                                        if (!pageIds.includes(driveId)) {
+                                        
+                                        const hasMatch = pageIds.some(pid => 
+                                            pid === driveId || 
+                                            pid === driveBaseId || 
+                                            String(pid).startsWith(driveBaseId) ||
+                                            driveBaseId.startsWith(String(pid))
+                                        );
+
+                                        if (!hasMatch) {
                                             console.log(`   ⚠️ [Riachuelo] Bloqueado: ID do Drive ${driveId} não encontrado na página (Página: ${p.id}).`);
                                             continue;
                                         }
