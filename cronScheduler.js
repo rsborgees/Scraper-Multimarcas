@@ -9,9 +9,9 @@ const { loadQuotaTargets, NOVIDADE_KEYS } = require('./utils/quotaManager');
 
 // Limites EXATOS por rodada horária (min = max = obrigatório)
 const BATCH_CONFIG = {
-    'renner': { min: 3, max: 6 },    // Meta 45/15h = 3. Max 6 permite recuperar atrasos.
-    'riachuelo': { min: 1, max: 3 }, // Meta 15/15h = 1.
-    'cea': { min: 1, max: 2 }       // Meta 10/15h = 0.6.
+    'renner': { min: 3, max: 10 },    // Meta 45/15h = 3. Max 10 permite recuperar atrasos.
+    'riachuelo': { min: 1, max: 10 }, // Meta 15/15h = 1.
+    'cea': { min: 1, max: 10 }       // Meta 10/15h = 0.6.
 };
 
 // Lojas com parser disponível (usado no cálculo horário)
