@@ -173,50 +173,20 @@ async function parseProductRenner(page, urlOrId) {
             const tamanhosRaw = [];
             const sizeRegex = /^(PP|P|M|G|GG|G1|G2|G3|G4|XG|XGG|UNI|U|\d{2})$/;
 
-            // ESTRATÉGIA PRINCIPAL: __NEXT_DATA__ → record.groupView
-            // O groupView contém TODOS os tamanhos de TODAS as cores, com disponibilidade real.
-            // É a fonte mais confiável e não depende de renderização do DOM.
-            const mainContent = nextData?.props?.pageProps?.content?.mainContent;
-            let groupView = null;
-            if (Array.isArray(mainContent)) {
-                for (const block of mainContent) {
-                    if (block?.record?.groupView) {
-                        groupView = block.record.groupView;
-                        break;
-                    }
+            // ESTRATÉGIA PRINCIPAL: DOM labels com classe ProductAttributes_labelOption
+            // A classe 'unavailableStock' é aplicada pelo frontend da Renner nos tamanhos sem estoque.
+            // Esta é a fonte mais confiável pois reflete o estoque real em tempo real.
+            const labels = document.querySelectorAll('label[class*="ProductAttributes_labelOption"]');
+            labels.forEach(label => {
+                const cls = label.className || '';
+                const isUnavailable = cls.includes('unavailableStock');
+                if (!isUnavailable) {
+                    const txt = (label.innerText || label.textContent || '').trim().toUpperCase();
+                    if (txt && sizeRegex.test(txt)) tamanhosRaw.push(txt);
                 }
-            }
+            });
 
-            if (groupView && Array.isArray(groupView.groupOne)) {
-                // Coleta todos os tamanhos disponíveis em todas as cores
-                for (const colorGroup of groupView.groupOne) {
-                    if (Array.isArray(colorGroup.refs)) {
-                        for (const ref of colorGroup.refs) {
-                            if (ref.type === 'size' && ref.name) {
-                                const s = ref.name.trim().toUpperCase();
-                                if (s && sizeRegex.test(s)) tamanhosRaw.push(s);
-                            }
-                        }
-                    }
-                }
-            }
-
-            // FALLBACK 1: DOM com seletores exatos
-            // Tamanho disponível: label.ProductAttributes_labelOption__* + ProductAttributes_attribute-size__*
-            // Tamanho indisponível (riscado): label.ProductAttributes_labelOption__* + ProductAttributes_unavailableStock__*
-            if (tamanhosRaw.length === 0) {
-                const labels = document.querySelectorAll('label[class*="ProductAttributes_labelOption"]');
-                labels.forEach(label => {
-                    const cls = label.className || '';
-                    const isUnavailable = cls.includes('unavailableStock');
-                    if (!isUnavailable) {
-                        const txt = (label.innerText || label.textContent || '').trim().toUpperCase();
-                        if (txt && sizeRegex.test(txt)) tamanhosRaw.push(txt);
-                    }
-                });
-            }
-
-            // FALLBACK 2: Outros seletores de tamanho conhecidos
+            // FALLBACK 1: Outros seletores de DOM conhecidos
             if (tamanhosRaw.length === 0) {
                 const fallbackSelectors = [
                     '[class*="attribute-size"]:not([class*="unavailableStock"])',
@@ -231,13 +201,41 @@ async function parseProductRenner(page, urlOrId) {
                 });
             }
 
-            // FALLBACK 3: skuAttributes do produto (só o SKU atual — último recurso)
+            // FALLBACK 2: skuAttributes do produto (só o SKU atual selecionado)
             if (tamanhosRaw.length === 0 && product) {
                 if (Array.isArray(product.skuAttributes)) {
                     const sizeAttr = product.skuAttributes.find(a => a.attributeType === 'size');
                     if (sizeAttr && sizeAttr.name) {
                         const s = sizeAttr.name.trim().toUpperCase();
                         if (s) tamanhosRaw.push(s);
+                    }
+                }
+            }
+
+            // FALLBACK 3 (último recurso): __NEXT_DATA__ → record.groupView
+            // ATENÇÃO: groupView NÃO tem campo de estoque — lista todos os tamanhos do catálogo.
+            // Usar apenas se nenhuma estratégia anterior retornou tamanhos.
+            if (tamanhosRaw.length === 0) {
+                const mainContent = nextData?.props?.pageProps?.content?.mainContent;
+                let groupView = null;
+                if (Array.isArray(mainContent)) {
+                    for (const block of mainContent) {
+                        if (block?.record?.groupView) {
+                            groupView = block.record.groupView;
+                            break;
+                        }
+                    }
+                }
+                if (groupView && Array.isArray(groupView.groupOne)) {
+                    for (const colorGroup of groupView.groupOne) {
+                        if (Array.isArray(colorGroup.refs)) {
+                            for (const ref of colorGroup.refs) {
+                                if (ref.type === 'size' && ref.name) {
+                                    const s = ref.name.trim().toUpperCase();
+                                    if (s && sizeRegex.test(s)) tamanhosRaw.push(s);
+                                }
+                            }
+                        }
                     }
                 }
             }
