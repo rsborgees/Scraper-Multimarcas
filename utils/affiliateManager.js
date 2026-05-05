@@ -34,15 +34,18 @@ async function generateAffiliateLink(originalUrl, store) {
     }
 
     // Busca IDs dinamicamente para evitar problemas de inicialização do process.env
-    let publisherId = process.env.AWIN_PUBLISHER_ID;
-    if (storeLower === 'riachuelo' && process.env.AWIN_PUBLISHER_ID_RIACHUELO) {
+    // GARANTIA TOTAL: Cada loja tem seu ID específico e obrigatório no .env
+    let publisherId = null;
+    if (storeLower === 'riachuelo') {
         publisherId = process.env.AWIN_PUBLISHER_ID_RIACHUELO;
+    } else if (storeLower === 'renner') {
+        publisherId = process.env.AWIN_PUBLISHER_ID_RENNER;
     }
-    
+
     const advertiserId = MERCHANT_IDS[storeLower];
 
     if (!publisherId) {
-        console.warn('⚠️ [Awin] AWIN_PUBLISHER_ID não configurado.');
+        console.error(`❌ [Awin] ID de Publisher não encontrado para a loja: ${store.toUpperCase()}. Verifique o seu arquivo .env.`);
         return originalUrl;
     }
 
