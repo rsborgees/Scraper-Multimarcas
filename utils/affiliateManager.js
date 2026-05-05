@@ -9,10 +9,6 @@ const MERCHANT_IDS = {
     'cea': 'cea-minha' // Marcador para identificar que usa lógica própria
 };
 
-const PUBLISHER_IDS = {
-    'riachuelo': process.env.AWIN_PUBLISHER_ID_RIACHUELO
-};
-
 /**
  * Gera um link parametrizado para o produto.
  * 
@@ -37,7 +33,12 @@ async function generateAffiliateLink(originalUrl, store) {
         return originalUrl;
     }
 
-    const publisherId = PUBLISHER_IDS[storeLower] || process.env.AWIN_PUBLISHER_ID;
+    // Busca IDs dinamicamente para evitar problemas de inicialização do process.env
+    let publisherId = process.env.AWIN_PUBLISHER_ID;
+    if (storeLower === 'riachuelo' && process.env.AWIN_PUBLISHER_ID_RIACHUELO) {
+        publisherId = process.env.AWIN_PUBLISHER_ID_RIACHUELO;
+    }
+    
     const advertiserId = MERCHANT_IDS[storeLower];
 
     if (!publisherId) {
