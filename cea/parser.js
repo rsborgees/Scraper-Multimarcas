@@ -165,8 +165,7 @@ async function parseProductCea(page, urlOrId) {
                 }
             }
 
-            const isIndisponivel = !!Array.from(document.querySelectorAll('p, span, div, button')).find(el => el.innerText && /produto indisponível|avise-me/i.test(el.innerText));
-            if (tamanhos.length === 0 || isIndisponivel) return null;
+            if (tamanhos.length === 0) return null;
 
             const isAcessorio = /brinco|bolsa|colar|cinto|oculos|pulseira|relogio|meia/i.test(nome);
 
