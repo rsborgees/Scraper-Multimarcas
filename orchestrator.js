@@ -21,6 +21,7 @@ const { parseProductCea } = require('./cea/parser');
 const { generateAwinLink } = require('./utils/affiliateManager');
 const { getSelectionPool } = require('./utils/historyManager');
 const { formatRennerMessage, formatRiachueloMessage, formatCeaMessage } = require('./utils/messageFormatter');
+const { NOVIDADE_KEYS } = require('./utils/quotaManager');
 
 // ─── Google Drive ─────────────────────────────────────────────────────────────
 
@@ -37,7 +38,7 @@ function buildDriveClient() {
 /**
  * Lista TODOS os arquivos da pasta do Drive e classifica por loja.
  * Retorna: { renner: [...], riachuelo: [...], cea: [...] }
- * Cada item: { id: driveFileId, fileName: 'nome.jpg', productId: '12345', store: 'renner' }
+ * Cada item: { id, fileName, productId, store, isNovidade }
  */
 async function listDriveFilesByStore() {
     const folderId = process.env.GOOGLE_DRIVE_FOLDER_ID;
@@ -72,7 +73,7 @@ async function listDriveFilesByStore() {
 
     files.forEach(f => {
         const nameLower = (f.name || '').toLowerCase();
-        
+
         // Remove extensão
         let cleanName = f.name.replace(/\.[^.]+$/, '');
         let store = 'renner'; // Default
@@ -89,24 +90,21 @@ async function listDriveFilesByStore() {
             cleanName = cleanName.replace(/renner/i, '');
         }
 
+        // Detecta se é novidade pelo nome do arquivo
+        const isNovidade = nameLower.includes('novidade');
+
         // O que sobrou (removendo espaços extras) é o ID completo
         const productId = cleanName.trim();
 
         // Só processa se sobrar algo que pareça um ID (pelo menos 4 caracteres)
         if (productId.length < 4) return;
 
-        const item = { 
-            id: f.id, 
-            fileName: f.name, 
-            productId, 
-            store 
-        };
-
-        byStore[store].push(item);
+        byStore[store].push({ id: f.id, fileName: f.name, productId, store, isNovidade });
     });
 
     Object.entries(byStore).forEach(([store, items]) => {
-        console.log(`   📁 ${store}: ${items.length} arquivos`);
+        const novCount = items.filter(i => i.isNovidade).length;
+        console.log(`   📁 ${store}: ${items.length} arquivos (${novCount} novidades)`);
     });
 
     return byStore;
@@ -128,13 +126,13 @@ const PARSERS = {
  * IMPORTANTE: Nunca bloqueia — se uma loja não tiver produtos suficientes,
  * retorna o que conseguiu. A quota é um alvo, não um bloqueio.
  *
- * @param {Object} storeLimits - Ex: { renner: 3, riachuelo: 1, cea: 0 }
+ * @param {Object} storeLimits - Ex: { renner: 3, novidades_renner: 1, riachuelo: 1, cea: 0 }
  * @returns {Promise<Array>} - Pool bruto de produtos parseados
  */
 async function runAllScrapers(storeLimits = {}) {
     const allProducts = [];
 
-    // Filtra lojas ativas (limit > 0) com parser disponível
+    // Filtra lojas ativas (limit > 0) com parser disponível (ignora chaves de novidades aqui)
     const activeStores = Object.entries(storeLimits)
         .filter(([store, limit]) => limit > 0 && PARSERS[store]);
 
@@ -172,29 +170,26 @@ async function runAllScrapers(storeLimits = {}) {
             const parser = PARSERS[store];
             const driveFiles = driveByStore[store] || [];
 
-            console.log(`\n🏪 [Orchestrator] Processando: ${store.toUpperCase()} (alvo: ${limit} itens, ${driveFiles.length} no Drive)`);
+            // Calcula sub-limites: total = normais + novidades
+            const novidadeKey = NOVIDADE_KEYS[store];
+            const novidadeLimit = (novidadeKey && storeLimits[novidadeKey] > 0)
+                ? storeLimits[novidadeKey]
+                : 0;
+            const normalLimit = limit - novidadeLimit;
+
+            console.log(`\n🏪 [Orchestrator] Processando: ${store.toUpperCase()} (alvo: ${limit} = ${normalLimit} normais + ${novidadeLimit} novidades | ${driveFiles.length} no Drive)`);
 
             if (driveFiles.length === 0) {
                 console.log(`📭 [Orchestrator/${store}] Nenhum arquivo no Drive para esta loja.`);
                 continue;
             }
 
-            // 4. Aplica filtro de histórico (Tier1: nunca enviado, Tier2: mais antigo)
-            const selectionPool = getSelectionPool(driveFiles);
-            console.log(`🗂️ [Orchestrator/${store}] Pool disponível: ${selectionPool.length} itens (excluídos enviados hoje)`);
+            // Separa o pool do Drive em dois sub-pools
+            const driveNovidades = driveFiles.filter(f => f.isNovidade);
+            const driveNormais   = driveFiles.filter(f => !f.isNovidade);
+            console.log(`🗂️ [Orchestrator/${store}] Drive split: ${driveNormais.length} normais, ${driveNovidades.length} novidades`);
 
-            if (selectionPool.length === 0) {
-                console.log(`⚠️ [Orchestrator/${store}] Todos os itens foram enviados hoje. Pulando.`);
-                continue;
-            }
-
-            // 5. Abre uma página e tenta parsear até atingir o limite
-            let successCount = 0;
-            let attemptIndex = 0;
-            // Tenta no máximo 20x o alvo para ter margem de falhas maior (pedido pelo usuário)
-            // Se o pool for pequeno, tenta o pool todo.
-            const maxAttempts = Math.min(selectionPool.length, Math.max(limit * 20, 50)); 
-
+            // 4. Abre uma única página para esta loja (reutilizada por normais e novidades)
             const page = await browser.newPage();
             try {
                 await page.setUserAgent(
@@ -202,132 +197,157 @@ async function runAllScrapers(storeLimits = {}) {
                 );
                 await page.setExtraHTTPHeaders({ 'Accept-Language': 'pt-BR,pt;q=0.9' });
 
-                while (successCount < limit && attemptIndex < maxAttempts) {
-                    const item = selectionPool[attemptIndex];
-                    attemptIndex++;
+                /**
+                 * Sub-função de coleta: processa um pool (normais OU novidades)
+                 * até atingir targetCount sucessos.
+                 */
+                async function collectFromPool(pool, targetCount, isNovidade) {
+                    if (targetCount <= 0) return;
 
-                    const rawProductId = item.productId || item.fileName;
-                    
-                    // --- Lógica de Conjuntos (Parsing de IDs e Tamanhos) ---
-                    // Ex: "930773780 38 931151771" ou "930773780_38_931151771" -> IDs: [930773780 (tam 38), 931151771 (sem tam)]
-                    const tokens = rawProductId.split(/[\s_]+/);
-                    const targets = [];
-                    for (let i = 0; i < tokens.length; i++) {
-                        const token = tokens[i];
-                        // IDs geralmente têm 7+ dígitos. C&A pode ter 5+.
-                        if (token.length >= 7 || (store === 'cea' && token.length >= 5)) {
-                            const nextToken = tokens[i+1];
-                            let sizeUsed = null;
-                            // Se o próximo token parece um tamanho (ex: 38, PP, G)
-                            if (nextToken && /^(PP|P|M|G|GG|G1|G2|G3|G4|XG|XGG|UNI|U|\d{2})$/i.test(nextToken)) {
-                                sizeUsed = nextToken.toUpperCase();
-                                i++; // Consome o token de tamanho
-                            }
-                            targets.push({ id: token, sizeUsed });
-                        }
+                    const selPool = getSelectionPool(pool);
+                    const label = isNovidade ? 'novidades' : 'normais';
+                    console.log(`   📋 [${store}/${label}] Pool disponível: ${selPool.length} (excluídos enviados hoje). Alvo: ${targetCount}`);
+
+                    if (selPool.length === 0) {
+                        console.log(`   ⚠️ [${store}/${label}] Pool vazio. Pulando.`);
+                        return;
                     }
 
-                    if (targets.length === 0) {
-                        console.log(`   ⚠️ [${store}] Nenhum ID válido encontrado em "${rawProductId}", pulando.`);
-                        continue;
-                    }
+                    let successCount = 0;
+                    let attemptIndex = 0;
+                    const maxAttempts = Math.min(selPool.length, Math.max(targetCount * 20, 50));
 
-                    const targetsDesc = targets.map(t => `${t.id}${t.sizeUsed ? ` (${t.sizeUsed})` : ''}`).join(', ');
-                    console.log(`   🔍 [${store}] Tentativa ${attemptIndex}/${maxAttempts}: ${targetsDesc}`);
+                    while (successCount < targetCount && attemptIndex < maxAttempts) {
+                        const item = selPool[attemptIndex];
+                        attemptIndex++;
 
-                    try {
-                        const scrapedProducts = [];
-                        for (const target of targets) {
-                            const p = await parser(page, target.id);
-                            if (p && p.nome && p.precoAtual) {
-                                // --- Filtro de Tamanhos Restritos (PP/GG sozinhos) ---
-                                const availableSizes = p.tamanhos || [];
-                                if (availableSizes.length === 1) {
-                                    const s = availableSizes[0].toUpperCase();
-                                    if (s === 'PP' || s === 'GG') {
-                                        console.log(`   ⚠️ [${store}] Bloqueado: Apenas ${s} disponível para ${target.id}`);
-                                        continue;
-                                    }
+                        const rawProductId = item.productId || item.fileName;
+
+                        // --- Lógica de Conjuntos (Parsing de IDs e Tamanhos) ---
+                        const tokens = rawProductId.split(/[\s_]+/);
+                        const targets = [];
+                        for (let i = 0; i < tokens.length; i++) {
+                            const token = tokens[i];
+                            // IDs geralmente têm 7+ dígitos. C&A pode ter 5+.
+                            if (token.length >= 7 || (store === 'cea' && token.length >= 5)) {
+                                const nextToken = tokens[i + 1];
+                                let sizeUsed = null;
+                                // Se o próximo token parece um tamanho (ex: 38, PP, G)
+                                if (nextToken && /^(PP|P|M|G|GG|G1|G2|G3|G4|XG|XGG|UNI|U|\d{2})$/i.test(nextToken)) {
+                                    sizeUsed = nextToken.toUpperCase();
+                                    i++; // Consome o token de tamanho
                                 }
-                                
-                                p.tamanhoQueUsei = target.sizeUsed;
-                                p.searchId = target.id;
-
-                                // --- Filtro de Match de ID (Pedido pelo Usuário) ---
-                                if (store === 'riachuelo') {
-                                    const driveId = String(target.id);
-                                    const pageIds = p.allSkuIds || [String(p.id)];
-                                    if (!pageIds.includes(driveId)) {
-                                        console.log(`   ⚠️ [Riachuelo] Bloqueado: ID do Drive ${driveId} não encontrado na página (Página: ${p.id}).`);
-                                        continue;
-                                    }
-                                }
-
-                                scrapedProducts.push(p);
+                                targets.push({ id: token, sizeUsed });
                             }
                         }
 
-                        if (scrapedProducts.length === 0) {
-                            console.log(`   ⚠️ [${store}] Falha ao coletar dados para ${rawProductId}, pulando.`);
+                        if (targets.length === 0) {
+                            console.log(`   ⚠️ [${store}] Nenhum ID válido em "${rawProductId}", pulando.`);
                             continue;
                         }
 
-                        // Enriquecimento de cada produto do conjunto
-                        for (const p of scrapedProducts) {
-                            const affiliateUrl = await generateAwinLink(p.url, store);
-                            p.url = affiliateUrl;
-                            p.store = store;
-                            
-                            // Imagem do DRIVE (comum a todos do arquivo)
-                            const driveImageUrl = `https://drive.google.com/uc?export=download&id=${item.id}`;
-                            p.imageUrl = driveImageUrl;
-                            p.image = driveImageUrl;
+                        const targetsDesc = targets.map(t => `${t.id}${t.sizeUsed ? ` (${t.sizeUsed})` : ''}`).join(', ');
+                        console.log(`   🔍 [${store}/${label}] Tentativa ${attemptIndex}/${maxAttempts}: ${targetsDesc}`);
+
+                        try {
+                            const scrapedProducts = [];
+                            for (const target of targets) {
+                                const p = await parser(page, target.id);
+                                if (p && p.nome && p.precoAtual) {
+                                    // --- Filtro de Tamanhos Restritos (PP/GG sozinhos) ---
+                                    const availableSizes = p.tamanhos || [];
+                                    if (availableSizes.length === 1) {
+                                        const s = availableSizes[0].toUpperCase();
+                                        if (s === 'PP' || s === 'GG') {
+                                            console.log(`   ⚠️ [${store}] Bloqueado: Apenas ${s} disponível para ${target.id}`);
+                                            continue;
+                                        }
+                                    }
+
+                                    p.tamanhoQueUsei = target.sizeUsed;
+                                    p.searchId = target.id;
+
+                                    // --- Filtro de Match de ID (Riachuelo) ---
+                                    if (store === 'riachuelo') {
+                                        const driveId = String(target.id);
+                                        const pageIds = p.allSkuIds || [String(p.id)];
+                                        if (!pageIds.includes(driveId)) {
+                                            console.log(`   ⚠️ [Riachuelo] Bloqueado: ID do Drive ${driveId} não encontrado na página (Página: ${p.id}).`);
+                                            continue;
+                                        }
+                                    }
+
+                                    scrapedProducts.push(p);
+                                }
+                            }
+
+                            if (scrapedProducts.length === 0) {
+                                console.log(`   ⚠️ [${store}] Falha ao coletar dados para ${rawProductId}, pulando.`);
+                                continue;
+                            }
+
+                            // Enriquecimento de cada produto do conjunto
+                            for (const p of scrapedProducts) {
+                                const affiliateUrl = await generateAwinLink(p.url, store);
+                                p.url = affiliateUrl;
+                                p.store = store;
+                                p.novidade = isNovidade; // 🆕 Flag de novidade
+
+                                const driveImageUrl = `https://drive.google.com/uc?export=download&id=${item.id}`;
+                                p.imageUrl = driveImageUrl;
+                                p.image = driveImageUrl;
+                            }
+
+                            // Define o objeto de resultado
+                            let result;
+                            if (scrapedProducts.length > 1) {
+                                // É um conjunto. Usamos o primeiro como base para campos globais.
+                                result = { ...scrapedProducts[0] };
+                                result.isConjunto = true;
+                                result.subProducts = scrapedProducts;
+                            } else {
+                                result = scrapedProducts[0];
+                            }
+
+                            // Metadados do Drive
+                            result.driveId = item.id;
+                            result.fileName = item.fileName;
+                            result.novidade = isNovidade; // 🆕 Flag de novidade no resultado
+
+                            // Formatação da Mensagem
+                            const formatterInput = scrapedProducts.length > 1 ? scrapedProducts : result;
+                            if (store === 'renner') {
+                                result.message = formatRennerMessage(formatterInput);
+                            } else if (store === 'riachuelo') {
+                                result.message = formatRiachueloMessage(formatterInput);
+                            } else if (store === 'cea') {
+                                result.message = formatCeaMessage(formatterInput);
+                            }
+
+                            allProducts.push(result);
+                            successCount++;
+
+                            const msgDesc = scrapedProducts.length > 1 ? `${scrapedProducts.length} itens (conjunto)` : `"${result.nome}"`;
+                            console.log(`   ✅ [${store}/${label}] Coletado: ${msgDesc} (${successCount}/${targetCount})`);
+
+                        } catch (parseErr) {
+                            console.error(`   ❌ [${store}] Erro ao processar ${rawProductId}: ${parseErr.message}`);
                         }
+                    }
 
-                        // Define o objeto de resultado
-                        let result;
-                        if (scrapedProducts.length > 1) {
-                            // É um conjunto. Usamos o primeiro como base para campos globais.
-                            result = { ...scrapedProducts[0] };
-                            result.isConjunto = true;
-                            result.subProducts = scrapedProducts;
-                        } else {
-                            result = scrapedProducts[0];
-                        }
-
-                        // Metadados do Drive
-                        result.driveId = item.id;
-                        result.fileName = item.fileName;
-
-                        // Formatação da Mensagem (Passa array para o formatter se for conjunto)
-                        const formatterInput = scrapedProducts.length > 1 ? scrapedProducts : result;
-                        if (store === 'renner') {
-                            result.message = formatRennerMessage(formatterInput);
-                        } else if (store === 'riachuelo') {
-                            result.message = formatRiachueloMessage(formatterInput);
-                        } else if (store === 'cea') {
-                            result.message = formatCeaMessage(formatterInput);
-                        }
-
-                        allProducts.push(result);
-                        successCount++;
-
-                        const msgDesc = scrapedProducts.length > 1 ? `${scrapedProducts.length} itens (conjunto)` : `"${result.nome}"`;
-                        console.log(`   ✅ [${store}] Coletado: ${msgDesc} (${successCount}/${limit})`);
-
-                    } catch (parseErr) {
-                        console.error(`   ❌ [${store}] Erro ao processar ${rawProductId}: ${parseErr.message}`);
+                    if (successCount < targetCount) {
+                        console.warn(`⚠️ [Orchestrator/${store}] ${label}: ${successCount}/${targetCount} — abaixo do alvo, mas continuando.`);
+                    } else {
+                        console.log(`✅ [Orchestrator/${store}] ${label}: meta atingida ${successCount}/${targetCount}`);
                     }
                 }
 
+                // Coleta novidades primeiro, depois normais
+                await collectFromPool(driveNovidades, novidadeLimit, true);
+                await collectFromPool(driveNormais, normalLimit, false);
+
             } finally {
                 await page.close().catch(() => {});
-            }
-
-            if (successCount < limit) {
-                console.warn(`⚠️ [Orchestrator/${store}] Coletados ${successCount}/${limit} — abaixo do alvo, mas continuando.`);
-            } else {
-                console.log(`✅ [Orchestrator/${store}] Meta atingida: ${successCount}/${limit}`);
             }
         }
 
@@ -338,7 +358,8 @@ async function runAllScrapers(storeLimits = {}) {
     // Resumo final
     const byStore = {};
     allProducts.forEach(p => { byStore[p.store] = (byStore[p.store] || 0) + 1; });
-    console.log(`\n✅ [Orchestrator] Coleta finalizada. Total: ${allProducts.length} produtos.`);
+    const novidadesCount = allProducts.filter(p => p.novidade).length;
+    console.log(`\n✅ [Orchestrator] Coleta finalizada. Total: ${allProducts.length} produtos (${novidadesCount} novidades).`);
     console.log(`📊 [Orchestrator] Por loja: ${JSON.stringify(byStore)}`);
 
     return allProducts;

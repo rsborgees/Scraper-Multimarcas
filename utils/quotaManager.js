@@ -4,7 +4,7 @@
  * Busca as metas diárias por loja da tabela `quota_config` no Supabase.
  * A cliente edita os valores diretamente no dashboard do Supabase.
  *
- * Retorna { renner: N, cea: N, riachuelo: N }
+ * Retorna { renner: N, cea: N, riachuelo: N, novidades_renner: N, novidades_cea: N, novidades_riachuelo: N }
  * Fallback seguro: valores hardcoded caso o Supabase falhe ou esteja indisponível.
  */
 
@@ -16,11 +16,21 @@ require('dotenv').config();
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SERVICE_KEY  = process.env.SUPABASE_SERVICE_KEY;
 
+/** Mapeamento: loja → chave de novidade no Supabase */
+const NOVIDADE_KEYS = {
+    renner:    'novidades_renner',
+    cea:       'novidades_cea',
+    riachuelo: 'novidades_riachuelo'
+};
+
 /** Valores padrão caso o Supabase esteja indisponível */
 const FALLBACK_TARGETS = {
-    renner:    45,
-    cea:       10,
-    riachuelo: 15
+    renner:              45,
+    cea:                 10,
+    riachuelo:           15,
+    novidades_renner:     0,
+    novidades_cea:        0,
+    novidades_riachuelo:  0
 };
 
 /**
@@ -81,11 +91,11 @@ async function loadQuotaTargets() {
                         }
                     });
 
-                    // Fallback por loja individual — garante que lojas ausentes não quebrem o scheduler
-                    Object.keys(FALLBACK_TARGETS).forEach(store => {
-                        if (!(store in targets)) {
-                            console.warn(`[QuotaManager] ⚠️  Loja "${store}" ausente no Supabase. Usando fallback: ${FALLBACK_TARGETS[store]}`);
-                            targets[store] = FALLBACK_TARGETS[store];
+                    // Fallback por chave individual — garante que lojas e novidades ausentes não quebrem o scheduler
+                    Object.keys(FALLBACK_TARGETS).forEach(key => {
+                        if (!(key in targets)) {
+                            console.warn(`[QuotaManager] ⚠️  Chave "${key}" ausente no Supabase. Usando fallback: ${FALLBACK_TARGETS[key]}`);
+                            targets[key] = FALLBACK_TARGETS[key];
                         }
                     });
 
@@ -115,4 +125,4 @@ async function loadQuotaTargets() {
     });
 }
 
-module.exports = { loadQuotaTargets, FALLBACK_TARGETS };
+module.exports = { loadQuotaTargets, FALLBACK_TARGETS, NOVIDADE_KEYS };

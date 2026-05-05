@@ -5,7 +5,7 @@ require('dotenv').config();
 const { runAllScrapers } = require('./orchestrator');
 const { distributeLinks } = require('./utils/linkDistributor');
 const { loadHistory, markAsSent } = require('./utils/historyManager');
-const { loadQuotaTargets } = require('./utils/quotaManager');
+const { loadQuotaTargets, NOVIDADE_KEYS } = require('./utils/quotaManager');
 
 // Limites EXATOS por rodada horária (min = max = obrigatório)
 const BATCH_CONFIG = {
@@ -13,6 +13,9 @@ const BATCH_CONFIG = {
     'riachuelo': { min: 1, max: 3 }, // Meta 15/15h = 1.
     'cea': { min: 1, max: 2 }       // Meta 10/15h = 0.6.
 };
+
+// Lojas com parser disponível (usado no cálculo horário)
+const PARSERS_KEYS = { renner: true, cea: true, riachuelo: true };
 
 /**
  * Cálculo de GAP (Meta - Enviados Hoje)
@@ -37,10 +40,12 @@ function calculateDynamicQuotas(idealTargets) {
     });
 
     const quotas = {};
-    Object.keys(idealTargets).forEach(store => {
-        const sent = counts[store] || 0;
-        const target = idealTargets[store];
-        quotas[store] = Math.max(0, target - sent);
+
+    // GAP das lojas principais
+    Object.keys(idealTargets).forEach(key => {
+        const sent = counts[key] || 0;
+        const target = idealTargets[key];
+        quotas[key] = Math.max(0, target - sent);
     });
 
     return { quotas, counts };
@@ -60,26 +65,34 @@ function calculateHourlyBatchLimit(quotas) {
     const hourlyLimits = {};
     let totalBatchSize = 0;
 
-    Object.keys(quotas).forEach(store => {
-        if (quotas[store] <= 0) {
+    // Lojas principais
+    Object.keys(PARSERS_KEYS).forEach(store => {
+        if ((quotas[store] || 0) <= 0) {
             hourlyLimits[store] = 0;
             return;
         }
-        // Configurações de min/max para a loja
         const config = BATCH_CONFIG[store] || { min: 1, max: 3 };
-        
-        // Divide o que falta pelas horas restantes
         const calculated = Math.ceil(quotas[store] / hoursRemaining);
-        
-        // Aplica os limitadores (nunca menos que 'min', nunca mais que 'max')
         let limit = Math.max(config.min, calculated);
         limit = Math.min(limit, config.max);
-        
-        // Mas nunca maior que a própria quota pendente
         limit = Math.min(quotas[store], limit);
-        
         hourlyLimits[store] = limit;
         totalBatchSize += limit;
+    });
+
+    // Chaves de novidades: proporcional ao total da loja (sem min/max rígido)
+    Object.entries(NOVIDADE_KEYS).forEach(([store, novidadeKey]) => {
+        const novidadeGap = quotas[novidadeKey] || 0;
+        if (novidadeGap <= 0) {
+            hourlyLimits[novidadeKey] = 0;
+            return;
+        }
+        // Divide o gap restante pelas horas restantes, mínimo 1
+        const calculated = Math.ceil(novidadeGap / hoursRemaining);
+        // Não ultrapassa o limite total da loja nesta hora
+        const storeLimit = hourlyLimits[store] || 0;
+        const novidadeLimit = Math.min(calculated, novidadeGap, storeLimit);
+        hourlyLimits[novidadeKey] = novidadeLimit;
     });
 
     return { hourlyLimits, totalBatchSize };
