@@ -179,8 +179,10 @@ async function parseProductRiachuelo(page, urlOrId) {
                         link: d.urlPath,
                         categories: d.breadcrumb ? d.breadcrumb.map(b => b.label) : [],
                         items: skus.length > 0 ? skus.map(s => ({
+                            id: s.id || s.itemId,
+                            itemId: s.itemId || s.id,
                             name: s.name || s.tamanho || (s.attributes ? (s.attributes.tamanho || s.attributes.Tamanho) : null),
-                            images: s.media ? s.media.map(m => ({ imageUrl: m.uri })) : (d.media ? d.media.map(m => ({ imageUrl: m.uri })) : []),
+                            images: s.media ? s.media.map(m => ({ imageUrl: m.url || m.uri })) : (d.media ? d.media.map(m => ({ imageUrl: m.url || m.uri })) : []),
                             sellers: [{
                                 commertialOffer: {
                                     Price: s.salePrice || d.salePrice,
@@ -190,7 +192,7 @@ async function parseProductRiachuelo(page, urlOrId) {
                             }]
                         })) : [{
                             name: d.attributes ? (d.attributes.tamanho || d.attributes.Tamanho?.value || d.attributes.tamanho?.value || d.attributes.Tamanho) : null,
-                            images: d.media ? d.media.map(m => ({ imageUrl: m.uri })) : [],
+                            images: d.media ? d.media.map(m => ({ imageUrl: m.url || m.uri })) : [],
                             sellers: [{
                                 commertialOffer: {
                                     Price: d.salePrice,
@@ -335,6 +337,25 @@ async function parseProductRiachuelo(page, urlOrId) {
             let allSkuIds = [];
             if (vtexProduct && vtexProduct.items) {
                 allSkuIds = vtexProduct.items.map(item => String(item.itemId || item.id || ''));
+                
+                // EXTRA: Coleta também IDs a partir das URLs das imagens.
+                // Isso é essencial porque muitos usuários nomeiam os arquivos com o ID que aparece no nome da imagem da Riachuelo.
+                vtexProduct.items.forEach(item => {
+                    if (item.images) {
+                        item.images.forEach(img => {
+                            if (img && img.imageUrl) {
+                                const match = img.imageUrl.match(/\/(\d{8,11})\//);
+                                if (match) {
+                                    allSkuIds.push(match[1]);
+                                    // Se tiver 10 ou 11 dígitos, adiciona a base (8 dígitos)
+                                    if (match[1].length >= 10) {
+                                        allSkuIds.push(match[1].substring(0, 8));
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
             }
             if (id) allSkuIds.push(String(id));
             allSkuIds = [...new Set(allSkuIds.filter(Boolean))];

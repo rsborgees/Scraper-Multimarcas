@@ -1,0 +1,208 @@
+{
+  "name": "Regata feminina canelada Silvia Braz - Azul-marinho",
+  "description": "A delicadeza atual se manifesta nesta <strong>Regata feminina canelada Silvia Braz</strong>&nbsp;que combina leveza visual e um toque essencial para composições práticas e cheias de charme. O canelado cria textura sutil que valoriza a silhueta com naturalidade e permite um caimento confortável para acompanhar o ritmo do dia. Parte da collab <strong>Silvia Braz + Riachuelo</strong>, o modelo reflete o estilo da influenciadora ao entregar versatilidade em uma peça que multiplica possibilidades no closet. A modelagem justa desenha o corpo sem apertar e facilita sobreposições elegantes. Um básico contemporâneo que desperta vontade de criar looks intuitivos e cheios de presença.<br> <br> <strong>Características:</strong><br> • Marca: Silvia Braz&nbsp;+ Riachuelo<br> • 64% Liocel; 31% Algodão; 5% Elastano<br> • Modelagem ajustada<br> • Decote U<br> • Alças médias<br> • Aplicação de viés<br> • Malha canelada<br> <br> A união entre <strong>Riachuelo </strong>e<strong> Silvia Braz</strong> traz ícones do estilo da influenciadora para todo o país. Uma collab com modelagens e cores versáteis, criada para multiplicar as possibilidades de looks com peças que combinam entre si.<br> <br> <strong>A cor do produto nas fotos reproduzidas com modelos, pode sofrer alteração em decorrência do uso do flash.</strong>",
+  "sku": "16321987",
+  "skuGroup": "16321987",
+  "skuSubGroup": "16321987--azul-marinho",
+  "urlPath": "regata-feminina-canelada-silvia-braz-16321987_sku_sku_azul-marinho",
+  "media": [
+    {
+      "type": "image",
+      "url": "https://static.riachuelo.com.br/RCHLO/16321995005/portrait/9f1615f330f273f3f6cb191411141f7af251bc7a.jpg"
+    },
+    {
+      "type": "image",
+      "url": "https://static.riachuelo.com.br/RCHLO/16321995005/portrait/4ffefdb90e4d0f0679be4e611a5a0d82d2aa000e.jpg"
+    },
+    {
+      "type": "image",
+      "url": "https://static.riachuelo.com.br/RCHLO/16321995005/portrait/3d3783b459278ad57877075d37cc6c2c16749bb8.jpg"
+    },
+    {
+      "type": "image",
+      "url": "https://static.riachuelo.com.br/RCHLO/16321995005/portrait/7b79c1254712bcf29aab3aae2909cfab8d0b4250.jpg"
+    }
+  ],
+  "attributes": {
+    "washing_instruction": {
+      "id": "washing_instruction",
+      "label": "Instrução de Lavagem",
+      "value": "Máxima Temperatura De Lavagem 30 ºc. Não Utilizar Alvejante. Passar A Ferro Quente Máxima Temperatura 110 ºc."
+    },
+    "custom_label_2": {
+      "id": "custom_label_2",
+      "label": "Custom Label 2",
+      "value": "Dia das M�es"
+    },
+    "gender": {
+      "id": "gender",
+      "label": "Gênero",
+      "value": "Feminino"
+    },
+    "catalog_class": {
+      "id": "catalog_class",
+      "label": "Sub Categoria",
+      "value": "Blusa"
+    },
+    "pattern": {
+      "id": "pattern",
+      "label": "Padronagem",
+      "value": "Liso"
+    },
+    "gift_pack": {
+      "id": "gift_pack",
+      "label": "Embalagem para presente",
+      "value": "true"
+    },
+    "catalog_line": {
+      "id": "catalog_line",
+      "label": "Categoria",
+      "value": "Coleção Feminina"
+    },
+    "winter": {
+      "id": "winter",
+      "label": "Inverno",
+      "value": "Nao"
+    },
+    "axis": {
+      "id": "axis",
+      "label": "Eixo",
+      "value": "P"
+    },
+    "division": {
+      "id": "division",
+      "label": "Divisão",
+      "value": "Blusa"
+    },
+    "dco": {
+      "id": "dco",
+      "label": "DCO",
+      "value": "208"
+    },
+    "product_measures": {
+      "id": "product_measures",
+      "label": "Medidas do Produto",
+      "value": "Peso: 0,305 Qui<br>"
+    },
+    "department_description": {
+      "id": "department_description",
+      "label": "Descrição do Departamento",
+      "value": "Fem. Jovem Básicos"
+    },
+    "season": {
+      "id": "season",
+      "label": "Estação",
+      "value": "Silvia Braz + Riachuelo"
+    },
+    "model": {
+      "id": "model",
+      "label": "Modelo",
+      "value": "Regata"
+    },
+    "theme": {
+      "id": "theme",
+      "label": "Tema",
+      "value": "Basico"
+    },
+    "department": {
+      "id": "department",
+      "label": "Department",
+      "value": "Feminino"
+    },
+    "brand": {
+      "id": "brand",
+      "label": "Marca",
+      "value": "Silvia Braz + Riachuelo"
+    },
+    "class": {
+      "id": "class",
+      "label": "Classificação do Grupo",
+      "value": "Malha"
+    },
+    "catalog_subclass": {
+      "id": "catalog_subclass",
+      "label": "Modelagem",
+      "value": "Regata"
+    },
+    "gg": {
+      "id": "gg",
+      "label": "Categoria",
+      "value": "FEMININO"
+    },
+    "product": {
+      "id": "product",
+      "label": "Produto",
+      "value": "Blusa"
+    },
+    "gm": {
+      "id": "gm",
+      "label": "GM",
+      "value": "208075"
+    },
+    "age_group": {
+      "id": "age_group",
+      "label": "Faixa Etária",
+      "value": "Adulto"
+    },
+    "collection": {
+      "id": "collection",
+      "label": "Coleção",
+      "value": "Inverno"
+    },
+    "productAge": {
+      "id": "productAge",
+      "label": "Idade do produto",
+      "value": "21 days"
+    },
+    "lifestyle": {
+      "id": "lifestyle",
+      "label": "Estilo de Vida",
+      "value": "Casual"
+    },
+    "catalog_department": {
+      "id": "catalog_department",
+      "label": "Departamento",
+      "value": "Feminino"
+    },
+    "geek": {
+      "id": "geek",
+      "label": "Geek",
+      "value": "F"
+    },
+    "sleeve": {
+      "id": "sleeve",
+      "label": "Manga",
+      "value": "N/A"
+    },
+    "lining": {
+      "id": "lining",
+      "label": "Forro",
+      "value": "Sem Forro"
+    },
+    "brand_description": {
+      "id": "brand_description",
+      "label": "Descrição da Marca",
+      "value": "Silvia Braz + Riachuelo"
+    },
+    "family": {
+      "id": "family",
+      "label": "Família",
+      "value": "MESA 1"
+    },
+    "manufacturing_country": {
+      "id": "manufacturing_country",
+      "label": "País de Fabricação",
+      "value": "BR - Brasil"
+    }
+  },
+  "visibleAttributes": [
+    "washing_instruction",
+    "collection",
+    "manufacturing_country",
+    "brand",
+    "product_measures"
+  ],
+  "listPrice": 59.99,
+  "salePrice": 59.99,
+  "soldOut": false
+}
